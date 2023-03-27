@@ -78,7 +78,9 @@ git add Contributors.md
 ```
 
 For adding all files at a time.
-```git add -A```
+```
+git add -A
+```
 
 Now commit those changes using the `git commit` command:
 

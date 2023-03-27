@@ -94,5 +94,3 @@ git push -u origin your-branch-name
 
 replacing `your-branch-name` with the name of the branch you created earlier.
 
-<details>
-<summary> <strong>If you get any errors while pushing, click here:</strong> </summary>

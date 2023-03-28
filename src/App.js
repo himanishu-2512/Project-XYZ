@@ -4,7 +4,7 @@ import "./Pages/LoginForm"
 import LoginForm from './Pages/LoginForm';
 import ForgotPass from "./Pages/ForgotPass";
 import Homepage from './Pages/homepage';
-
+import Profile from "./Pages/Profile";
 
 function App() {
 
@@ -29,6 +29,7 @@ function App() {
       <Route exact path="/" element={((user && user._id) || loggedIn) ? <Homepage setLoginUser={setLoginUser}/> : <LoginForm setLoginUser={setLoginUser}/>}/> 
           <Route path="/LoginForm" element={<LoginForm setLoginUser={setLoginUser}/>}/>
           <Route path="/Forgotpassword" element={<ForgotPass/>} />
+          <Route path="/Profile" element={<Profile/>} />
       </Routes>
     </BrowserRouter>
     </div>

@@ -24,9 +24,8 @@ jobs:
       name: "Checkout Source Code"
       
     - name: Setup Node.js environment
-      uses: actions/setup-node@v1.4.2
-      with:
-        version: 10.x
+      uses: actions/setup-node@v2.5.2
+  
 
     # Runs a set of commands using the runners shell
     - name: Build the site

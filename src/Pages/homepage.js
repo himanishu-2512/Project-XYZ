@@ -1,4 +1,4 @@
-import { Box, createTheme, Stack, ThemeProvider } from "@mui/material";
+import { Box, createTheme,  ThemeProvider } from "@mui/material";
 import React, { useState } from "react";
 import Recents from "../component/Home/Recents";
 import LeftBar from "../component/Home/LeftBar";
@@ -7,10 +7,10 @@ import Header from "../component/Home/Header";
 import Share from "../component/Home/share";
 
 const Homepage = ({ setLoginUser }) => {
-	const handlechange = () => {
-		setLoginUser({});
-		window.localStorage.removeItem("isLoggedIn");
-	};
+	// const handlechange = () => {
+	// 	setLoginUser({});
+	// 	window.localStorage.removeItem("isLoggedIn");
+	// };
 	//Theme
 	const [mode, setMode] = useState("dark");
 

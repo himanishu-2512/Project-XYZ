@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import  { Container } from '@mui/material';
+// import  { Container } from '@mui/material';
 // import './style.css';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
@@ -120,7 +120,7 @@ const LoginForm = ({setLoginUser}) => {
                   
                   <input type="text" name ="rNum" onChange={vale} placeholder="Registration Number" />
                   <input type="password" name ="pass" onChange={vale} placeholder="Password" />
-                  <a href="" onClick={() => Navigate('/Forgotpassword')}>Forgot your password?</a>
+                  <Link href="#" onClick={() => Navigate('/Forgotpassword')}>Forgot your password?</Link>
                   <button onClick = { handleChange } >Sign In</button>
                   <button id="sign" onClick ={ Change } >Sign Up</button>
               </form>
@@ -186,7 +186,7 @@ span {
 	font-size: 12px;
 }
 
-a {
+Link {
 	color: #333;
 	font-size: 14px;
 	text-decoration: none;

@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import Feed from './Feed'
 import Feed2 from './Feed2'
-import Share from './share'
+// import Share from './share'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;

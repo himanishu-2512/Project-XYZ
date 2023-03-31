@@ -13,7 +13,7 @@ import {
 import React, { useState } from "react";
 import {
   Add as AddIcon,
-  DateRange,
+  
   EmojiEmotions,
   Image,
   PersonAdd,

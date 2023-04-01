@@ -120,7 +120,7 @@ const LoginForm = ({setLoginUser}) => {
                   
                   <input type="text" name ="rNum" onChange={vale} placeholder="Registration Number" />
                   <input type="password" name ="pass" onChange={vale} placeholder="Password" />
-                  <Link href="#" onClick={() => Navigate('/Forgotpassword')}>Forgot your password?</Link>
+                  <Link  to='Forgotpassword' href="#" >Forgot your password?</Link>
                   <button onClick = { handleChange } >Sign In</button>
                   <button id="sign" onClick ={ Change } >Sign Up</button>
               </form>
@@ -186,7 +186,7 @@ span {
 	font-size: 12px;
 }
 
-Link {
+a {
 	color: #333;
 	font-size: 14px;
 	text-decoration: none;

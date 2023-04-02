@@ -1,15 +1,39 @@
 import React from 'react'
 import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-// import Typography from '@mui/material/Typography'
-// import Avatar from '@mui/material/Avatar';
-// import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import { Paper, Collapse, CardContent } from '@mui/material';
+import RightBar from './Notifications';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 function LeftBar() {
+
+  const [checked, setChecked] = React.useState(false);
+
+  const handleChange = () => {
+    setChecked((prev) => !prev);
+  };
+
   return (
     <Box>
-      <Divider sx={{fontSize:"22px", margin: "10px"}}> My Profile</Divider>
+    <Box
+    sx={{
+      display:'flex',
+      justifyContent:'Right',
+      alignContent:'center'
+    }}
+    >
+      <Avatar style={{top: 10, right: 10, color: "white", backgroundColor: '#2196f3' }} component={Paper} elevation={5} checked={checked} onClick={handleChange}>
+        {!checked && <NotificationsIcon/>}
+        {checked && <CancelIcon/>}
+      </Avatar>
       
+      <Collapse in={checked} timeout="auto" unmountOnExit>
+        <CardContent>
+          <RightBar/>
+        </CardContent>
+      </Collapse>
+    </Box>
     </Box>
   )
 }

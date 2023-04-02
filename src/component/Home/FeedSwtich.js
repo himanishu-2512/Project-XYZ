@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import Feed from './Feed'
 import Feed2 from './Feed2'
-// import Share from './share'
+import { Paper } from '@mui/material';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -49,19 +49,26 @@ function TabPanel(props) {
     };
   
     return (
-      <Box sx={{ width: '100%' }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box 
+    sx={{ marginTop:'2%', maxWidth: "100%", display: "flex", justifyContent: "center"}}
+    >  
+      <Box sx={{ width: '80%', display:'flex',flexDirection: "column" ,justifyContent :'center' }}>
+        <Paper>
+        <Box sx={{  borderBottom: 1, borderColor: 'divider', width :'100%',justifyContent :'space-evenly', display:'flex' }}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
             <Tab label="Opportunities" {...a11yProps(0)} />
             <Tab label="Questions" {...a11yProps(1)} />
           </Tabs>
         </Box>
+        </Paper>
         <TabPanel value={value} index={0}>
           <Feed/>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <Feed2/>
         </TabPanel>
+        
+      </Box>
       </Box>
     );
   }

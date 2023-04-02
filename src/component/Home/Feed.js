@@ -1,7 +1,7 @@
-import { Avatar, Card, CardActionArea, CardActions, CardContent, CardHeader, CardMedia, Checkbox, Collapse, IconButton, Typography, Paper, Divider } from '@mui/material'
-import { red,blue,green, lightGreen, blueGrey } from '@mui/material/colors'
+import { Avatar, CardContent, CardHeader, CardMedia, Checkbox, Collapse, IconButton, Typography, Paper, Divider } from '@mui/material'
+import {  blueGrey } from '@mui/material/colors'
 import React, { useState } from 'react'
-import {ExpandMore, Favorite, FavoriteBorder, Mail, MoreVert, Share} from "@mui/icons-material";
+import { Favorite, MoreVert} from "@mui/icons-material";
 import { Box } from '@mui/system';
 import CommentIcon from '@mui/icons-material/Comment';
 import Button from '@mui/material/Button';

@@ -33,7 +33,7 @@ const Homepage = ({ setLoginUser }) => {
 							<Share />
 							<FeedSwitch />
 						</div>
-						<div style={{ flex: 2 }}>
+						<div style={{ flex: 3 }}>
 							<LeftBar />
 						</div>
 					</div>

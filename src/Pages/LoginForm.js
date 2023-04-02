@@ -39,11 +39,11 @@ const LoginForm = ({ setLoginUser }) => {
 	};
 
 	//SignUp button
-	const handlChange = (e) => {
+	const handlChange = async (e) => {
 		e.preventDefault();
-		const { rNum, dob, pass } = newuser;
-		if (rNum && dob && pass) {
-			axios.post("http://localhost:9002/register", newuser).then((res) => {
+		const { username, email, password, name } = newuser;
+		if (username && email && password && name) {
+			await axios.post("http://localhost:8000/api/auth/register", newuser).then((res) => {
 				alert(res.data.message);
 				window.location.reload();
 			});
@@ -74,9 +74,9 @@ const LoginForm = ({ setLoginUser }) => {
 	//SignIn button
 	const handleChange = (e) => {
 		e.preventDefault();
-		const { rNum, pass } = user;
-		if (rNum && pass) {
-			axios.post("http://localhost:9002/login", user).then((res) => {
+		const { username, password } = user;
+		if (username && password) {
+			axios.post("http://localhost:8000/api/auth/login", user).then((res) => {
 				alert(res.data.message);
 				if (res.data.user) {
 					setLoginUser(res.data.user);
@@ -98,10 +98,15 @@ const LoginForm = ({ setLoginUser }) => {
 						<form action="#" class="sign-up-form">
 							<div className="sign-up-background">
 								<h1>Create Account</h1>
-
-								<input type="text" name="rNum" onChange={val} placeholder="Registration Number" />
-								<input type="text" name="dob" onChange={val} placeholder="Date Of Birth (DDMMYYYY)" />
-								<input type="password" name="pass" onChange={val} placeholder="Create Your Password" />
+								<input type="text" name="name" onChange={val} placeholder="Name" />
+								<input type="text" name="username" onChange={val} placeholder="Username" />
+								<input type="email" name="email" onChange={val} placeholder="Email" />
+								<input
+									type="password"
+									name="password"
+									onChange={val}
+									placeholder="Create Your Password"
+								/>
 								<button onClick={handlChange}>Sign Up</button>
 								<button id="sign" onClick={Change}>
 									Sign In
@@ -114,8 +119,8 @@ const LoginForm = ({ setLoginUser }) => {
 							<div className="sign-in-background">
 								<h1>Sign In</h1>
 
-								<input type="text" name="rNum" onChange={vale} placeholder="Registration Number" />
-								<input type="password" name="pass" onChange={vale} placeholder="Password" />
+								<input type="text" name="username" onChange={vale} placeholder="Username or Email" />
+								<input type="password" name="password" onChange={vale} placeholder="Password" />
 								<Link to="Forgotpassword" href="#">
 									Forgot your password?
 								</Link>

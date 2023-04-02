@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 import Feed from './Feed'
 import Feed2 from './Feed2'
-import Share from './share'
 import { Paper } from '@mui/material';
 
 function TabPanel(props) {

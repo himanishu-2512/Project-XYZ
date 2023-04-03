@@ -29,7 +29,7 @@ function ChangePass() {
     const handleChange = async(e) => {
         e.preventDefault();
 		const {user,token,password} = newuser
-		if(user){
+		if(user&&token&&password){
 			await axios.post("http://localhost:8000/api/auth/verifyToken", newuser)
 			.then( res => {
                 alert(res.data.message)

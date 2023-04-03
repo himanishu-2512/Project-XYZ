@@ -56,7 +56,7 @@ function UserComments() {
         sx={{
             ml:'10px', mt:'10px',mb:'5px'
         }}>
-        <Typography variant="body2" >Prakhar Srivastav</Typography>
+        <Typography variant="body2" sx={{fontWeight:'550'}}>Prakhar Srivastav</Typography>
         </Box>
         <Box
         sx={{

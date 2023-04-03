@@ -1,8 +1,8 @@
 import { Box, createTheme,  ThemeProvider } from "@mui/material";
 import React, { useState } from "react";
 import Recents from "../component/Home/Recents";
-import LeftBar from "../component/Home/LeftBar";
-import FeedSwitch from "../component/Home/FeedSwtich";
+import LeftBar from "../component/Home/RightBar/RightBar";
+import FeedSwitch from "../component/Home/Feeds/FeedSwtich";
 import Header from "../component/Home/Header";
 import Share from "../component/Home/share";
 

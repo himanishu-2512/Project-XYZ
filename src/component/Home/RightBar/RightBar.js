@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Paper, Collapse, CardContent } from '@mui/material';
-import RightBar from './Notifications';
+import Notifications from './Notifications';
 import CancelIcon from '@mui/icons-material/Cancel';
 
 function LeftBar() {
@@ -30,7 +30,7 @@ function LeftBar() {
       
       <Collapse in={checked} timeout="auto" unmountOnExit>
         <CardContent>
-          <RightBar/>
+          <Notifications/>
         </CardContent>
       </Collapse>
     </Box>

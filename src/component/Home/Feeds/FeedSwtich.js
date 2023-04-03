@@ -53,7 +53,7 @@ function TabPanel(props) {
     sx={{ marginTop:'2%', maxWidth: "100%", display: "flex", justifyContent: "center"}}
     >  
       <Box sx={{ width: '80%', display:'flex',flexDirection: "column" ,justifyContent :'center' }}>
-        <Paper>
+        <Paper elevation={0}>
         <Box sx={{  borderBottom: 1, borderColor: 'divider', width :'100%',justifyContent :'space-evenly', display:'flex' }}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
             <Tab label="Opportunities" {...a11yProps(0)} />

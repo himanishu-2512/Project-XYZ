@@ -1,49 +1,64 @@
-import { Box, createTheme, Stack, ThemeProvider } from "@mui/material";
-import React, { useState } from 'react';
-import RightBar from '../component/Home/RightBar'
-import LeftBar from '../component/Home/LeftBar'
-import FeedSwitch from '../component/Home/FeedSwtich'
-import Header from '../component/Home/Header'
-import Share from '../component/Home/share'
+import { Box, createTheme, ThemeProvider } from "@mui/material";
+import React, { useState } from "react";
+import Recents from "../component/Home/Recents";
+import LeftBar from "../component/Home/RightBar/RightBar";
+import FeedSwitch from "../component/Home/Feeds/FeedSwtich";
+import Header from "../component/Home/Header";
+import Share from "../component/Home/share";
 
+const Homepage = ({ setLoginUser }) => {
+	//Theme
+	const [mode, setMode] = useState("light");
 
-const Homepage = ({setLoginUser}) => {
+	const darkTheme = createTheme({
+		palette: {
+			mode: mode,
+		},
+		breakpoints: {
+			values: {
+				xs: 0,
+				sm: 600,
+				md: 900,
+				lg: 1200,
+				big: 1400,
+				xl: 1536,
+			},
+		},
+	});
 
-    const handlechange = () =>{
-        setLoginUser({})
-        window.localStorage.removeItem("isLoggedIn")
-    }
-    //Theme
- const [mode, setMode] = useState("dark");
+	return (
+		<ThemeProvider theme={darkTheme}>
+			<div className="homepage">
+				<Box bgcolor={"background.default"} color={"text.primary"} height={"100%"}>
+					<Header setLoginUser={setLoginUser} setMode={setMode} mode={mode} />
+					<div style={{ display: "flex" }}>
+						<Box sx={{ flex: { md: "2", lg: "3" }, display: { xs: "none", md: "block" } }}>
+							<Recents />
+						</Box>
+						<Box
+							sx={{
+								flex: {
+									md: "4",
+									lg: "6",
+								},
+							}}
+						>
+							<Share />
+							<FeedSwitch />
+						</Box>
+						<Box
+							sx={{
+								flex: 3,
+								display: { xs: "none", big: "block" },
+							}}
+						>
+							<LeftBar />
+						</Box>
+					</div>
+				</Box>
+			</div>
+		</ThemeProvider>
+	);
+};
 
- const darkTheme = createTheme({
-   palette: {
-     mode: mode,
-   },
- });
-
-    return (
-        <ThemeProvider theme={darkTheme}>
-        <div className="homepage" >
-            <Box  bgcolor={"background.default"} color={"text.primary"} >
-                <Header setLoginUser={setLoginUser} setMode={setMode} mode={mode} />
-                <div style={{ display: "flex" }}>
-                <div style={{ flex: 2 }}>
-                    <LeftBar/>
-                </div>
-                    <div style={{ flex: 6 }}>
-                        <Share/>
-                        <FeedSwitch/>
-                    </div>
-                    <div style={{ flex: 3 }}>
-                    <RightBar/>
-                    </div>
-                </div>
-            </Box>
-            {/* <button onClick={handlechange} >Logout</button> */}
-        </div>
-        </ThemeProvider>
-    )
-}
-
-export default Homepage
+export default Homepage;

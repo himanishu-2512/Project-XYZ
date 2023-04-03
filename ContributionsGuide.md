@@ -76,6 +76,12 @@ Add those changes to the branch you just created using the `git add` command:
 ```
 git add Contributors.md
 ```
+
+For adding all files at a time.
+```
+git add -A
+```
+
 Now commit those changes using the `git commit` command:
 
 ```

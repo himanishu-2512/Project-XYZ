@@ -6,11 +6,12 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
+import { Paper } from '@mui/material';
 
 
 function RightBar() {
   return (
-
+    <Paper sx={{borderRadius:'5%'}}elevation={3}>
     <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
       <Divider textAlign='left' sx={{fontSize:"22px", margin: "10px"}}> Recent Opportunities </Divider>
     <ListItem alignItems="flex-start">
@@ -145,6 +146,7 @@ function RightBar() {
       />
     </ListItem>
   </List>
+  </Paper>
   )
 }
 

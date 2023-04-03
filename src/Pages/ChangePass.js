@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 // import { Link } from 'react-router-dom'
 // import { Container, Grid, Paper, TextField, Button } from '@mui/material';
 import styled from 'styled-components'
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from "axios"
 
-function RegisterForm() {
+function ChangePass() {
 
     const Navigate = useNavigate();
 
@@ -28,9 +28,9 @@ function RegisterForm() {
 	}
     const handleChange = async(e) => {
         e.preventDefault();
-		const {user} = newuser
+		const {user,token,password} = newuser
 		if(user){
-			await axios.post("http://localhost:8000/api/auth/forgotPassword", newuser)
+			await axios.post("http://localhost:8000/api/auth/verifyToken", newuser)
 			.then( res => {
                 alert(res.data.message)
 				Navigate('/forgotpassword')
@@ -38,7 +38,6 @@ function RegisterForm() {
 		} else {
 			alert("Invalid Input")
 		}
-		
     }
 
 
@@ -52,10 +51,10 @@ return(
             <h1>Forgot Your Password</h1>
                   
                 <input type="text" name ="user" onChange={val} placeholder="Username or Email" />
-                <button onClick = { handleChange } >Send OTP</button>
-                <Link to="Forgotpassword" href="#">
-					{'<<'} Back to Login...
-				</Link>
+                <input type="text" name="password" onChange={val} placeholder="New Password" />
+                <input type="text" name="token" onChange={val} placeholder="OTP" />
+                <button onClick = { handleChange } >Done</button>
+                <button onClick={() => Navigate('/LoginForm')} >Sign In</button>
         </form>
     </div>
     </div>
@@ -173,4 +172,4 @@ input {
 	height: 100%;
 }`
 
-export default RegisterForm
+export default ChangePass

@@ -43,6 +43,7 @@ const LoginForm = ({ setLoginUser }) => {
 		if (username && email && password && name) {
 			await axios.post("http://localhost:8000/api/auth/register", newuser).then((res) => {
 				alert(res.data.message);
+				console.log(res.data.user)
 				window.location.reload();
 			});
 		} else {
@@ -77,6 +78,8 @@ const LoginForm = ({ setLoginUser }) => {
 			axios.post("http://localhost:8000/api/auth/login", user).then((res) => {
 				alert(res.data.message);
 				if (res.data.user) {
+					console.log(res.data.user)
+
 					setLoginUser(res.data.user);
 					window.localStorage.setItem("isLoggedIn", true);
 				}

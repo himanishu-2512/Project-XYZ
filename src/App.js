@@ -5,6 +5,7 @@ import LoginForm from "./Pages/LoginForm";
 import ForgotPass from "./Pages/ForgotPass";
 import Homepage from "./Pages/homepage";
 import Profile from "./Pages/Profile";
+import ChangePass from "./Pages/ChangePass";
 
 function App() {
 	//UserLogin
@@ -33,6 +34,8 @@ function App() {
 					/>
 					<Route path="/LoginForm" element={<LoginForm setLoginUser={setLoginUser} />} />
 					<Route path="/Forgotpassword" element={<ForgotPass />} />
+					<Route path="/Changepassword" element={<ChangePass />} />
+
 					<Route path="/Profile" element={<Profile />} />
 				</Routes>
 			</BrowserRouter>

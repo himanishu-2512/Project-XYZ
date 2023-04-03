@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
@@ -6,185 +6,472 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
-import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import { Collapse } from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
 import { Box } from "@mui/system";
+import styled from "styled-components";
 
 function RightBar() {
-	return (
-		<Box sx={{ display: "flex", flexDirection: "column" }}>
-			<Accordion
-				disableGutters
-				sx={{
-					padding: "20px 30px 10px 30px",
-					border: "none",
-					boxShadow: "none",
-					"&:before": {
-						display: "none",
-					},
-				}}
-			>
-				<AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1a-content" id="panel1a-header">
-					<Typography sx={{ fontSize: "18px" }}>Recent Opportunities</Typography>
-				</AccordionSummary>
-				<AccordionDetails sx={{ paddingX: "0" }}>
-					<List>
-						<ListItem alignItems="flex-start">
-							<ListItemAvatar>
-								<Avatar alt="" src="" />
-							</ListItemAvatar>
-							<ListItemText
-								primary="Opportunity 1 description!!"
-								secondary={
-									<React.Fragment>
-										<Typography
-											sx={{ display: "inline" }}
-											component="span"
-											variant="body2"
-											color="text.primary"
-										>
-											Prakhar
-										</Typography>
-										{" — 1 day ago"}
-									</React.Fragment>
-								}
-							/>
-						</ListItem>
-						<Divider variant="inset" component="li" />
-						<ListItem alignItems="flex-start">
-							<ListItemAvatar>
-								<Avatar alt="Travis Howard" src="" />
-							</ListItemAvatar>
-							<ListItemText
-								primary="Opportunity 2 description!!"
-								secondary={
-									<React.Fragment>
-										<Typography
-											sx={{ display: "inline" }}
-											component="span"
-											variant="body2"
-											color="text.primary"
-										>
-											Vikrant
-										</Typography>
-										{" — 2 days ago"}
-									</React.Fragment>
-								}
-							/>
-						</ListItem>
-						<Divider variant="inset" component="li" />
-						<ListItem alignItems="flex-start">
-							<ListItemAvatar>
-								<Avatar alt="Cindy Baker" src="" />
-							</ListItemAvatar>
-							<ListItemText
-								primary="Opportunity 3 description!!"
-								secondary={
-									<React.Fragment>
-										<Typography
-											sx={{ display: "inline" }}
-											component="span"
-											variant="body2"
-											color="text.primary"
-										>
-											Kunal
-										</Typography>
-										{" — 3 days ago"}
-									</React.Fragment>
-								}
-							/>
-						</ListItem>
-					</List>
-				</AccordionDetails>
-			</Accordion>
-			<Divider sx={{ width: "80%", alignSelf: "center", marginRight: "2%" }} />
-			<Accordion
-				disableGutters
-				sx={{
-					padding: "10px 30px 20px 30px",
-					border: "none",
-					boxShadow: "none",
-					"&:before": {
-						display: "none",
-					},
-				}}
-			>
-				<AccordionSummary expandIcon={<ExpandMore />} aria-controls="panel1a-content" id="panel1a-header">
-					<Typography sx={{ fontSize: "18px" }}>Recent Questions</Typography>
-				</AccordionSummary>
-				<AccordionDetails sx={{ paddingX: "0" }}>
-					<List>
-						<ListItem alignItems="flex-start">
-							<ListItemAvatar>
-								<Avatar alt="" src="" />
-							</ListItemAvatar>
-							<ListItemText
-								primary="Question 1 description!!"
-								secondary={
-									<React.Fragment>
-										<Typography
-											sx={{ display: "inline" }}
-											component="span"
-											variant="body2"
-											color="text.primary"
-										>
-											Kunal
-										</Typography>
-										{" — 1 day ago"}
-									</React.Fragment>
-								}
-							/>
-						</ListItem>
-						<Divider variant="inset" component="li" />
+	const [expandOpportunities, setExpandOpportunities] = useState(false);
+	const handleExpandOpportunities = () => {
+		setExpandOpportunities(!expandOpportunities);
+	};
 
-						<ListItem alignItems="flex-start">
-							<ListItemAvatar>
-								<Avatar alt="Travis Howard" src="" />
-							</ListItemAvatar>
-							<ListItemText
-								primary="Question 2 description!!"
-								secondary={
-									<React.Fragment>
-										<Typography
-											sx={{ display: "inline" }}
-											component="span"
-											variant="body2"
-											color="text.primary"
-										>
-											Prakhar
-										</Typography>
-										{" — 2 days ago"}
-									</React.Fragment>
-								}
+	const [expandQuestions, setExpandQuestions] = useState(false);
+	const handleExpandQuestions = () => {
+		setExpandQuestions(!expandQuestions);
+	};
+
+	return (
+		<Box
+			sx={{
+				display: "flex",
+				flexDirection: "column",
+				position: "fixed",
+				width: { md: "33.33%", lg: "35%", big: "25%" },
+				height: "100%",
+			}}
+		>
+			<Box sx={{ display: "flex", flexDirection: "column", width: "100%", height: "100%" }}>
+				<Container>
+					<Box
+						class="Recents"
+						sx={{
+							marginBottom: "5%",
+						}}
+					>
+						<Typography
+							sx={{
+								display: "flex",
+								justifyContent: "space-between",
+								paddingX: "8%",
+								marginY: "5%",
+								cursor: "pointer",
+							}}
+							onClick={handleExpandOpportunities}
+						>
+							Recent Opportunities
+							<ExpandMore
+								sx={{
+									transition: "transform 0.5s",
+									transform: `${expandOpportunities ? "rotate(180deg)" : ""}`,
+								}}
 							/>
-						</ListItem>
-						<Divider variant="inset" component="li" />
-						<ListItem alignItems="flex-start">
-							<ListItemAvatar>
-								<Avatar alt="Cindy Baker" src="" />
-							</ListItemAvatar>
-							<ListItemText
-								primary="Question 3 description!!"
-								secondary={
-									<React.Fragment>
-										<Typography
-											sx={{ display: "inline" }}
-											component="span"
-											variant="body2"
-											color="text.primary"
-										>
-											Himanshu
-										</Typography>
-										{" — 3 days ago"}
-									</React.Fragment>
-								}
+						</Typography>
+
+						<Collapse
+							className={"collapse"}
+							in={expandOpportunities}
+							timeout={500}
+							sx={{ padding: "0  8% 0 3%", position: "relative", maxHeight: "35vh", overflowY: "scroll" }}
+						>
+							<List>
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar alt="" src="" />
+									</ListItemAvatar>
+									<ListItemText
+										primary="Opportunity 1 description!!"
+										secondary={
+											<React.Fragment>
+												<Typography
+													sx={{ display: "inline" }}
+													component="span"
+													variant="body2"
+													color="text.primary"
+												>
+													Prakhar
+												</Typography>
+												{" — 1 day ago"}
+											</React.Fragment>
+										}
+									/>
+								</ListItem>
+								<Divider variant="inset" component="li" />
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar alt="" src="" />
+									</ListItemAvatar>
+									<ListItemText
+										primary="Opportunity 1 description!!"
+										secondary={
+											<React.Fragment>
+												<Typography
+													sx={{ display: "inline" }}
+													component="span"
+													variant="body2"
+													color="text.primary"
+												>
+													Prakhar
+												</Typography>
+												{" — 1 day ago"}
+											</React.Fragment>
+										}
+									/>
+								</ListItem>
+								<Divider variant="inset" component="li" />
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar alt="" src="" />
+									</ListItemAvatar>
+									<ListItemText
+										primary="Opportunity 1 description!!"
+										secondary={
+											<React.Fragment>
+												<Typography
+													sx={{ display: "inline" }}
+													component="span"
+													variant="body2"
+													color="text.primary"
+												>
+													Prakhar
+												</Typography>
+												{" — 1 day ago"}
+											</React.Fragment>
+										}
+									/>
+								</ListItem>
+								<Divider variant="inset" component="li" />
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar alt="" src="" />
+									</ListItemAvatar>
+									<ListItemText
+										primary="Opportunity 1 description!!"
+										secondary={
+											<React.Fragment>
+												<Typography
+													sx={{ display: "inline" }}
+													component="span"
+													variant="body2"
+													color="text.primary"
+												>
+													Prakhar
+												</Typography>
+												{" — 1 day ago"}
+											</React.Fragment>
+										}
+									/>
+								</ListItem>
+								<Divider variant="inset" component="li" />
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar alt="" src="" />
+									</ListItemAvatar>
+									<ListItemText
+										primary="Opportunity 1 description!!"
+										secondary={
+											<React.Fragment>
+												<Typography
+													sx={{ display: "inline" }}
+													component="span"
+													variant="body2"
+													color="text.primary"
+												>
+													Prakhar
+												</Typography>
+												{" — 1 day ago"}
+											</React.Fragment>
+										}
+									/>
+								</ListItem>
+								<Divider variant="inset" component="li" />
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar alt="Travis Howard" src="" />
+									</ListItemAvatar>
+									<ListItemText
+										primary="Opportunity 2 description!!"
+										secondary={
+											<React.Fragment>
+												<Typography
+													sx={{ display: "inline" }}
+													component="span"
+													variant="body2"
+													color="text.primary"
+												>
+													Vikrant
+												</Typography>
+												{" — 2 days ago"}
+											</React.Fragment>
+										}
+									/>
+								</ListItem>
+								<Divider variant="inset" component="li" />
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar alt="Cindy Baker" src="" />
+									</ListItemAvatar>
+									<ListItemText
+										primary="Opportunity 3 description!!"
+										secondary={
+											<React.Fragment>
+												<Typography
+													sx={{ display: "inline" }}
+													component="span"
+													variant="body2"
+													color="text.primary"
+												>
+													Kunal
+												</Typography>
+												{" — 3 days ago"}
+											</React.Fragment>
+										}
+									/>
+								</ListItem>
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar alt="Cindy Baker" src="" />
+									</ListItemAvatar>
+									<ListItemText
+										primary="Opportunity 3 description!!"
+										secondary={
+											<React.Fragment>
+												<Typography
+													sx={{ display: "inline" }}
+													component="span"
+													variant="body2"
+													color="text.primary"
+												>
+													Kunal
+												</Typography>
+												{" — 3 days ago"}
+											</React.Fragment>
+										}
+									/>
+								</ListItem>
+							</List>
+						</Collapse>
+					</Box>
+				</Container>
+
+				<Container>
+					<Box
+						class="Recents"
+						sx={{
+							marginBottom: "5%",
+						}}
+					>
+						<Typography
+							sx={{
+								display: "flex",
+								justifyContent: "space-between",
+								paddingX: "8%",
+								marginY: "5%",
+								cursor: "pointer",
+							}}
+							onClick={handleExpandQuestions}
+						>
+							Recent Questions
+							<ExpandMore
+								sx={{
+									transition: "transform 0.5s",
+									transform: `${expandQuestions ? "rotate(180deg)" : ""}`,
+								}}
 							/>
-						</ListItem>
-					</List>
-				</AccordionDetails>
-			</Accordion>
+						</Typography>
+
+						<Collapse
+							className={"collapse"}
+							in={expandQuestions}
+							timeout={500}
+							sx={{ padding: "0  8% 0 3%", position: "relative", maxHeight: "35vh", overflowY: "scroll" }}
+						>
+							<List>
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar alt="" src="" />
+									</ListItemAvatar>
+									<ListItemText
+										primary="Opportunity 1 description!!"
+										secondary={
+											<React.Fragment>
+												<Typography
+													sx={{ display: "inline" }}
+													component="span"
+													variant="body2"
+													color="text.primary"
+												>
+													Prakhar
+												</Typography>
+												{" — 1 day ago"}
+											</React.Fragment>
+										}
+									/>
+								</ListItem>
+								<Divider variant="inset" component="li" />
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar alt="" src="" />
+									</ListItemAvatar>
+									<ListItemText
+										primary="Opportunity 1 description!!"
+										secondary={
+											<React.Fragment>
+												<Typography
+													sx={{ display: "inline" }}
+													component="span"
+													variant="body2"
+													color="text.primary"
+												>
+													Prakhar
+												</Typography>
+												{" — 1 day ago"}
+											</React.Fragment>
+										}
+									/>
+								</ListItem>
+								<Divider variant="inset" component="li" />
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar alt="" src="" />
+									</ListItemAvatar>
+									<ListItemText
+										primary="Opportunity 1 description!!"
+										secondary={
+											<React.Fragment>
+												<Typography
+													sx={{ display: "inline" }}
+													component="span"
+													variant="body2"
+													color="text.primary"
+												>
+													Prakhar
+												</Typography>
+												{" — 1 day ago"}
+											</React.Fragment>
+										}
+									/>
+								</ListItem>
+								<Divider variant="inset" component="li" />
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar alt="" src="" />
+									</ListItemAvatar>
+									<ListItemText
+										primary="Opportunity 1 description!!"
+										secondary={
+											<React.Fragment>
+												<Typography
+													sx={{ display: "inline" }}
+													component="span"
+													variant="body2"
+													color="text.primary"
+												>
+													Prakhar
+												</Typography>
+												{" — 1 day ago"}
+											</React.Fragment>
+										}
+									/>
+								</ListItem>
+								<Divider variant="inset" component="li" />
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar alt="" src="" />
+									</ListItemAvatar>
+									<ListItemText
+										primary="Opportunity 1 description!!"
+										secondary={
+											<React.Fragment>
+												<Typography
+													sx={{ display: "inline" }}
+													component="span"
+													variant="body2"
+													color="text.primary"
+												>
+													Prakhar
+												</Typography>
+												{" — 1 day ago"}
+											</React.Fragment>
+										}
+									/>
+								</ListItem>
+								<Divider variant="inset" component="li" />
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar alt="Travis Howard" src="" />
+									</ListItemAvatar>
+									<ListItemText
+										primary="Opportunity 2 description!!"
+										secondary={
+											<React.Fragment>
+												<Typography
+													sx={{ display: "inline" }}
+													component="span"
+													variant="body2"
+													color="text.primary"
+												>
+													Vikrant
+												</Typography>
+												{" — 2 days ago"}
+											</React.Fragment>
+										}
+									/>
+								</ListItem>
+								<Divider variant="inset" component="li" />
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar alt="Cindy Baker" src="" />
+									</ListItemAvatar>
+									<ListItemText
+										primary="Opportunity 3 description!!"
+										secondary={
+											<React.Fragment>
+												<Typography
+													sx={{ display: "inline" }}
+													component="span"
+													variant="body2"
+													color="text.primary"
+												>
+													Kunal
+												</Typography>
+												{" — 3 days ago"}
+											</React.Fragment>
+										}
+									/>
+								</ListItem>
+								<ListItem alignItems="flex-start">
+									<ListItemAvatar>
+										<Avatar alt="Cindy Baker" src="" />
+									</ListItemAvatar>
+									<ListItemText
+										primary="Opportunity 3 description!!"
+										secondary={
+											<React.Fragment>
+												<Typography
+													sx={{ display: "inline" }}
+													component="span"
+													variant="body2"
+													color="text.primary"
+												>
+													Kunal
+												</Typography>
+												{" — 3 days ago"}
+											</React.Fragment>
+										}
+									/>
+								</ListItem>
+							</List>
+						</Collapse>
+					</Box>
+				</Container>
+			</Box>
 		</Box>
 	);
 }
 
 export default RightBar;
+
+const Container = styled.div`
+	.MuiCollapse-root::-webkit-scrollbar {
+		width: 6px;
+		background-color: rgba(0, 0, 0, 0.1);
+		border-radius: 10px;
+	}
+	.MuiCollapse-root::-webkit-scrollbar-thumb {
+		background-color: rgba(0, 0, 0, 0.3);
+		height: 20px;
+		border-radius: 10px;
+	}
+`;

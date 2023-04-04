@@ -1,29 +1,75 @@
-import { CakeRounded,KeyboardArrowDown, KeyboardArrowUp, Mail, Place } from "@mui/icons-material";
-import {
-	Avatar,
-	
-	Chip,
-	Collapse,
-	
-	Typography,
-} from "@mui/material";
+import { CakeRounded, Clear, KeyboardArrowDown, KeyboardArrowUp, Mail, Place } from "@mui/icons-material";
+import { Autocomplete, Avatar, Button, Chip, Collapse, TextField, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Box } from "@mui/system";
 import { useState } from "react";
-// import React, { useState } from "react";
+import styled from "@emotion/styled";
+
+const StyledAutocomplete = styled(Autocomplete)((props) => ({
+	width: "30%",
+	marginBottom: "10px",
+	"& .MuiInputLabel-outlined:not(.MuiInputLabel-shrink)": {
+		transform: "translate(20px, 9px) scale(1);",
+	},
+	"&.Mui-focused .MuiInputLabel-outlined": {
+		color: "grey",
+	},
+	"& input": {
+		padding: "0px",
+		width: "200px",
+	},
+	"& .MuiInputBase-root": {
+		padding: " 0 20px",
+		border: "none",
+		borderRadius: "30px",
+		height: "40px",
+	},
+	"&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+		borderColor: "grey",
+	},
+}));
 
 function UserInfo({ checked }) {
-	// const [userSkills, setUserSkills] = useState([]);
-	const skills = ["Android", "Angular", "C", "C++", "C#"];
+	const [userSkills, setUserSkills] = useState([]);
+	const skills = [
+		"Android",
+		"Angular",
+		"C",
+		"C++",
+		"C#",
+		"CSS",
+		"Django",
+		"Git",
+		"Java",
+		"JavaScript",
+		"jQuery",
+		"JSON",
+		"Kotlin",
+		"Linux",
+		"MATLAB",
+		"MongoDB",
+		"MySQL",
+		"Node.js",
+		"OOP",
+		"PHP",
+		"R",
+		"React.js",
+		"Ruby",
+		"Rust",
+		"Scala",
+		"Swift",
+		"Unity",
+		"Visio",
+		"XML",
+	];
+	const options = skills.filter((skill) => userSkills.indexOf(skill) === -1);
+	const value = null;
 	const [userInfoOpen, setUserInfoOpen] = useState(false);
 
-	// const handleChange = (e) => {
-	// 	setUserSkills([...userSkills, e.target.value]);
-	// };
-
-	// const handleSkillRemove = (e) => {
-	// 	console.log(e.target.closest("button"));
-	// };
+	const handleSkillRemove = (e) => {
+		const updatedSkills = userSkills.filter((skill) => skill !== e.target.closest("button").value);
+		setUserSkills(updatedSkills);
+	};
 
 	const info = (
 		<Box>
@@ -36,26 +82,23 @@ function UserInfo({ checked }) {
 						justifyContent: "space-between",
 					}}
 				>
-					{/* <FormControl sx={{ width: "50%", margin: "10px 0 10px 0" }}>
-							<InputLabel id="demo-simple-select-label">Choose Skill</InputLabel>
-							<Select
-								labelId="demo-simple-select-label"
-								id="demo-simple-select"
-								value=""
-								label="Choose Skill"
-								onChange={handleChange}
-							>
-								{skills.map((skill) => {
-									return (
-										<MenuItem key={skill} value={skill}>
-											{skill}
-										</MenuItem>
-									);
-								})}
-							</Select>
-						</FormControl> */}
 					<Grid container rowSpacing={2} columnSpacing={2} sx={{ margin: "0" }}>
-						{skills.map((skill) => {
+						{true && (
+							<Grid item xs={12}>
+								<StyledAutocomplete
+									disablePortal
+									value={value}
+									onChange={(event, newValue) => {
+										if (newValue && userSkills.indexOf(newValue) === -1)
+											setUserSkills([newValue, ...userSkills].sort());
+									}}
+									id="combo-box-demo"
+									options={options}
+									renderInput={(params) => <TextField {...params} label="Choose Skill" />}
+								/>
+							</Grid>
+						)}
+						{userSkills.map((skill) => {
 							return (
 								<Grid key={`user${skill}`} item xs={4} sx={{ display: "flex" }}>
 									<Chip
@@ -67,9 +110,17 @@ function UserInfo({ checked }) {
 											fontWeight: "bold",
 										}}
 									/>
-									{/* <Button sx={{ color: "grey" }} onClick={handleSkillRemove}>
+									{true && (
+										<Button
+											sx={{
+												color: "grey",
+											}}
+											value={skill}
+											onClick={handleSkillRemove}
+										>
 											<Clear />
-										</Button> */}
+										</Button>
+									)}
 								</Grid>
 							);
 						})}
@@ -97,27 +148,6 @@ function UserInfo({ checked }) {
 				</Box>
 			</Box>
 
-			{/* <Box
-					sx={{
-						display: "flex",
-						justifyContent: "space-around",
-						margin: "60px 0 50px 0",
-						color: "rgb(80,80,80)",
-					}}
-				>
-					<Box sx={{ flex: "1" }}>
-						<Box sx={{ display: "flex" }}>
-							<CakeRounded />
-							<Typography sx={{ marginLeft: "15px" }}>24/04/2000</Typography>
-						</Box>
-					</Box>
-					<Box sx={{ flex: "1" }}>
-						<Box sx={{ display: "flex" }}>
-							<Place />
-							<Typography sx={{ marginLeft: "15px" }}>Tonk, Rajasthan</Typography>
-						</Box>
-					</Box>
-				</Box> */}
 			<Box sx={{ color: "rgb(80,80,80)", marginBottom: "30px" }}>
 				<Box sx={{ display: "flex" }}>
 					<CakeRounded sx={{ width: "20px", height: "20px" }} />
@@ -166,7 +196,9 @@ function UserInfo({ checked }) {
 				)}
 				{userInfoOpen && <KeyboardArrowUp onClick={() => setUserInfoOpen(!userInfoOpen)} />}
 			</Box>
-			<Collapse in={userInfoOpen}>{info}</Collapse>
+			<Collapse in={userInfoOpen} timeout={500}>
+				{info}
+			</Collapse>
 		</div>
 	);
 }

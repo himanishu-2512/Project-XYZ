@@ -166,14 +166,9 @@ function Profile() {
 							</Box>
 						</Box>
 					</Box>
-					<Box sx={{ marginLeft: "10%" }}>
+					<Box sx={{ marginX: "5%" }}>
 						<UserInfo />
 					</Box>
-					{/* <Box display="flex" justifyContent="center" alignItems="center">
-						{!userInfoOpen && <KeyboardArrowDownIcon onClick={() => setUserInfoOpen(!userInfoOpen)} />}
-						{userInfoOpen && <KeyboardArrowUpIcon onClick={() => setUserInfoOpen(!userInfoOpen)} />}
-					</Box>
-					{userInfoOpen && <UserInfo checked={userInfoOpen} />} */}
 					<Divider />
 					<UserPosts />
 				</Container>

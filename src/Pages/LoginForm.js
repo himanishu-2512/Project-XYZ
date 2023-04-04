@@ -1,10 +1,20 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const LoginForm = ({ setLoginUser }) => {
+
+
+	useEffect(() => {
+		const loader = document.getElementById("preloader");
+		console.log(loader.textContent)
+		window.addEventListener("load", function(){
+		loader.style.display="none";
+})
+	  }, []);
+
 	//Forgot Password
 	const Navigate = useNavigate();
 
@@ -94,6 +104,7 @@ const LoginForm = ({ setLoginUser }) => {
 		<>
 			<Containers>
 				<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+				<div id="preloader">hi</div>
 				<div class={`container ${active ? "right-panel-active" : ""}`} id="container">
 					<div class={`form-container sign-up-container ${active ? "right-panel-active" : ""}`}>
 						<form action="#" class="sign-up-form">
@@ -157,6 +168,8 @@ const LoginForm = ({ setLoginUser }) => {
 		</>
 	);
 };
+
+
 
 const Containers = styled.div`
 	background: #232323;
@@ -399,6 +412,15 @@ const Containers = styled.div`
 
 	#sign {
 		display: none;
+	}
+
+	#preloader{
+		background: #000 url(images/pre3.gif) no-repeat center center;
+		background-size: 10%;
+		height: 100vh;
+		width: 100%;
+		position: fixed;
+		z-index:110;
 	}
 
 	@media (max-width: 554px) {

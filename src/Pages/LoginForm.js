@@ -9,11 +9,20 @@ const LoginForm = ({ setLoginUser }) => {
 
 	useEffect(() => {
 		const loader = document.getElementById("preloader");
-		console.log(loader.textContent)
-		window.addEventListener("load", function(){
-		loader.style.display="none";
-})
+		const onPageLoad = () => {
+			loader.style.display="none";
+		};
+	
+		// Check if the page has already loaded
+		if (document.readyState === 'complete') {
+		  onPageLoad();
+		} else {
+		  window.addEventListener('load', onPageLoad);
+		  // Remove the event listener when component unmounts
+		  return () => window.removeEventListener('load', onPageLoad);
+		}
 	  }, []);
+	
 
 	//Forgot Password
 	const Navigate = useNavigate();
@@ -92,6 +101,7 @@ const LoginForm = ({ setLoginUser }) => {
 
 					setLoginUser(res.data.user);
 					window.localStorage.setItem("isLoggedIn", true);
+					window.localStorage.setItem("userId", res.data.user._id);
 				}
 				Navigate("/");
 			});
@@ -104,7 +114,7 @@ const LoginForm = ({ setLoginUser }) => {
 		<>
 			<Containers>
 				<meta name="viewport" content="width=device-width,initial-scale=1.0" />
-				<div id="preloader">hi</div>
+				<div id="preloader"></div>
 				<div class={`container ${active ? "right-panel-active" : ""}`} id="container">
 					<div class={`form-container sign-up-container ${active ? "right-panel-active" : ""}`}>
 						<form action="#" class="sign-up-form">
@@ -415,7 +425,7 @@ const Containers = styled.div`
 	}
 
 	#preloader{
-		background: #000 url(images/pre3.gif) no-repeat center center;
+		background: #000 url(images/pre2.gif) no-repeat center center;
 		background-size: 10%;
 		height: 100vh;
 		width: 100%;

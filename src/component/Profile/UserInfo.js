@@ -1,9 +1,10 @@
-import { CakeRounded, Clear, KeyboardArrowDown, KeyboardArrowUp, Mail, Place } from "@mui/icons-material";
+import { CakeRounded, Clear, ExpandMore, Mail, Place } from "@mui/icons-material";
 import { Autocomplete, Avatar, Button, Chip, Collapse, TextField, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import { Box } from "@mui/system";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
+import axios from "axios";
 
 const StyledAutocomplete = styled(Autocomplete)((props) => ({
 	width: "30%",
@@ -11,8 +12,11 @@ const StyledAutocomplete = styled(Autocomplete)((props) => ({
 	"& .MuiInputLabel-outlined:not(.MuiInputLabel-shrink)": {
 		transform: "translate(20px, 9px) scale(1);",
 	},
-	"&.Mui-focused .MuiInputLabel-outlined": {
-		color: "grey",
+	// "&.Mui-focused .MuiInputLabel-outlined": {
+	// 	color: "red",
+	// },
+	labe: {
+		color: "red",
 	},
 	"& input": {
 		padding: "0px",
@@ -29,8 +33,19 @@ const StyledAutocomplete = styled(Autocomplete)((props) => ({
 	},
 }));
 
-function UserInfo({ checked }) {
-	const [userSkills, setUserSkills] = useState([]);
+function UserInfo({ checked, user, setUser }) {
+	const [userInfoOpen, setUserInfoOpen] = useState(false);
+	const [userSkills, setUserSkills] = useState(user.skills);
+	const [loadingText, setLoadingText] = useState("Loading");
+	const [inputValue, setInputValue] = useState("");
+	const [cityInput, setCityInput] = useState("");
+	const [cities, setCities] = useState([]);
+	const [city, setCity] = useState(null);
+	const [date, setDate] = useState(user.dob ? user.dob.slice(0, 10) : "");
+
+	const [demo, setDemo] = useState(null);
+	const [demoInput, setDemoInput] = useState("");
+
 	const skills = [
 		"Android",
 		"Angular",
@@ -64,12 +79,55 @@ function UserInfo({ checked }) {
 	];
 	const options = skills.filter((skill) => userSkills.indexOf(skill) === -1);
 	const value = null;
-	const [userInfoOpen, setUserInfoOpen] = useState(false);
+
+	const handleSkills = (newValue) => {
+		setUser({ ...user, skills: [newValue, ...userSkills].sort() });
+		// console.log("On adding:", user.skills);
+		setUserSkills([newValue, ...userSkills].sort());
+	};
 
 	const handleSkillRemove = (e) => {
-		const updatedSkills = userSkills.filter((skill) => skill !== e.target.closest("button").value);
-		setUserSkills(updatedSkills);
+		setUser({ ...user, skilss: userSkills.filter((skill) => skill !== e.target.closest("button").value) });
+		setUserSkills(userSkills.filter((skill) => skill !== e.target.closest("button").value));
 	};
+
+	const handleDate = (e) => {
+		// user.dob = e.target.value;
+		setUser({ ...user, dob: e.target.value });
+		setDate(e.target.value);
+	};
+
+	const handleCity = (newValue) => {
+		setUser({
+			...user,
+			city: newValue,
+		});
+		setCity(newValue);
+	};
+
+	useEffect(() => {
+		if (cityInput.length > 0) {
+			const fetchCities = setTimeout(async () => {
+				try {
+					const response = await axios.get(
+						`http://geodb-free-service.wirefreethought.com/v1/geo/cities?namePrefix=${cityInput}`
+					);
+					const gotCities = response.data.data.map((city) => `${city.city}, ${city.region}, ${city.country}`);
+					// console.log(gotCities);
+					const updatedCities = [...new Set(gotCities)];
+					setLoadingText(gotCities.length > 0 ? "Loading..." : "No city found");
+					setCities(updatedCities);
+				} catch (error) {
+					console.log(error);
+				}
+			}, 750);
+			return () => clearTimeout(fetchCities);
+		} else setCities([]);
+		// if (cityInput.length > 0) fetchCities();
+		// else setCities([]);
+	}, [cityInput]);
+
+	// console.log(cityInput);
 
 	const info = (
 		<Box>
@@ -83,14 +141,18 @@ function UserInfo({ checked }) {
 					}}
 				>
 					<Grid container rowSpacing={2} columnSpacing={2} sx={{ margin: "0" }}>
-						{true && (
+						{checked && (
 							<Grid item xs={12}>
 								<StyledAutocomplete
 									disablePortal
 									value={value}
 									onChange={(event, newValue) => {
-										if (newValue && userSkills.indexOf(newValue) === -1)
-											setUserSkills([newValue, ...userSkills].sort());
+										if (newValue && userSkills.indexOf(newValue) === -1) handleSkills(newValue);
+									}}
+									inputValue={inputValue}
+									selectOnFocus={true}
+									onInputChange={(event, newInputValue) => {
+										setInputValue(newInputValue);
 									}}
 									id="combo-box-demo"
 									options={options}
@@ -110,7 +172,7 @@ function UserInfo({ checked }) {
 											fontWeight: "bold",
 										}}
 									/>
-									{true && (
+									{checked && (
 										<Button
 											sx={{
 												color: "grey",
@@ -148,31 +210,78 @@ function UserInfo({ checked }) {
 				</Box>
 			</Box>
 
-			<Box sx={{ color: "rgb(80,80,80)", marginBottom: "30px" }}>
-				<Box sx={{ display: "flex" }}>
-					<CakeRounded sx={{ width: "20px", height: "20px" }} />
-					<Typography
+			{(user.dob || checked) && (
+				<Box sx={{ color: "rgb(80,80,80)", marginBottom: "30px" }}>
+					<Box
 						sx={{
-							marginLeft: "15px",
 							display: "flex",
-							justifyContent: "center",
-							alignItems: "end",
+							height: "100%",
 						}}
 					>
-						18/07/2001
-					</Typography>
+						<CakeRounded sx={{ width: "20px", height: "20px" }} />
+						<TextField
+							type="date"
+							value={date}
+							InputProps={{
+								readOnly: !checked,
+							}}
+							onChange={handleDate}
+							sx={{
+								color: "rgb(80,80,80)",
+								marginLeft: "15px",
+								fieldset: !checked ? { border: "none" } : {},
+								input: {
+									color: "rgb(80,80,80)",
+									padding: !checked ? "2px 0 0 0 " : "",
+								},
+								label: {
+									fontWeight: "bold",
+									color: "transparent",
+								},
+							}}
+						></TextField>
+					</Box>
 				</Box>
-			</Box>
-			<Box sx={{ color: "rgb(80,80,80)", marginBottom: "30px" }}>
-				<Box sx={{ display: "flex" }}>
-					<Place sx={{ width: "20px", height: "20px" }} />
-					<Typography sx={{ marginLeft: "15px" }}>Kanpur, Uttar Pradesh</Typography>
+			)}
+			{(user.city || checked) && (
+				<Box sx={{ color: "rgb(80,80,80)", marginBottom: "30px" }}>
+					<Box sx={{ display: "flex" }}>
+						<Place sx={{ width: "20px", height: "20px" }} />
+						{checked && (
+							<Autocomplete
+								disablePortal
+								options={cities}
+								loading={cityInput.length > 0 ? true : false}
+								loadingText={loadingText}
+								noOptionsText="Type to search"
+								value={city}
+								onChange={(event, newValue) => handleCity(newValue)}
+								inputValue={cityInput}
+								onInputChange={(event, newInputValue) => {
+									// console.log(newInputValue);
+									setCityInput(newInputValue);
+								}}
+								renderInput={(params) => <TextField {...params} label="Choose City" />}
+								sx={{ width: "50%", marginBottom: "10px", marginLeft: "15px" }}
+							/>
+						)}
+						{!checked && <Typography sx={{ marginLeft: "15px" }}>{user.city}</Typography>}
+					</Box>
 				</Box>
-			</Box>
+			)}
 			<Box sx={{ color: "rgb(80,80,80)", marginBottom: "30px" }}>
 				<Box sx={{ display: "flex" }}>
 					<Mail sx={{ width: "20px", height: "20px" }} />
-					<Typography sx={{ marginLeft: "15px" }}>abcd@gmail.com</Typography>
+					<Typography sx={{ marginLeft: "15px" }}>{user.email}</Typography>
+					<Autocomplete
+						options={skills}
+						value={demo}
+						onChange={(event, newValue) => setDemo(newValue)}
+						inputValue={demoInput}
+						onInputChange={(event, newInputValue) => setDemoInput(newInputValue)}
+						renderInput={(params) => <TextField {...params} label="Demo" />}
+						sx={{ width: "50%" }}
+					/>
 				</Box>
 			</Box>
 		</Box>
@@ -184,19 +293,18 @@ function UserInfo({ checked }) {
 				display="flex"
 				justifyContent="center"
 				alignItems="center"
-				margin="10px 0 0 10%"
+				marginTop="10px"
 				onClick={() => setUserInfoOpen(!userInfoOpen)}
 				sx={{ cursor: "pointer" }}
 			>
-				{!userInfoOpen && (
-					<Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-						{/* <Typography sx={{ fontWeight: "bold", fontSize: "12px" }}> More Info</Typography> */}
-						<KeyboardArrowDown />
-					</Box>
-				)}
-				{userInfoOpen && <KeyboardArrowUp onClick={() => setUserInfoOpen(!userInfoOpen)} />}
+				<ExpandMore
+					sx={{
+						transition: "transform 0.5s",
+						transform: `${userInfoOpen || checked ? "rotate(180deg)" : ""}`,
+					}}
+				/>
 			</Box>
-			<Collapse in={userInfoOpen} timeout={500}>
+			<Collapse in={userInfoOpen || checked} timeout={500}>
 				{info}
 			</Collapse>
 		</div>

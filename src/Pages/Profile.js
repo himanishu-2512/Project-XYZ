@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, TextField, Typography } from "@mui/material";
 import NavBar from "../component/Home/Header";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -7,178 +7,280 @@ import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import UserInfo from "../component/Profile/UserInfo";
-// import { useState } from "react";
-// import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-// import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import UserPosts from "../component/Profile/UserPosts";
-import { PersonAdd } from "@mui/icons-material";
+import { Edit, PersonAdd } from "@mui/icons-material";
+import axios from "axios";
 
-function Profile() {
-	// const [userInfoOpen, setUserInfoOpen] = useState(false);
+function Profile({ setLoginUser }) {
+	const [edit, setEdit] = useState(false);
+	const [user, setUser] = useState();
+	const id = window.localStorage.getItem("userId");
+
+	useEffect(() => {
+		const fetchUser = async () => {
+			try {
+				const userInfo = await axios.get(`http://localhost:8000/api/auth/user/${id}`);
+				// console.log(userInfo.data.user);
+				setUser(userInfo.data.user);
+			} catch (error) {
+				console.log(error);
+			}
+		};
+		fetchUser();
+	}, [id]);
+
+	const handleChange = (e) => {
+		e.preventDefault();
+		const { value, name } = e.target;
+		// console.log(name, value);
+		setUser(() => {
+			return {
+				...user,
+				[name]: value,
+			};
+		});
+	};
+	// console.log(user);
+	const handleSave = async (e) => {
+		e.preventDefault();
+		// console.log("User to be updated: ", user);
+		const updatedUser = await axios.post(`http://localhost:8000/api/auth/updateuser/${id}`, user);
+		// console.log(updatedUser);
+		setEdit(false);
+		setUser(updatedUser.data.userUp);
+	};
 
 	return (
-		<div>
-			<Box>
-				<NavBar />
-				<Container component="main" maxWidth="md">
-					<CssBaseline />
-					<Box
-						sx={{
-							// marginLeft: "10%",
-							display: "flex",
-							flexDirection: "row",
-							justifyContent: "flex-end",
-							alignItems: "center",
-						}}
-					>
-						<Box
-							sx={{
-								// flex: "1",
-								display: "flex",
-								justifyContent: "center",
-								width: "30%",
-							}}
-						>
-							<Avatar alt="" src="" sx={{ width: 100, height: 100, margin: 2 }} />
-						</Box>
-						<Box
-							sx={{
-								// marginLeft: "10%",
-								display: "flex",
-								flexDirection: "column",
-								alignItems: "right",
-								// flex: "1",
-								width: "70%",
-							}}
-						>
+		<>
+			{user && (
+				<div>
+					<Box>
+						<NavBar />
+						<Container component="main" maxWidth="md">
+							<CssBaseline />
 							<Box
 								sx={{
-									marginTop: 1,
 									display: "flex",
 									flexDirection: "row",
+									justifyContent: "flex-end",
 									alignItems: "center",
 								}}
 							>
 								<Box
 									sx={{
-										margin: 1,
+										display: "flex",
+										justifyContent: "center",
+										width: "30%",
+									}}
+								>
+									<Avatar alt="" src="" sx={{ width: 100, height: 100, margin: 2 }} />
+								</Box>
+								<Box
+									sx={{
 										display: "flex",
 										flexDirection: "column",
-										alignItems: "left",
+										alignItems: "right",
+										width: "70%",
 									}}
 								>
-									<Typography variant="h5" sx={{ letterSpacing: "1px", fontWeight: "bold" }}>
-										Kunal Chaurasia
-									</Typography>
-									<Typography
-										variant="body2"
+									<Box
 										sx={{
-											color: "rgb(80,80,80)",
-											marginTop: "10px",
+											marginTop: 2,
+											display: "flex",
+											flexDirection: "row",
+											alignItems: "center",
 										}}
 									>
-										Kunalc
-									</Typography>
+										<Box
+											sx={{
+												margin: 1,
+												display: "flex",
+												flexDirection: "column",
+												alignItems: "left",
+											}}
+										>
+											<Box
+												sx={{
+													width: "100%",
+												}}
+											>
+												<TextField
+													id="outlined-static"
+													value={user.name}
+													name="name"
+													label={edit ? "Name" : ""}
+													fullWidth={true}
+													onChange={handleChange}
+													InputProps={{
+														readOnly: !edit,
+													}}
+													sx={{
+														fieldset: !edit ? { border: "none" } : {},
+														fontWeight: "bold",
+														input: {
+															fontWeight: "bold",
+															paddingX: !edit ? "0" : "",
+														},
+														label: {
+															fontWeight: "bold",
+														},
+													}}
+												/>
+											</Box>
+											<Typography
+												variant="body2"
+												sx={{
+													color: "rgb(80,80,80)",
+													marginTop: !edit ? "-15px" : "10px",
+												}}
+											>
+												{user.username}
+											</Typography>
+										</Box>
+										<Box sx={{ marginLeft: "auto", display: "flex", flexDirection: "column" }}>
+											{true && (
+												<>
+													<Button variant="outlined">
+														<Typography variant="caption">Following</Typography>
+													</Button>
+												</>
+											)}
+											{true && (
+												<Button variant="outlined">
+													<PersonAdd />
+													<Typography variant="caption">Follow</Typography>
+												</Button>
+											)}
+											{true && (
+												<>
+													<Button variant="outlined" onClick={() => setEdit(true)}>
+														<Edit />
+														<Typography variant="caption">Edit</Typography>
+													</Button>
+												</>
+											)}
+										</Box>
+									</Box>
+									<Box
+										sx={{
+											display: "flex",
+											flexDirection: "row",
+											alignItems: "center",
+										}}
+									>
+										<Box
+											sx={{
+												margin: 1,
+												display: "flex",
+												flexDirection: "row",
+												alignItems: "center",
+											}}
+										>
+											<Typography component="h1" variant="body2" sx={{ fontWeight: "bold" }}>
+												{user.posts.length + user.questions.length}
+											</Typography>
+											<Typography component="h1" variant="body2" sx={{ marginLeft: "5px" }}>
+												Posts
+											</Typography>
+										</Box>
+										<Box
+											sx={{
+												margin: 1,
+												display: "flex",
+												flexDirection: "row",
+												alignItems: "center",
+											}}
+										>
+											<Typography
+												component="h1"
+												variant="body2"
+												sx={{ marginLeft: "5px", fontWeight: "bold" }}
+											>
+												{user.following.length}
+											</Typography>
+											<Typography component="h1" variant="body2" sx={{ marginLeft: "5px" }}>
+												Following
+											</Typography>
+										</Box>
+										<Box
+											sx={{
+												margin: 1,
+												display: "flex",
+												flexDirection: "row",
+												alignItems: "center",
+											}}
+										>
+											<Typography
+												component="h1"
+												variant="body2"
+												sx={{ marginLeft: "5px", fontWeight: "bold" }}
+											>
+												200
+											</Typography>
+											<Typography component="h1" variant="body2" sx={{ marginLeft: "5px" }}>
+												Followers
+											</Typography>
+										</Box>
+									</Box>
+									<Box
+										sx={{
+											margin: 1,
+											display: "flex",
+											flexDirection: "row",
+											alignItems: "center",
+										}}
+									>
+										<Box
+											sx={{
+												width: "100%",
+											}}
+										>
+											<TextField
+												id="outlined-multiline-static"
+												name="bio"
+												label={edit ? "Bio" : ""}
+												multiline
+												value={user.bio}
+												onChange={handleChange}
+												fullWidth={true}
+												InputProps={{
+													readOnly: !edit,
+												}}
+												sx={{
+													fieldset: !edit ? { border: "none" } : {},
+													".MuiInputBase-root": {
+														paddingBottom: !edit ? "0" : "",
+														paddingX: !edit ? "0" : "",
+													},
+													label: {
+														fontWeight: "bold",
+													},
+												}}
+											/>
+										</Box>
+									</Box>
 								</Box>
-								<Box sx={{ marginLeft: "auto" }}>
-									<Button variant="outlined">
-										<PersonAdd />
-										{/* <Typography variant="caption" sx={{ marginLeft: "10px" }}>
-											Follow
-										</Typography> */}
+							</Box>
+							<Box sx={{ marginX: "5%" }}>
+								<UserInfo checked={edit} user={user} setUser={setUser} />
+							</Box>
+							{edit && (
+								<>
+									<Button variant="outlined" onClick={handleSave}>
+										<Typography variant="caption">Save</Typography>
 									</Button>
-								</Box>
-							</Box>
-							<Box
-								sx={{
-									display: "flex",
-									flexDirection: "row",
-									alignItems: "center",
-								}}
-							>
-								<Box
-									sx={{
-										margin: 1,
-										display: "flex",
-										flexDirection: "row",
-										alignItems: "center",
-									}}
-								>
-									<Typography component="h1" variant="body2" sx={{ fontWeight: "bold" }}>
-										17
-									</Typography>
-									<Typography component="h1" variant="body2" sx={{ marginLeft: "5px" }}>
-										Posts
-									</Typography>
-								</Box>
-								<Box
-									sx={{
-										margin: 1,
-										display: "flex",
-										flexDirection: "row",
-										alignItems: "center",
-									}}
-								>
-									<Typography
-										component="h1"
-										variant="body2"
-										sx={{ marginLeft: "5px", fontWeight: "bold" }}
-									>
-										67
-									</Typography>
-									<Typography component="h1" variant="body2" sx={{ marginLeft: "5px" }}>
-										Following
-									</Typography>
-								</Box>
-								<Box
-									sx={{
-										margin: 1,
-										display: "flex",
-										flexDirection: "row",
-										alignItems: "center",
-									}}
-								>
-									<Typography
-										component="h1"
-										variant="body2"
-										sx={{ marginLeft: "5px", fontWeight: "bold" }}
-									>
-										200
-									</Typography>
-									<Typography component="h1" variant="body2" sx={{ marginLeft: "5px" }}>
-										Followers
-									</Typography>
-								</Box>
-							</Box>
-							<Box
-								sx={{
-									margin: 1,
-									display: "flex",
-									flexDirection: "row",
-									alignItems: "center",
-								}}
-							>
-								<Box>
-									Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur officia et,
-									quidem aut praesentium, ducimus quod officiis exercitationem voluptatum facilis
-									fugiat pariatur fuga totam ipsa quam repellendus odio corporis est.
-								</Box>
-							</Box>
-						</Box>
+									<Button variant="outlined" onClick={() => setEdit(false)}>
+										<Typography variant="caption">Cancel</Typography>
+									</Button>
+								</>
+							)}
+							<Divider />
+							<UserPosts />
+						</Container>
 					</Box>
-					<Box sx={{ marginLeft: "10%" }}>
-						<UserInfo />
-					</Box>
-					{/* <Box display="flex" justifyContent="center" alignItems="center">
-						{!userInfoOpen && <KeyboardArrowDownIcon onClick={() => setUserInfoOpen(!userInfoOpen)} />}
-						{userInfoOpen && <KeyboardArrowUpIcon onClick={() => setUserInfoOpen(!userInfoOpen)} />}
-					</Box>
-					{userInfoOpen && <UserInfo checked={userInfoOpen} />} */}
-					<Divider />
-					<UserPosts />
-				</Container>
-			</Box>
-		</div>
+				</div>
+			)}
+		</>
 	);
 }
 

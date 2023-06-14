@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Box, TextField, Typography } from "@mui/material";
 import NavBar from "../component/Home/Header";
 import Container from "@mui/material/Container";
@@ -18,17 +18,18 @@ function Profile({ setLoginUser }) {
 	// const [id, setId] = useState(window.localStorage.getItem("userId"));
 	let id = window.localStorage.getItem("userId");
 
-	const fetchUser = async () => {
+	const fetchUser = useCallback(async () => {
 		try {
 			const userInfo = await axios.get(`http://localhost:8000/api/auth/user/${id}`);
 			setUser(userInfo.data.user);
 		} catch (error) {
 			console.log(error);
 		}
-	};
+	}, [id]);
+
 	useEffect(() => {
 		fetchUser();
-	}, []);
+	}, [fetchUser]);
 
 	const handleChange = (e) => {
 		e.preventDefault();

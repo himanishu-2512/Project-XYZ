@@ -14,25 +14,25 @@ import axios from "axios";
 function Profile({ setLoginUser }) {
 	const [edit, setEdit] = useState(false);
 	const [user, setUser] = useState();
-	const id = window.localStorage.getItem("userId");
+	// const [newUser, setNewUser] = useState();
+	// const [id, setId] = useState(window.localStorage.getItem("userId"));
+	let id = window.localStorage.getItem("userId");
 
+	const fetchUser = async () => {
+		try {
+			const userInfo = await axios.get(`http://localhost:8000/api/auth/user/${id}`);
+			setUser(userInfo.data.user);
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	useEffect(() => {
-		const fetchUser = async () => {
-			try {
-				const userInfo = await axios.get(`http://localhost:8000/api/auth/user/${id}`);
-				// console.log(userInfo.data.user);
-				setUser(userInfo.data.user);
-			} catch (error) {
-				console.log(error);
-			}
-		};
 		fetchUser();
-	}, [id]);
+	}, []);
 
 	const handleChange = (e) => {
 		e.preventDefault();
 		const { value, name } = e.target;
-		// console.log(name, value);
 		setUser(() => {
 			return {
 				...user,
@@ -40,14 +40,16 @@ function Profile({ setLoginUser }) {
 			};
 		});
 	};
-	// console.log(user);
 	const handleSave = async (e) => {
 		e.preventDefault();
-		// console.log("User to be updated: ", user);
 		const updatedUser = await axios.post(`http://localhost:8000/api/auth/updateuser/${id}`, user);
-		// console.log(updatedUser);
 		setEdit(false);
 		setUser(updatedUser.data.userUp);
+	};
+
+	const handleCancel = () => {
+		fetchUser();
+		setEdit(false);
 	};
 
 	return (
@@ -269,7 +271,7 @@ function Profile({ setLoginUser }) {
 									<Button variant="outlined" onClick={handleSave}>
 										<Typography variant="caption">Save</Typography>
 									</Button>
-									<Button variant="outlined" onClick={() => setEdit(false)}>
+									<Button variant="outlined" onClick={handleCancel}>
 										<Typography variant="caption">Cancel</Typography>
 									</Button>
 								</>

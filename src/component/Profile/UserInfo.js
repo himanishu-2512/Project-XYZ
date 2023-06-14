@@ -1,10 +1,14 @@
 import { CakeRounded, Clear, ExpandMore, Mail, Place } from "@mui/icons-material";
 import { Autocomplete, Avatar, Button, Chip, Collapse, TextField, Typography } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Grid from "@mui/material/Grid";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import axios from "axios";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 const StyledAutocomplete = styled(Autocomplete)((props) => ({
 	width: "30%",
@@ -12,10 +16,7 @@ const StyledAutocomplete = styled(Autocomplete)((props) => ({
 	"& .MuiInputLabel-outlined:not(.MuiInputLabel-shrink)": {
 		transform: "translate(20px, 9px) scale(1);",
 	},
-	// "&.Mui-focused .MuiInputLabel-outlined": {
-	// 	color: "red",
-	// },
-	labe: {
+	label: {
 		color: "red",
 	},
 	"& input": {
@@ -41,10 +42,7 @@ function UserInfo({ checked, user, setUser }) {
 	const [cityInput, setCityInput] = useState("");
 	const [cities, setCities] = useState([]);
 	const [city, setCity] = useState(null);
-	const [date, setDate] = useState(user.dob ? user.dob.slice(0, 10) : "");
-
-	const [demo, setDemo] = useState(null);
-	const [demoInput, setDemoInput] = useState("");
+	const [date, setDate] = useState(user.dob ? dayjs(user.dob) : null);
 
 	const skills = [
 		"Android",
@@ -82,7 +80,6 @@ function UserInfo({ checked, user, setUser }) {
 
 	const handleSkills = (newValue) => {
 		setUser({ ...user, skills: [newValue, ...userSkills].sort() });
-		// console.log("On adding:", user.skills);
 		setUserSkills([newValue, ...userSkills].sort());
 	};
 
@@ -91,10 +88,9 @@ function UserInfo({ checked, user, setUser }) {
 		setUserSkills(userSkills.filter((skill) => skill !== e.target.closest("button").value));
 	};
 
-	const handleDate = (e) => {
-		// user.dob = e.target.value;
-		setUser({ ...user, dob: e.target.value });
-		setDate(e.target.value);
+	const handleDate = (newValue) => {
+		setUser({ ...user, dob: newValue.$d });
+		setDate(dayjs(newValue.$d));
 	};
 
 	const handleCity = (newValue) => {
@@ -113,7 +109,6 @@ function UserInfo({ checked, user, setUser }) {
 						`http://geodb-free-service.wirefreethought.com/v1/geo/cities?namePrefix=${cityInput}`
 					);
 					const gotCities = response.data.data.map((city) => `${city.city}, ${city.region}, ${city.country}`);
-					// console.log(gotCities);
 					const updatedCities = [...new Set(gotCities)];
 					setLoadingText(gotCities.length > 0 ? "Loading..." : "No city found");
 					setCities(updatedCities);
@@ -123,11 +118,7 @@ function UserInfo({ checked, user, setUser }) {
 			}, 750);
 			return () => clearTimeout(fetchCities);
 		} else setCities([]);
-		// if (cityInput.length > 0) fetchCities();
-		// else setCities([]);
 	}, [cityInput]);
-
-	// console.log(cityInput);
 
 	const info = (
 		<Box>
@@ -209,40 +200,41 @@ function UserInfo({ checked, user, setUser }) {
 					</Box>
 				</Box>
 			</Box>
-
-			{(user.dob || checked) && (
-				<Box sx={{ color: "rgb(80,80,80)", marginBottom: "30px" }}>
-					<Box
-						sx={{
-							display: "flex",
-							height: "100%",
-						}}
-					>
-						<CakeRounded sx={{ width: "20px", height: "20px" }} />
-						<TextField
-							type="date"
-							value={date}
-							InputProps={{
-								readOnly: !checked,
-							}}
-							onChange={handleDate}
+			<LocalizationProvider dateAdapter={AdapterDayjs}>
+				{(user.dob || checked) && (
+					<Box sx={{ color: "rgb(80,80,80)", marginBottom: "30px" }}>
+						<Box
 							sx={{
-								color: "rgb(80,80,80)",
-								marginLeft: "15px",
-								fieldset: !checked ? { border: "none" } : {},
-								input: {
-									color: "rgb(80,80,80)",
-									padding: !checked ? "2px 0 0 0 " : "",
-								},
-								label: {
-									fontWeight: "bold",
-									color: "transparent",
-								},
+								display: "flex",
+								height: "100%",
 							}}
-						></TextField>
+						>
+							<CakeRounded sx={{ width: "20px", height: "20px" }} />
+							<DatePicker
+								value={date}
+								onChange={(newValue) => handleDate(newValue)}
+								readOnly={!checked}
+								sx={{
+									color: "rgb(80,80,80)",
+									marginLeft: "15px",
+									fieldset: !checked ? { border: "none" } : {},
+									input: {
+										color: "rgb(80,80,80)",
+										padding: !checked ? "2px 0 0 0 " : "",
+									},
+									label: {
+										fontWeight: "bold",
+										color: "transparent",
+									},
+									".MuiInputAdornment-root": {
+										display: checked ? "" : "none",
+									},
+								}}
+							/>
+						</Box>
 					</Box>
-				</Box>
-			)}
+				)}
+			</LocalizationProvider>
 			{(user.city || checked) && (
 				<Box sx={{ color: "rgb(80,80,80)", marginBottom: "30px" }}>
 					<Box sx={{ display: "flex" }}>
@@ -258,11 +250,25 @@ function UserInfo({ checked, user, setUser }) {
 								onChange={(event, newValue) => handleCity(newValue)}
 								inputValue={cityInput}
 								onInputChange={(event, newInputValue) => {
-									// console.log(newInputValue);
 									setCityInput(newInputValue);
 								}}
 								renderInput={(params) => <TextField {...params} label="Choose City" />}
-								sx={{ width: "50%", marginBottom: "10px", marginLeft: "15px" }}
+								sx={{
+									width: "50%",
+									marginBottom: "10px",
+									marginLeft: "15px",
+									fieldset: !checked ? { border: "none" } : {},
+									fontWeight: "bold",
+									input: {
+										paddingX: !checked ? "0" : "",
+									},
+									label: {
+										fontWeight: "bold",
+									},
+									".MuiAutocomplete-endAdornment": {
+										display: checked ? "" : "none",
+									},
+								}}
 							/>
 						)}
 						{!checked && <Typography sx={{ marginLeft: "15px" }}>{user.city}</Typography>}
@@ -273,15 +279,6 @@ function UserInfo({ checked, user, setUser }) {
 				<Box sx={{ display: "flex" }}>
 					<Mail sx={{ width: "20px", height: "20px" }} />
 					<Typography sx={{ marginLeft: "15px" }}>{user.email}</Typography>
-					<Autocomplete
-						options={skills}
-						value={demo}
-						onChange={(event, newValue) => setDemo(newValue)}
-						inputValue={demoInput}
-						onInputChange={(event, newInputValue) => setDemoInput(newInputValue)}
-						renderInput={(params) => <TextField {...params} label="Demo" />}
-						sx={{ width: "50%" }}
-					/>
 				</Box>
 			</Box>
 		</Box>

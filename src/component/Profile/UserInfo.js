@@ -142,7 +142,7 @@ function UserInfo({ checked, user, setUser }) {
 									onInputChange={(event, newInputValue) => {
 										setInputValue(newInputValue);
 									}}
-									id="combo-box-demo"
+									id="clear-on-escape"
 									options={options}
 									renderInput={(params) => <TextField {...params} label="Choose Skill" />}
 								/>

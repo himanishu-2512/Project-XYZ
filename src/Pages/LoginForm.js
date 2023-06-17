@@ -5,24 +5,24 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const LoginForm = ({ setLoginUser }) => {
-
+	const BASE_URL = process.env.REACT_APP_BASE_URL
 
 	useEffect(() => {
 		const loader = document.getElementById("preloader");
 		const onPageLoad = () => {
-			loader.style.display="none";
+			loader.style.display = "none";
 		};
-	
+
 		// Check if the page has already loaded
 		if (document.readyState === 'complete') {
-		  onPageLoad();
+			onPageLoad();
 		} else {
-		  window.addEventListener('load', onPageLoad);
-		  // Remove the event listener when component unmounts
-		  return () => window.removeEventListener('load', onPageLoad);
+			window.addEventListener('load', onPageLoad);
+			// Remove the event listener when component unmounts
+			return () => window.removeEventListener('load', onPageLoad);
 		}
-	  }, []);
-	
+	}, []);
+
 
 	//Forgot Password
 	const Navigate = useNavigate();
@@ -41,12 +41,10 @@ const LoginForm = ({ setLoginUser }) => {
 		dob: "",
 		pass: "",
 	});
-	//console.log(newuser);
 
 	const val = (e) => {
 		e.preventDefault();
 		const { value, name } = e.target;
-		//console.log(value,name);
 		setNewUser(() => {
 			return {
 				...newuser,
@@ -60,7 +58,7 @@ const LoginForm = ({ setLoginUser }) => {
 		e.preventDefault();
 		const { username, email, password, name } = newuser;
 		if (username && email && password && name) {
-			await axios.post("http://localhost:8000/api/auth/register", newuser).then((res) => {
+			await axios.post(`${BASE_URL}/auth/register`, newuser).then((res) => {
 				alert(res.data.message);
 				console.log(res.data.user)
 				window.location.reload();
@@ -75,12 +73,10 @@ const LoginForm = ({ setLoginUser }) => {
 		rNum: "",
 		pass: "",
 	});
-	//console.log(user);
 
 	const vale = (e) => {
 		e.preventDefault();
 		const { value, name } = e.target;
-		//console.log(value,name);
 		setUser(() => {
 			return {
 				...user,
@@ -94,7 +90,7 @@ const LoginForm = ({ setLoginUser }) => {
 		e.preventDefault();
 		const { username, password } = user;
 		if (username && password) {
-			axios.post("http://localhost:8000/api/auth/login", user).then((res) => {
+			axios.post(`${BASE_URL}/auth/login`, user).then((res) => {
 				alert(res.data.message);
 				if (res.data.user) {
 					console.log(res.data.user)

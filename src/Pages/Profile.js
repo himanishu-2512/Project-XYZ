@@ -12,20 +12,19 @@ import { Edit, PersonAdd } from "@mui/icons-material";
 import axios from "axios";
 
 function Profile({ setLoginUser }) {
+	const BASE_URL = process.env.REACT_APP_BASE_URL
 	const [edit, setEdit] = useState(false);
 	const [user, setUser] = useState();
-	// const [newUser, setNewUser] = useState();
-	// const [id, setId] = useState(window.localStorage.getItem("userId"));
 	let id = window.localStorage.getItem("userId");
 
 	const fetchUser = useCallback(async () => {
 		try {
-			const userInfo = await axios.get(`http://localhost:8000/api/auth/user/${id}`);
+			const userInfo = await axios.get(`${BASE_URL}/auth/user/${id}`);
 			setUser(userInfo.data.user);
 		} catch (error) {
 			console.log(error);
 		}
-	}, [id]);
+	}, [BASE_URL, id]);
 
 	useEffect(() => {
 		fetchUser();
@@ -43,7 +42,7 @@ function Profile({ setLoginUser }) {
 	};
 	const handleSave = async (e) => {
 		e.preventDefault();
-		const updatedUser = await axios.post(`http://localhost:8000/api/auth/updateuser/${id}`, user);
+		const updatedUser = await axios.post(`${BASE_URL}/auth/updateuser/${id}`, user);
 		setEdit(false);
 		setUser(updatedUser.data.userUp);
 	};

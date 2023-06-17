@@ -136,6 +136,7 @@ function UserInfo({ checked, user, setUser }) {
 									value={value}
 									onChange={(event, newValue) => {
 										if (newValue && userSkills.indexOf(newValue) === -1) handleSkills(newValue);
+										setInputValue("");
 									}}
 									inputValue={inputValue}
 									selectOnFocus={true}

@@ -16,9 +16,6 @@ const StyledAutocomplete = styled(Autocomplete)((props) => ({
 	"& .MuiInputLabel-outlined:not(.MuiInputLabel-shrink)": {
 		transform: "translate(20px, 9px) scale(1);",
 	},
-	label: {
-		color: "red",
-	},
 	"& input": {
 		padding: "0px",
 		width: "200px",

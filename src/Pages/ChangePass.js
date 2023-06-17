@@ -5,6 +5,7 @@ import axios from "axios";
 
 function ChangePass() {
 	const Navigate = useNavigate();
+	const BASE_URL = process.env.REACT_APP_BASE_URL
 
 	const [newuser, setNewUser] = useState({
 		rNum: "",
@@ -26,7 +27,7 @@ function ChangePass() {
 		e.preventDefault();
 		const { user, token, password } = newuser;
 		if (user && token && password) {
-			await axios.post("http://localhost:8000/api/auth/verifyToken", newuser).then((res) => {
+			await axios.post(`${BASE_URL}/auth/verifyToken`, newuser).then((res) => {
 				alert(res.data.message);
 				Navigate("/forgotpassword");
 			});

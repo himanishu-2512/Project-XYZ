@@ -5,6 +5,7 @@ import axios from "axios";
 
 function RegisterForm() {
 	const Navigate = useNavigate();
+	const BASE_URL = process.env.REACT_APP_BASE_URL
 
 	const [newuser, setNewUser] = useState({
 		rNum: "",
@@ -26,7 +27,7 @@ function RegisterForm() {
 		e.preventDefault();
 		const { user } = newuser;
 		if (user) {
-			await axios.post("http://localhost:8000/api/auth/forgotPassword", newuser).then((res) => {
+			await axios.post(`${BASE_URL}/auth/forgotPassword`, newuser).then((res) => {
 				alert(res.data.message);
 				Navigate("/Changepassword");
 			});

@@ -2,15 +2,8 @@ import { Mail, Notifications, Pets } from "@mui/icons-material";
 import { AppBar, Avatar, Badge, Box, InputBase, Menu, MenuItem, styled, Toolbar, Typography } from "@mui/material";
 import React, { useState } from "react";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
+import { useNavigate } from "react-router-dom";
 
-const Header = (setLoginUser) => {
-	const handleChange = () => {
-		setLoginUser({});
-		window.localStorage.removeItem("isLoggedIn");
-		window.localStorage.removeItem("userId");
-	};
-	handleChange();
-};
 const StyledToolbar = styled(Toolbar)({
 	display: "flex",
 	justifyContent: "space-between",
@@ -42,6 +35,13 @@ const UserBox = styled(Box)(({ theme }) => ({
 }));
 const Navbar = ({ setLoginUser, mode, setMode }) => {
 	const [open, setOpen] = useState(false);
+	const navigate = useNavigate();
+	const handleChange = () => {
+    setLoginUser({})
+    window.localStorage.removeItem('isLoggedIn')
+    window.localStorage.removeItem('userId')
+    navigate('/')
+  }
 	return (
 		<AppBar position="sticky" sx={{ background: "background.default" }}>
 			<StyledToolbar>
@@ -83,7 +83,7 @@ const Navbar = ({ setLoginUser, mode, setMode }) => {
 			>
 				<MenuItem>Profile</MenuItem>
 				<MenuItem>Saved Posts</MenuItem>
-				<MenuItem onClick={() => Header(setLoginUser)}>Logout</MenuItem>
+				<MenuItem onClick={handleChange}>Logout</MenuItem>
 			</Menu>
 			{/* <div onClick={handleChange}></div> */}
 		</AppBar>

@@ -18,29 +18,35 @@ function App() {
 	console.log(user._id);
 
 	return (
-		<div className="App" sx={{ margin: 0 }}>
-			<BrowserRouter>
-				<Routes>
-					<Route
-						exact
-						path="/"
-						element={
-							(user && user._id) || loggedIn ? (
-								<Homepage setLoginUser={setLoginUser} />
-							) : (
-								<LoginForm setLoginUser={setLoginUser} />
-							)
-						}
-					/>
-					<Route path="/LoginForm" element={<LoginForm setLoginUser={setLoginUser} />} />
-					<Route path="/Forgotpassword" element={<ForgotPass />} />
-					<Route path="/Changepassword" element={<ChangePass />} />
+    <div className="App" sx={{ margin: 0 }}>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            exact
+            path="/"
+            element={
+              (user && user._id) || loggedIn ? (
+                <Homepage setLoginUser={setLoginUser} />
+              ) : (
+                <LoginForm setLoginUser={setLoginUser} />
+              )
+            }
+          />
+          <Route
+            path="/LoginForm"
+            element={<LoginForm setLoginUser={setLoginUser} />}
+          />
+          <Route path="/Forgotpassword" element={<ForgotPass />} />
+          <Route path="/Changepassword" element={<ChangePass />} />
 
-					<Route path="/Profile" element={<Profile />} />
-				</Routes>
-			</BrowserRouter>
-		</div>
-	);
+          <Route
+            path="/Profile"
+            element={<Profile setLoginUser={setLoginUser} />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </div>
+  )
 }
 
 export default App;

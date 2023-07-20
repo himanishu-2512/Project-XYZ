@@ -8,17 +8,17 @@ import Profile from "./Pages/Profile";
 import ChangePass from "./Pages/ChangePass";
 
 function App() {
-	//UserLogin
-	const loggedIn = window.localStorage.getItem("isLoggedIn");
-	const [user, setLoginUser] = useState({
-		rNum: "",
-		dob: "",
-		pass: "",
-	});
-	console.log(user._id);
+  //UserLogin
+  const loggedIn = window.localStorage.getItem("isLoggedIn");
+  const [user, setLoginUser] = useState({
+    rNum: "",
+    dob: "",
+    pass: "",
+  });
+  console.log(user._id);
 
-	return (
-    <div className="App" sx={{ margin: 0 }}>
+  return (
+    <div className="App" >
       <BrowserRouter>
         <Routes>
           <Route

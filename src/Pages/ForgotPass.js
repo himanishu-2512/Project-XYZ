@@ -2,17 +2,22 @@ import { useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import LoadingButton from '@mui/lab/LoadingButton';
+
 
 function RegisterForm() {
 	const Navigate = useNavigate();
 	const BASE_URL = process.env.REACT_APP_BASE_URL
+	const [loading, setLoading] = useState(false);
 
 	const [newuser, setNewUser] = useState({
 		rNum: "",
 		dob: "",
 		pass: "",
 	});
-	console.log(newuser);
+	// console.log(newuser);
 
 	const val = (e) => {
 		const { value, name } = e.target;
@@ -24,27 +29,43 @@ function RegisterForm() {
 		});
 	};
 	const handleChange = async (e) => {
+		setLoading(true)
 		e.preventDefault();
 		const { user } = newuser;
 		if (user) {
 			await axios.post(`${BASE_URL}/auth/forgotPassword`, user).then((res) => {
-				alert(res.data.message);
-				Navigate("/Changepassword");
-			});
+				if(res.data.status){
+					toast.success(res.data.message);
+					Navigate("/Changepassword");
+				}
+				else{
+					toast.error(res.data.message)
+				}
+				
+			})
+			.catch(error=>{
+				toast.error(error.message);
+			})
+
+			
 		} else {
-			alert("Invalid Input");
+			toast.error("Invalid Input");
 		}
+		setLoading(false)
 	};
 
 	return (
 		<Containers>
-			<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+			<ToastContainer autoClose={5000} position="top-center" closeOnClick pauseOnHover draggable />
 			<div class="container" id="container">
 				<div class="Fpass">
 					<form action="#">
 						<h1>Forgot Your Password</h1>
 						<input type="text" name="user" onChange={val} placeholder="Username or Email" />
-						<button onClick={handleChange}>Send OTP</button>
+						
+						<LoadingButton  loading={loading} variant="contained"  onClick={handleChange} loadingPosition="end">
+  							<span>Send OTP</span>
+						</LoadingButton>
 						<Link to="/" href="#">
 							{"<<"} Back to Login
 						</Link>
@@ -86,7 +107,9 @@ const Containers = styled.div`
 		letter-spacing: 0.5px;
 		margin: 20px 0 30px;
 	}
-
+button:active{
+	background-color: #000000;
+}
 	span {
 		font-size: 12px;
 	}

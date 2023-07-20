@@ -59,26 +59,29 @@ const LoginForm = ({ setLoginUser }) => {
 
 	//SignUp button
 	const handlChange = async (e) => {
-		
+
 		e.preventDefault();
 		const { username, email, password, name } = newuser;
 		if (username && email && password && name) {
 			setLoading(true)
 			await axios.post(`${BASE_URL}/auth/register`, newuser).then((res) => {
-				if(res.data.status){
-					toast.success(res.data.message,{
-						position:"top-center"})
+				if (res.data.status) {
+					toast.success(res.data.message, {
+						position: "top-center"
+					})
 				}
-				else{
-					toast.error(res.data.message,{
-						position:"top-center"})
+				else {
+					toast.error(res.data.message, {
+						position: "top-center"
+					})
 				}
 				console.log(res.data.user)
-				
+
 			});
 		} else {
-			toast.error("Invalid data",{
-				position:"top-center"})
+			toast.error("Invalid data", {
+				position: "top-center"
+			})
 		}
 		setLoading(false)
 	};
@@ -102,32 +105,35 @@ const LoginForm = ({ setLoginUser }) => {
 
 	//SignIn button
 	const handleChange = (e) => {
-		
+
 		e.preventDefault();
 		const { username, password } = user;
 		if (username && password) {
 			setLoading(true)
 			axios.post(`${BASE_URL}/auth/login`, user).then((res) => {
-			
+
 				if (res.data.user) {
-					toast.success(res.data.message,{
-						position:"top-center"})
+					toast.success(res.data.message, {
+						position: "top-center"
+					})
 					setLoginUser(res.data.user);
 					window.localStorage.setItem("isLoggedIn", true);
 					window.localStorage.setItem("userId", res.data.user._id);
 				}
-				
-					
-				
-				else{
-					toast.error(res.data.message,{
-						position:"top-center"})
+
+
+
+				else {
+					toast.error(res.data.message, {
+						position: "top-center"
+					})
 				}
 				Navigate("/");
 			});
 		} else {
-			toast.error("Invalid data",{
-				position:"top-center"})
+			toast.error("Invalid data", {
+				position: "top-center"
+			})
 		}
 		setLoading(false)
 	};
@@ -135,7 +141,7 @@ const LoginForm = ({ setLoginUser }) => {
 	return (
 		<>
 			<Containers>
-			<ToastContainer autoClose={5000} position="top-center" closeOnClick pauseOnHover draggable />
+				<ToastContainer autoClose={5000} position="top-center" closeOnClick pauseOnHover draggable />
 				<div id="preloader"></div>
 				<div class={`container ${active ? "right-panel-active" : ""}`} id="container">
 					<div class={`form-container sign-up-container ${active ? "right-panel-active" : ""}`}>
@@ -151,9 +157,9 @@ const LoginForm = ({ setLoginUser }) => {
 									onChange={val}
 									placeholder="Create Your Password"
 								/>
-								<LoadingButton  loading={loading} variant="contained"  onClick={handlChange} loadingPosition="end">
-  							<span>Sign Up</span>
-						</LoadingButton>
+								<LoadingButton loading={loading} variant="contained" onClick={handlChange} loadingPosition="end">
+									<span>Sign Up</span>
+								</LoadingButton>
 								<button id="sign" onClick={Change}>
 									Sign In
 								</button>
@@ -170,9 +176,9 @@ const LoginForm = ({ setLoginUser }) => {
 								<Link to="Forgotpassword" href="#">
 									Forgot your password?
 								</Link>
-								<LoadingButton  loading={loading} variant="contained"  onClick={handleChange} loadingPosition="end">
-  							    <span>Sign In</span>
-						        </LoadingButton>
+								<LoadingButton loading={loading} variant="contained" onClick={handleChange} loadingPosition="end">
+									<span>Sign In</span>
+								</LoadingButton>
 								<button id="sign" onClick={Change}>
 									Sign Up
 								</button>

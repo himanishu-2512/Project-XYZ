@@ -34,20 +34,20 @@ function RegisterForm() {
 		const { user } = newuser;
 		if (user) {
 			await axios.post(`${BASE_URL}/auth/forgotPassword`, user).then((res) => {
-				if(res.data.status){
+				if (res.data.status) {
 					toast.success(res.data.message);
 					Navigate("/Changepassword");
 				}
-				else{
+				else {
 					toast.error(res.data.message)
 				}
-				
-			})
-			.catch(error=>{
-				toast.error(error.message);
-			})
 
-			
+			})
+				.catch(error => {
+					toast.error(error.message);
+				})
+
+
 		} else {
 			toast.error("Invalid Input");
 		}
@@ -62,9 +62,9 @@ function RegisterForm() {
 					<form action="#">
 						<h1>Forgot Your Password</h1>
 						<input type="text" name="user" onChange={val} placeholder="Username or Email" />
-						
-						<LoadingButton  loading={loading} variant="contained"  onClick={handleChange} loadingPosition="end">
-  							<span>Send OTP</span>
+
+						<LoadingButton loading={loading} variant="contained" onClick={handleChange} loadingPosition="end">
+							<span>Send OTP</span>
 						</LoadingButton>
 						<Link to="/" href="#">
 							{"<<"} Back to Login

@@ -3,9 +3,13 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const LoginForm = ({ setLoginUser }) => {
 	const BASE_URL = process.env.REACT_APP_BASE_URL
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		const loader = document.getElementById("preloader");
@@ -55,17 +59,28 @@ const LoginForm = ({ setLoginUser }) => {
 
 	//SignUp button
 	const handlChange = async (e) => {
+		
 		e.preventDefault();
 		const { username, email, password, name } = newuser;
 		if (username && email && password && name) {
+			setLoading(true)
 			await axios.post(`${BASE_URL}/auth/register`, newuser).then((res) => {
-				alert(res.data.message);
+				if(res.data.status){
+					toast.success(res.data.message,{
+						position:"top-center"})
+				}
+				else{
+					toast.error(res.data.message,{
+						position:"top-center"})
+				}
 				console.log(res.data.user)
-				window.location.reload();
+				
 			});
 		} else {
-			alert("Invalid Input");
+			toast.error("Invalid data",{
+				position:"top-center"})
 		}
+		setLoading(false)
 	};
 
 	//SignIn
@@ -87,29 +102,40 @@ const LoginForm = ({ setLoginUser }) => {
 
 	//SignIn button
 	const handleChange = (e) => {
+		
 		e.preventDefault();
 		const { username, password } = user;
 		if (username && password) {
+			setLoading(true)
 			axios.post(`${BASE_URL}/auth/login`, user).then((res) => {
-				alert(res.data.message);
+			
 				if (res.data.user) {
-					console.log(res.data.user)
-
+					toast.success(res.data.message,{
+						position:"top-center"})
 					setLoginUser(res.data.user);
 					window.localStorage.setItem("isLoggedIn", true);
 					window.localStorage.setItem("userId", res.data.user._id);
 				}
+				
+					
+				
+				else{
+					toast.error(res.data.message,{
+						position:"top-center"})
+				}
 				Navigate("/");
 			});
 		} else {
-			alert("Invalid Input");
+			toast.error("Invalid data",{
+				position:"top-center"})
 		}
+		setLoading(false)
 	};
 
 	return (
 		<>
 			<Containers>
-				<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+			<ToastContainer autoClose={5000} position="top-center" closeOnClick pauseOnHover draggable />
 				<div id="preloader"></div>
 				<div class={`container ${active ? "right-panel-active" : ""}`} id="container">
 					<div class={`form-container sign-up-container ${active ? "right-panel-active" : ""}`}>
@@ -125,7 +151,9 @@ const LoginForm = ({ setLoginUser }) => {
 									onChange={val}
 									placeholder="Create Your Password"
 								/>
-								<button onClick={handlChange}>Sign Up</button>
+								<LoadingButton  loading={loading} variant="contained"  onClick={handlChange} loadingPosition="end">
+  							<span>Sign Up</span>
+						</LoadingButton>
 								<button id="sign" onClick={Change}>
 									Sign In
 								</button>
@@ -142,7 +170,9 @@ const LoginForm = ({ setLoginUser }) => {
 								<Link to="Forgotpassword" href="#">
 									Forgot your password?
 								</Link>
-								<button onClick={handleChange}>Sign In</button>
+								<LoadingButton  loading={loading} variant="contained"  onClick={handleChange} loadingPosition="end">
+  							    <span>Sign In</span>
+						        </LoadingButton>
 								<button id="sign" onClick={Change}>
 									Sign Up
 								</button>
@@ -232,6 +262,9 @@ const Containers = styled.div`
 		letter-spacing: 1px;
 		text-transform: uppercase;
 		transition: transform 80ms ease-in;
+	}
+	button:hover{
+		background-color: #000000;
 	}
 
 	button:active {

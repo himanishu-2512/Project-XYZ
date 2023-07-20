@@ -2,17 +2,20 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 function ChangePass() {
 	const Navigate = useNavigate();
 	const BASE_URL = process.env.REACT_APP_BASE_URL
-
+	const [loading, setLoading] = useState(false);
 	const [newuser, setNewUser] = useState({
 		rNum: "",
 		dob: "",
 		pass: "",
 	});
-	console.log(newuser);
+	// console.log(newuser);
 
 	const val = (e) => {
 		const { value, name } = e.target;
@@ -27,18 +30,28 @@ function ChangePass() {
 		e.preventDefault();
 		const { user, token, password } = newuser;
 		if (user && token && password) {
+			setLoading(true)
 			await axios.post(`${BASE_URL}/auth/verifyToken`, newuser).then((res) => {
-				alert(res.data.message);
-				Navigate("/forgotpassword");
+				if(res.data.status){
+                    toast.success(res.data.message);
+					Navigate("/forgotpassword");
+				}
+				else{
+					toast.error(res.data.message)
+				}
+			})
+			.catch(error=>{
+				toast.error(error.message)
 			});
 		} else {
-			alert("Invalid Input");
+			toast.error("invalid input")
 		}
+		setLoading(false)
 	};
 
 	return (
 		<Containers>
-			<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+			<ToastContainer autoClose={5000} position="top-center" closeOnClick pauseOnHover draggable />
 			<div class="container" id="container">
 				<div class="Fpass">
 					<form action="#">
@@ -46,7 +59,11 @@ function ChangePass() {
 						<input type="text" name="user" onChange={val} placeholder="Username or Email" />
 						<input type="text" name="password" onChange={val} placeholder="New Password" />
 						<input type="text" name="token" onChange={val} placeholder="OTP" />
-						<button onClick={handleChange}>Done</button>
+						
+						<LoadingButton  loading={loading} variant="contained"  onClick={handleChange} loadingPosition="end">
+  							<span>submit</span>
+						</LoadingButton>
+
 						<button onClick={() => Navigate("/")}>Sign In</button>
 					</form>
 				</div>
@@ -88,6 +105,7 @@ const Containers = styled.div`
 	}
 
 	span {
+		color:white;
 		font-size: 12px;
 	}
 
@@ -110,6 +128,10 @@ const Containers = styled.div`
 		letter-spacing: 1px;
 		text-transform: uppercase;
 		transition: transform 80ms ease-in;
+	}
+	button:hover{
+		background-color: #000000;
+
 	}
 
 	button:active {

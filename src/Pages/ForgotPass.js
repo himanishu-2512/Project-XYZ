@@ -107,7 +107,7 @@ const Containers = styled.div`
 		letter-spacing: 0.5px;
 		margin: 20px 0 30px;
 	}
-button:active{
+button:hover{
 	background-color: #000000;
 }
 	span {

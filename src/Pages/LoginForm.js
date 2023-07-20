@@ -8,9 +8,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 const LoginForm = ({ setLoginUser }) => {
+	const [loading1, setLoading1] = useState(false);
+const [loading2, setLoading2] = useState(false);
 	const BASE_URL = process.env.REACT_APP_BASE_URL
-	const [loading, setLoading] = useState(false);
-
 	useEffect(() => {
 		const loader = document.getElementById("preloader");
 		const onPageLoad = () => {
@@ -26,6 +26,7 @@ const LoginForm = ({ setLoginUser }) => {
 			return () => window.removeEventListener('load', onPageLoad);
 		}
 	}, []);
+	
 
 
 	//Forgot Password
@@ -63,7 +64,7 @@ const LoginForm = ({ setLoginUser }) => {
 		e.preventDefault();
 		const { username, email, password, name } = newuser;
 		if (username && email && password && name) {
-			setLoading(true)
+			setLoading1(true)
 			await axios.post(`${BASE_URL}/auth/register`, newuser).then((res) => {
 				if (res.data.status) {
 					toast.success(res.data.message, {
@@ -77,13 +78,15 @@ const LoginForm = ({ setLoginUser }) => {
 				}
 				console.log(res.data.user)
 
+			}).catch(error=>{
+				toast.error(error.message);
 			});
 		} else {
 			toast.error("Invalid data", {
 				position: "top-center"
 			})
 		}
-		setLoading(false)
+		setLoading1(false)
 	};
 
 	//SignIn
@@ -104,14 +107,12 @@ const LoginForm = ({ setLoginUser }) => {
 	};
 
 	//SignIn button
-	const handleChange = (e) => {
-
+	const handleChange = async(e) => {
+		setLoading2(true)
 		e.preventDefault();
 		const { username, password } = user;
 		if (username && password) {
-			setLoading(true)
-			axios.post(`${BASE_URL}/auth/login`, user).then((res) => {
-
+			await axios.post(`${BASE_URL}/auth/login`, user).then((res) => {
 				if (res.data.user) {
 					toast.success(res.data.message, {
 						position: "top-center"
@@ -119,32 +120,33 @@ const LoginForm = ({ setLoginUser }) => {
 					setLoginUser(res.data.user);
 					window.localStorage.setItem("isLoggedIn", true);
 					window.localStorage.setItem("userId", res.data.user._id);
+					Navigate("/");
 				}
-
-
-
 				else {
 					toast.error(res.data.message, {
 						position: "top-center"
 					})
 				}
-				Navigate("/");
+				
+			})
+			.catch(error=>{
+				toast.error(error.message);
 			});
 		} else {
 			toast.error("Invalid data", {
 				position: "top-center"
 			})
 		}
-		setLoading(false)
+		setLoading2(false)
 	};
 
 	return (
 		<>
 			<Containers>
-				<ToastContainer autoClose={5000} position="top-center" closeOnClick pauseOnHover draggable />
+				<ToastContainer autoClose={5000} position="top-center" closeOnClick pauseOnHover draggable/>
 				<div id="preloader"></div>
 				<div class={`container ${active ? "right-panel-active" : ""}`} id="container">
-					<div class={`form-container sign-up-container ${active ? "right-panel-active" : ""}`}>
+					<div class={`form-container sign-up-container ${active ? "right-panel-active":""}`}>
 						<form action="#" class="sign-up-form">
 							<div className="sign-up-background">
 								<h1>Create Account</h1>
@@ -157,7 +159,7 @@ const LoginForm = ({ setLoginUser }) => {
 									onChange={val}
 									placeholder="Create Your Password"
 								/>
-								<LoadingButton loading={loading} variant="contained" onClick={handlChange} loadingPosition="end">
+								<LoadingButton loading={loading1} variant="contained" onClick={handlChange} loadingPosition="end">
 									<span>Sign Up</span>
 								</LoadingButton>
 								<button id="sign" onClick={Change}>
@@ -173,10 +175,10 @@ const LoginForm = ({ setLoginUser }) => {
 
 								<input type="text" name="username" onChange={vale} placeholder="Username or Email" />
 								<input type="password" name="password" onChange={vale} placeholder="Password" />
-								<Link to="Forgotpassword" href="#">
+								<Link to="Forgotpassword">
 									Forgot your password?
 								</Link>
-								<LoadingButton loading={loading} variant="contained" onClick={handleChange} loadingPosition="end">
+								<LoadingButton loading={loading2} variant="contained" onClick={handleChange} loadingPosition="end">
 									<span>Sign In</span>
 								</LoadingButton>
 								<button id="sign" onClick={Change}>

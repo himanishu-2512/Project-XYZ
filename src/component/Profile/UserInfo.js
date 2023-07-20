@@ -1,5 +1,5 @@
-import { CakeRounded, Clear, ExpandMore, Mail, Place } from "@mui/icons-material";
-import { Autocomplete, Avatar, Button, Chip, Collapse, TextField, Typography } from "@mui/material";
+import { CakeRounded, Clear, Mail, Place } from "@mui/icons-material";
+import { Autocomplete, Avatar, Button, Chip, TextField, Typography } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Grid from "@mui/material/Grid";
@@ -32,9 +32,8 @@ const StyledAutocomplete = styled(Autocomplete)((props) => ({
 }));
 
 function UserInfo({ checked, user, setUser }) {
-	const [userInfoOpen, setUserInfoOpen] = useState(false);
 	const [userSkills, setUserSkills] = useState(user.skills);
-	const [loadingText, setLoadingText] = useState("Loading");
+	const [loadingText, setLoadingText] = useState("Loading...");
 	const [inputValue, setInputValue] = useState("");
 	const [cityInput, setCityInput] = useState("");
 	const [cities, setCities] = useState([]);
@@ -81,7 +80,7 @@ function UserInfo({ checked, user, setUser }) {
 	};
 
 	const handleSkillRemove = (e) => {
-		setUser({ ...user, skilss: userSkills.filter((skill) => skill !== e.target.closest("button").value) });
+		setUser({ ...user, skills: userSkills.filter((skill) => skill !== e.target.closest("button").value) });
 		setUserSkills(userSkills.filter((skill) => skill !== e.target.closest("button").value));
 	};
 
@@ -117,191 +116,196 @@ function UserInfo({ checked, user, setUser }) {
 		} else setCities([]);
 	}, [cityInput]);
 
-	const info = (
-		<Box>
-			<Box sx={{ margin: "30px 0" }}>
-				<Typography sx={{ fontWeight: "bold", fontSize: "18px" }}>Skills</Typography>
-				<Box
-					sx={{
-						display: "flex",
-						flexDirection: "column",
-						justifyContent: "space-between",
-					}}
-				>
-					<Grid container rowSpacing={2} columnSpacing={2} sx={{ margin: "0" }}>
-						{checked && (
-							<Grid item xs={12}>
-								<StyledAutocomplete
-									disablePortal
-									value={value}
-									onChange={(event, newValue) => {
-										if (newValue && userSkills.indexOf(newValue) === -1) handleSkills(newValue);
-										setInputValue("");
-									}}
-									inputValue={inputValue}
-									selectOnFocus={true}
-									onInputChange={(event, newInputValue) => {
-										setInputValue(newInputValue);
-									}}
-									id="clear-on-escape"
-									options={options}
-									renderInput={(params) => <TextField {...params} label="Choose Skill" />}
-								/>
-							</Grid>
-						)}
-						{userSkills.map((skill) => {
-							return (
-								<Grid key={`user${skill}`} item xs={4} sx={{ display: "flex" }}>
-									<Chip
-										label={skill}
-										variant="outlined"
-										sx={{
-											width: "100%",
-											fontSize: "15px",
-											fontWeight: "bold",
-										}}
-									/>
-									{checked && (
-										<Button
-											sx={{
-												color: "grey",
-											}}
-											value={skill}
-											onClick={handleSkillRemove}
-										>
-											<Clear />
-										</Button>
-									)}
-								</Grid>
-							);
-						})}
-					</Grid>
-				</Box>
-			</Box>
-			<Box sx={{ margin: "30px 0" }}>
-				<Typography sx={{ fontWeight: "bold", fontSize: "18px" }}>Education</Typography>
-				<Box sx={{ display: "flex", marginTop: "10px" }}>
-					<Avatar src="images/iiitr.png" alt="" sx={{ width: "80px", height: "80px" }} />
+	return (
+		<div>
+			<Box>
+				{(user.skills.length > 0 || checked) && (
 					<Box
-						sx={{
-							display: "flex",
-							flexDirection: "column",
-							marginLeft: "40px",
-							justifyContent: "center",
-						}}
+						sx={{ margin: "30px 0", border: "solid 2px rgba(200,200,200,0.7)", borderRadius: "1em", padding: "1.5em" }}
 					>
-						<Typography sx={{ fontWeight: "bold", fontSize: "16px" }}>
-							Indian Institute of Information Technology, Ranchi
+						<Typography sx={{ marginBottom: "1.5em" }} variant="h5">
+							Skills
 						</Typography>
-						<Typography variant="subtitle2">Bachelor of Technology - BTech, Computer Science</Typography>
-						<Typography variant="caption">2020 - 2024</Typography>
-					</Box>
-				</Box>
-			</Box>
-			<LocalizationProvider dateAdapter={AdapterDayjs}>
-				{(user.dob || checked) && (
-					<Box sx={{ color: "rgb(80,80,80)", marginBottom: "30px" }}>
 						<Box
 							sx={{
 								display: "flex",
-								height: "100%",
+								flexDirection: "column",
+								justifyContent: "space-between",
 							}}
 						>
-							<CakeRounded sx={{ width: "20px", height: "20px" }} />
-							<DatePicker
-								value={date}
-								onChange={(newValue) => handleDate(newValue)}
-								readOnly={!checked}
-								sx={{
-									color: "rgb(80,80,80)",
-									marginLeft: "15px",
-									fieldset: !checked ? { border: "none" } : {},
-									input: {
-										color: "rgb(80,80,80)",
-										padding: !checked ? "2px 0 0 0 " : "",
-									},
-									label: {
-										fontWeight: "bold",
-										color: "transparent",
-									},
-									".MuiInputAdornment-root": {
-										display: checked ? "" : "none",
-									},
-								}}
-							/>
+							<Grid container rowSpacing={2} columnSpacing={2}>
+								{checked && (
+									<Grid item xs={12}>
+										<StyledAutocomplete
+											disablePortal
+											value={value}
+											onChange={(event, newValue) => {
+												if (newValue && userSkills.indexOf(newValue) === -1) handleSkills(newValue);
+												setInputValue("");
+											}}
+											inputValue={inputValue}
+											selectOnFocus={true}
+											onInputChange={(event, newInputValue) => {
+												setInputValue(newInputValue);
+											}}
+											id="clear-on-escape"
+											options={options}
+											renderInput={(params) => <TextField {...params} label="Choose Skill" />}
+										/>
+									</Grid>
+								)}
+								{userSkills.map((skill) => {
+									return (
+										<Grid key={`user${skill}`} item xs={4} sx={{ display: "flex" }}>
+											<Chip
+												label={skill}
+												variant="outlined"
+												sx={{
+													width: "100%",
+													fontSize: "15px",
+													fontWeight: "bold",
+												}}
+											/>
+											{checked && (
+												<Button
+													sx={{
+														color: "rgb(80,80,80)",
+														"&:hover": {
+															backgroundColor: "transparent",
+															color: "grey",
+														},
+													}}
+													value={skill}
+													onClick={handleSkillRemove}
+												>
+													<Clear />
+												</Button>
+											)}
+										</Grid>
+									);
+								})}
+							</Grid>
 						</Box>
 					</Box>
 				)}
-			</LocalizationProvider>
-			{(user.city || checked) && (
-				<Box sx={{ color: "rgb(80,80,80)", marginBottom: "30px" }}>
-					<Box sx={{ display: "flex" }}>
-						<Place sx={{ width: "20px", height: "20px" }} />
-						{checked && (
-							<Autocomplete
-								disablePortal
-								options={cities}
-								loading={cityInput.length > 0 ? true : false}
-								loadingText={loadingText}
-								noOptionsText="Type to search"
-								value={city}
-								onChange={(event, newValue) => handleCity(newValue)}
-								inputValue={cityInput}
-								onInputChange={(event, newInputValue) => {
-									setCityInput(newInputValue);
-								}}
-								renderInput={(params) => <TextField {...params} label="Choose City" />}
-								sx={{
-									width: "50%",
-									marginBottom: "10px",
-									marginLeft: "15px",
-									fieldset: !checked ? { border: "none" } : {},
-									fontWeight: "bold",
-									input: {
-										paddingX: !checked ? "0" : "",
-									},
-									label: {
-										fontWeight: "bold",
-									},
-									".MuiAutocomplete-endAdornment": {
-										display: checked ? "" : "none",
-									},
-								}}
-							/>
-						)}
-						{!checked && <Typography sx={{ marginLeft: "15px" }}>{user.city}</Typography>}
+				<Box
+					sx={{ margin: "30px 0", border: "solid 2px rgba(200,200,200,0.7)", borderRadius: "1em", padding: "1.5em" }}
+				>
+					<Typography sx={{ marginBottom: "1.5em" }} variant="h5">
+						Education
+					</Typography>
+					<Box sx={{ display: "flex", marginTop: "10px" }}>
+						<Avatar src="images/iiitr.png" alt="" sx={{ width: "80px", height: "80px" }} />
+						<Box
+							sx={{
+								display: "flex",
+								flexDirection: "column",
+								marginLeft: "40px",
+								justifyContent: "center",
+							}}
+						>
+							<Typography sx={{ fontWeight: "bold", fontSize: "16px" }}>
+								Indian Institute of Information Technology, Ranchi
+							</Typography>
+							<Typography variant="subtitle2">Bachelor of Technology - BTech, Computer Science</Typography>
+							<Typography variant="caption">2020 - 2024</Typography>
+						</Box>
 					</Box>
 				</Box>
-			)}
-			<Box sx={{ color: "rgb(80,80,80)", marginBottom: "30px" }}>
-				<Box sx={{ display: "flex" }}>
-					<Mail sx={{ width: "20px", height: "20px" }} />
-					<Typography sx={{ marginLeft: "15px" }}>{user.email}</Typography>
+				<Box
+					sx={{
+						border: "solid 2px rgba(200,200,200,0.7)",
+						borderRadius: "1em",
+						padding: "1.5em",
+						marginBottom: "30px",
+					}}
+				>
+					<Typography sx={{ marginBottom: "1.5em" }} variant="h5">
+						Personal Information
+					</Typography>
+					<LocalizationProvider dateAdapter={AdapterDayjs}>
+						{(user.dob || checked) && (
+							<Box sx={{ color: "rgb(80,80,80)", marginBottom: "30px" }}>
+								<Box
+									sx={{
+										display: "flex",
+										height: "100%",
+									}}
+								>
+									<CakeRounded sx={{ width: "20px", height: "20px" }} />
+									<DatePicker
+										value={date}
+										onChange={(newValue) => handleDate(newValue)}
+										readOnly={!checked}
+										sx={{
+											color: "rgb(80,80,80)",
+											marginLeft: "15px",
+											fieldset: !checked ? { border: "none" } : {},
+											input: {
+												color: "rgb(80,80,80)",
+												padding: !checked ? "2px 0 0 0 " : "",
+											},
+											label: {
+												fontWeight: "bold",
+												color: "transparent",
+											},
+											".MuiInputAdornment-root": {
+												display: checked ? "" : "none",
+											},
+										}}
+									/>
+								</Box>
+							</Box>
+						)}
+					</LocalizationProvider>
+					{(user.city || checked) && (
+						<Box sx={{ color: "rgb(80,80,80)", marginBottom: "30px" }}>
+							<Box sx={{ display: "flex" }}>
+								<Place sx={{ width: "20px", height: "20px" }} />
+								{checked && (
+									<Autocomplete
+										disablePortal
+										options={cities}
+										loading={cityInput.length > 0 ? true : false}
+										loadingText={loadingText}
+										noOptionsText="Type to search"
+										value={city}
+										onChange={(event, newValue) => handleCity(newValue)}
+										inputValue={cityInput}
+										onInputChange={(event, newInputValue) => {
+											setCityInput(newInputValue);
+										}}
+										renderInput={(params) => <TextField {...params} label="Choose City" />}
+										sx={{
+											width: "50%",
+											marginBottom: "10px",
+											marginLeft: "15px",
+											fieldset: !checked ? { border: "none" } : {},
+											fontWeight: "bold",
+											input: {
+												paddingX: !checked ? "0" : "",
+											},
+											label: {
+												fontWeight: "bold",
+											},
+											".MuiAutocomplete-endAdornment": {
+												display: checked ? "" : "none",
+											},
+										}}
+									/>
+								)}
+								{!checked && <Typography sx={{ marginLeft: "15px" }}>{user.city}</Typography>}
+							</Box>
+						</Box>
+					)}
+					<Box sx={{ color: "rgb(80,80,80)" }}>
+						<Box sx={{ display: "flex" }}>
+							<Mail sx={{ width: "20px", height: "20px" }} />
+							<Typography sx={{ marginLeft: "15px" }}>{user.email}</Typography>
+						</Box>
+					</Box>
 				</Box>
 			</Box>
-		</Box>
-	);
-
-	return (
-		<div>
-			<Box
-				display="flex"
-				justifyContent="center"
-				alignItems="center"
-				marginTop="10px"
-				onClick={() => setUserInfoOpen(!userInfoOpen)}
-				sx={{ cursor: "pointer" }}
-			>
-				<ExpandMore
-					sx={{
-						transition: "transform 0.5s",
-						transform: `${userInfoOpen || checked ? "rotate(180deg)" : ""}`,
-					}}
-				/>
-			</Box>
-			<Collapse in={userInfoOpen || checked} timeout={500}>
-				{info}
-			</Collapse>
 		</div>
 	);
 }

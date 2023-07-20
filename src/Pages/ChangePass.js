@@ -47,7 +47,7 @@ function ChangePass() {
 						<input type="text" name="password" onChange={val} placeholder="New Password" />
 						<input type="text" name="token" onChange={val} placeholder="OTP" />
 						<button onClick={handleChange}>Done</button>
-						<button onClick={() => Navigate("/LoginForm")}>Sign In</button>
+						<button onClick={() => Navigate("/")}>Sign In</button>
 					</form>
 				</div>
 			</div>

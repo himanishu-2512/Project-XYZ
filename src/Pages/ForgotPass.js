@@ -27,7 +27,7 @@ function RegisterForm() {
 		e.preventDefault();
 		const { user } = newuser;
 		if (user) {
-			await axios.post(`${BASE_URL}/auth/forgotPassword`, newuser).then((res) => {
+			await axios.post(`${BASE_URL}/auth/forgotPassword`, user).then((res) => {
 				alert(res.data.message);
 				Navigate("/Changepassword");
 			});

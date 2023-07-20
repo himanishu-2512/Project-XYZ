@@ -32,17 +32,17 @@ function ChangePass() {
 		if (user && token && password) {
 			setLoading(true)
 			await axios.post(`${BASE_URL}/auth/verifyToken`, newuser).then((res) => {
-				if(res.data.status){
-                    toast.success(res.data.message);
+				if (res.data.status) {
+					toast.success(res.data.message);
 					Navigate("/forgotpassword");
 				}
-				else{
+				else {
 					toast.error(res.data.message)
 				}
 			})
-			.catch(error=>{
-				toast.error(error.message)
-			});
+				.catch(error => {
+					toast.error(error.message)
+				});
 		} else {
 			toast.error("invalid input")
 		}
@@ -59,9 +59,9 @@ function ChangePass() {
 						<input type="text" name="user" onChange={val} placeholder="Username or Email" />
 						<input type="text" name="password" onChange={val} placeholder="New Password" />
 						<input type="text" name="token" onChange={val} placeholder="OTP" />
-						
-						<LoadingButton  loading={loading} variant="contained"  onClick={handleChange} loadingPosition="end">
-  							<span>submit</span>
+
+						<LoadingButton loading={loading} variant="contained" onClick={handleChange} loadingPosition="end">
+							<span>submit</span>
 						</LoadingButton>
 
 						<button onClick={() => Navigate("/")}>Sign In</button>

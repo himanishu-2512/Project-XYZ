@@ -8,7 +8,6 @@ import Homepage from "./Pages/homepage";
 import Profile from "./Pages/Profile";
 import ChangePass from "./Pages/ChangePass";
 
-
 function App() {
   //UserLogin
   const loggedIn = window.localStorage.getItem("isLoggedIn");

@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React, { useState } from "react";
+import "./Global.css"
 import "./Pages/LoginForm";
 import LoginForm from "./Pages/LoginForm";
 import ForgotPass from "./Pages/ForgotPass";
@@ -18,34 +19,35 @@ function App() {
   console.log(user._id);
 
   return (
-    <div className="App" >
-      <BrowserRouter>
-        <Routes>
-          <Route
-            exact
-            path="/"
-            element={
-              (user && user._id) || loggedIn ? (
-                <Homepage setLoginUser={setLoginUser} />
-              ) : (
-                <LoginForm setLoginUser={setLoginUser} />
-              )
-            }
-          />
-          <Route
-            path="/LoginForm"
-            element={<LoginForm setLoginUser={setLoginUser} />}
-          />
-          <Route path="/Forgotpassword" element={<ForgotPass />} />
-          <Route path="/Changepassword" element={<ChangePass />} />
+      <div className="App" >
+        <BrowserRouter>
+          <Routes>
+            <Route
+              exact
+              path="/"
+              element={
+                (user && user._id) || loggedIn ? (
+                  <Homepage setLoginUser={setLoginUser} />
+                ) : (
+                  <LoginForm setLoginUser={setLoginUser} />
+                )
+              }
+            />
+            <Route
+              path="/LoginForm"
+              element={<LoginForm setLoginUser={setLoginUser} />}
+            />
+            <Route path="/Forgotpassword" element={<ForgotPass />} />
+            <Route path="/Changepassword" element={<ChangePass />} />
 
-          <Route
-            path="/Profile"
-            element={<Profile setLoginUser={setLoginUser} />}
-          />
-        </Routes>
-      </BrowserRouter>
-    </div>
+            <Route
+              path="/Profile"
+              element={<Profile setLoginUser={setLoginUser} />}
+            />
+          </Routes>
+        </BrowserRouter>
+      </div>
+
   )
 }
 

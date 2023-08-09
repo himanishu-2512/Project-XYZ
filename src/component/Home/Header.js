@@ -2,7 +2,7 @@ import { Mail, Notifications, Pets } from "@mui/icons-material";
 import { AppBar, Avatar, Badge, Box, InputBase, Menu, MenuItem, styled, Toolbar, Typography } from "@mui/material";
 import React, { useState } from "react";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const StyledToolbar = styled(Toolbar)({
 	display: "flex",
@@ -46,14 +46,16 @@ const Navbar = ({ setLoginUser, mode, setMode }) => {
 		<AppBar position="sticky" sx={{ background: "background.default" }}>
 			<StyledToolbar>
 				<Typography variant="h6" sx={{ display: { xs: "none", sm: "block" } }}>
-					Project Name
+					<Link to = {"/"} style={{color:"white", textDecoration:"none", fontWeight:"700"}}>
+					Ask & Grow
+					</Link>
 				</Typography>
 				<Pets sx={{ display: { xs: "block", sm: "none" } }} />
 				<Search>
 					<InputBase placeholder="Search..." sx={{ color: "black" }} />
 				</Search>
 				<Icons>
-					<DarkModeIcon onClick={(e) => setMode(mode === "light" ? "dark" : "light")} />
+					
 					<Badge badgeContent={4} color="error">
 						<Mail />
 					</Badge>
@@ -81,7 +83,9 @@ const Navbar = ({ setLoginUser, mode, setMode }) => {
 					horizontal: "right",
 				}}
 			>
-				<MenuItem>Profile</MenuItem>
+				<MenuItem>
+				<Link style={{textDecoration:"none",color:"black"}} to={"/Profile"}>Profile</Link>
+				</MenuItem>
 				<MenuItem>Saved Posts</MenuItem>
 				<MenuItem onClick={handleChange}>Logout</MenuItem>
 			</Menu>

@@ -1,7 +1,7 @@
 import { Mail, Notifications, Pets } from "@mui/icons-material";
 import { AppBar, Avatar, Badge, Box, InputBase, Menu, MenuItem, styled, Toolbar, Typography } from "@mui/material";
 import React, { useState } from "react";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
+
 import { useNavigate, Link } from "react-router-dom";
 
 const StyledToolbar = styled(Toolbar)({

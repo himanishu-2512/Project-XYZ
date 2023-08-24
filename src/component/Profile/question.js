@@ -8,6 +8,8 @@ import {
 	Typography,
 	Paper,
 	Divider,
+	Menu,
+	MenuItem,
 } from "@mui/material";
 import { blueGrey } from "@mui/material/colors";
 import React, { useState } from "react";
@@ -16,9 +18,9 @@ import { Box } from "@mui/system";
 import CommentIcon from "@mui/icons-material/Comment";
 import Button from "@mui/material/Button";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-import styled from "styled-components";
 import AddComments from'../Home/Comments/AddComments'
 import UserComments from'../Home/Comments/UserComments'
+import { Link } from "react-router-dom";
 
 function Feed({data, username}) {
 	//Like
@@ -71,6 +73,51 @@ function Feed({data, username}) {
 		}
 	};
 
+	const [anchorEl, setAnchorEl] = useState(null);
+	const [menuOpenId, setMenuOpenId] = useState(null);
+	const handleAnchor = (e, id) => {
+		setMenuOpenId(id);
+		setAnchorEl(e.currentTarget);
+	};
+	const handleAnchorClose = () => {
+		setMenuOpenId(null);
+		setAnchorEl(null);
+	};
+
+	const timeDemo = (time) => {
+		var msPerMinute = 60 * 1000;
+		var msPerHour = msPerMinute * 60;
+		var msPerDay = msPerHour * 24;
+		var msPerMonth = msPerDay * 30;
+		var msPerYear = msPerDay * 365;
+
+		var elapsed = new Date() - new Date(time);
+
+		if (elapsed < msPerMinute) {
+			return Math.round(elapsed / 1000) + ' seconds ago';
+		}
+
+		else if (elapsed < msPerHour) {
+			return Math.round(elapsed / msPerMinute) + ' minutes ago';
+		}
+
+		else if (elapsed < msPerDay) {
+			return Math.round(elapsed / msPerHour) + ' hours ago';
+		}
+
+		else if (elapsed < msPerMonth) {
+			return '' + Math.round(elapsed / msPerDay) + ' days ago';
+		}
+
+		else if (elapsed < msPerYear) {
+			return '' + Math.round(elapsed / msPerMonth) + ' months ago';
+		}
+
+		else {
+			return '' + Math.round(elapsed / msPerYear) + ' years ago';
+		}
+	}
+
 	return (
 		<Box sx={{ maxWidth: "100%", display: "flex", justifyContent: "center", flexDirection:"column" }}>
 			{data?.toReversed().map((item, index) => {
@@ -91,13 +138,36 @@ function Feed({data, username}) {
 						</Avatar>
 					}
 					action={
-						<IconButton aria-label="settings">
+						<IconButton aria-label="settings" onClick={(e) => handleAnchor(e, item._id)}>
 							<MoreVert />
 						</IconButton>
 					}
 					title={username.toUpperCase()}
-					subheader={item.createdAt}
+					subheader={timeDemo(item.createdAt)}
 				/>
+				<Menu
+					id="demo-positioned-menu"
+					aria-labelledby="demo-positioned-button"
+					open={item._id === menuOpenId}
+					anchorEl={anchorEl}
+					onClose={(e) => handleAnchorClose()}
+					anchorOrigin={{
+						vertical: "top",
+						horizontal: "right",
+					}}
+					transformOrigin={{
+						vertical: "top",
+						horizontal: "right",
+					}}
+				>
+					<MenuItem>
+						<Link style={{ textDecoration: "none", color: "black" }} to={"/Profile"}>
+							Profile
+						</Link>
+					</MenuItem>
+					<MenuItem>Saved Posts</MenuItem>
+					<MenuItem onClick={handleChange}>Logout</MenuItem>
+				</Menu>
 				<CardContent sx={{}}>
 					<Typography variant="body2" sx={{ marginTop: "0px", textDecoration: "none", textAlign: "left" }}>
 						{item.description}
@@ -117,11 +187,32 @@ function Feed({data, username}) {
 							image="images/iiitr.png"
 						/>
 					</Collapse>
-					<Overlay id={`${expand}`}>
-						<Box onClick={()=>handleExpand(item._id)} sx={{ cursor: "pointer" }}>
-							<KeyboardArrowDown sx={{ color: "white" }} />
-						</Box>
-					</Overlay>
+<Box
+								onClick={() => handleExpand(item._id)}
+								sx={{
+									cursor: "pointer",
+									background: expand.includes(item._id)
+										? "linear-gradient(transparent,transparent)"
+										: "linear-gradient(transparent,#eeeeee)",
+									position: "absolute",
+									bottom: 0,
+									height: expand.includes(item._id) ? "15%" : "100%",
+									width: "100%",
+									display: "flex",
+									justifyContent: "center",
+									alignItems: "center",
+									transition: "all 0.5s",
+									// transition: "background-color 0.5s ease",
+								}}
+							>						
+<KeyboardArrowDown
+									sx={{
+										color: "white",
+										rotate: expand.includes(item._id) ? "180deg" : "",
+										filter: "drop-shadow(0px 1px 2px black);",
+										transition: "rotate 0.5s",
+									}}
+								/>						</Box>
 				</Box>
 				<Box sx={{ display: "flex", justifyContent: "space-between", padding: "10px" }}>
 					<Typography variant="body2" sx={{ marginLeft: "2%" }}>
@@ -177,18 +268,6 @@ function Feed({data, username}) {
 	);
 }
 
-const Overlay = styled.div`
-	width: 100%;
-	height: 100%;
-	background: linear-gradient(#f5f7fa95, #b1b9c495);
-	color: black;
-	position: absolute;
-	display: flex;
-	justify-content: center;
-	align-items: flex-end;
-	transition: opacity 0.5s;
 
-	${(props) => (props.id === "true" ? `opacity:0` : ``)}
-`;
 
 export default Feed;

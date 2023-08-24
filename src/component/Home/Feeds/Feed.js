@@ -8,30 +8,30 @@ import {
 	Typography,
 	Paper,
 	Divider,
+	Menu,
+	MenuItem,
+	Link,
 } from "@mui/material";
 import { blueGrey } from "@mui/material/colors";
 import React, { useState } from "react";
-import { Favorite, KeyboardArrowDown, MoreVert } from "@mui/icons-material";
+import { Favorite, MoreVert } from "@mui/icons-material";
 import { Box } from "@mui/system";
 import CommentIcon from "@mui/icons-material/Comment";
 import Button from "@mui/material/Button";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-import styled from "styled-components";
-import AddComments from'../Comments/AddComments'
-import UserComments from'../Comments/UserComments'
+import AddComments from "../Comments/AddComments";
+import UserComments from "../Comments/UserComments";
 
-function Feed({data}) {
+function Feed({ data }) {
 	//Like
 	const [color, setColor] = useState([]);
 	const handleLike = async (id) => {
 		//console.log(id)
 		const newIndex = color.indexOf(id);
-		if (newIndex > -1) { 
-			setColor(color.filter(e => e !== id));
+		if (newIndex > -1) {
+			setColor(color.filter((e) => e !== id));
 			// //console.log(color)
-		  }
-		else
-		setColor(color.concat(id));
+		} else setColor(color.concat(id));
 		//console.log(newIndex, color)
 	};
 
@@ -40,10 +40,10 @@ function Feed({data}) {
 	const handleChange = (id) => {
 		var index = open.indexOf(id);
 		if (index > -1) {
-			setOpen(open.filter(e => e !== id))
+			setOpen(open.filter((e) => e !== id));
 			//console.log(id)
 		} else {
-			setOpen(open.concat(id))
+			setOpen(open.concat(id));
 		}
 		//console.log(open)
 	};
@@ -53,22 +53,22 @@ function Feed({data}) {
 	const handleSave = (id) => {
 		var index = save.indexOf(id);
 		if (index > -1) {
-			setSave(save.filter(e => e !== id))
+			setSave(save.filter((e) => e !== id));
 			//console.log(id)
 		} else {
-			setSave(save.concat(id))
+			setSave(save.concat(id));
 		}
 	};
 
-	const [expand, setExpand] = useState([]); 
-	const handleExpand = (id) => {
-		var index = expand.indexOf(id);
-		if (index > -1) {
-			setExpand(expand.filter(e => e !== id))
-			//console.log(id)
-		} else {
-			setExpand(expand.concat(id))
-		}
+	const [anchorEl, setAnchorEl] = useState(null);
+	const [menuOpenId, setMenuOpenId] = useState(null);
+	const handleAnchor = (e, id) => {
+		setMenuOpenId(id);
+		setAnchorEl(e.currentTarget);
+	};
+	const handleAnchorClose = () => {
+		setMenuOpenId(null);
+		setAnchorEl(null);
 	};
 
 	const timeDemo=(time)=>{
@@ -105,7 +105,7 @@ function Feed({data}) {
 	}
 	}
 	return (
-		<Box sx={{ maxWidth: "100%", display: "flex", justifyContent: "center", flexDirection:"column" }}>
+		<Box sx={{ maxWidth: "100%", display: "flex", justifyContent: "center", flexDirection: "column" }}>
 			{data.post?.toReversed().map((item, index) => {
 			return (<Paper
 				sx={{
@@ -124,22 +124,41 @@ function Feed({data}) {
 						</Avatar>
 					}
 					action={
-						<IconButton aria-label="settings">
+						<IconButton aria-label="settings" onClick={(e) => handleAnchor(e, item._id)}>
 							<MoreVert />
 						</IconButton>
 					}
 					title={item.userId.username.toUpperCase()}
-					// subheader={item.createdAt.split("T")[0] + " " + item.createdAt.split("T")[1].split(".")[0]}
-					subheader={timeDemo(item.createdAt)}
-					
-				/>
+					subheader={timeDemo(item.createdAt)}				/>
+				<Menu
+					id="demo-positioned-menu"
+					aria-labelledby="demo-positioned-button"
+					open={item._id === menuOpenId}
+					anchorEl={anchorEl}
+					onClose={(e) => handleAnchorClose()}
+					anchorOrigin={{
+						vertical: "top",
+						horizontal: "right",
+					}}
+					transformOrigin={{
+						vertical: "top",
+						horizontal: "right",
+					}}
+				>
+					<MenuItem>
+						<Link style={{ textDecoration: "none", color: "black" }} to={"/Profile"}>
+							Profile
+						</Link>
+					</MenuItem>
+					<MenuItem>Saved Posts</MenuItem>
+					<MenuItem onClick={handleChange}>Logout</MenuItem>
+				</Menu>
 				<CardContent sx={{}}>
 					<Typography variant="body2" sx={{ marginTop: "0px", textDecoration: "none", textAlign: "left" }}>
 						{item.caption}
 					</Typography>
 				</CardContent>
 				<Box sx={{ display: "flex", justifyContent: "center", position: "relative" }}>
-					<Collapse in={expand.includes(item._id) ? true : false} collapsedSize={"3rem"} timeout={500}>
 						<CardMedia
 							sx={{
 								display: "block",
@@ -151,17 +170,11 @@ function Feed({data}) {
 							component="img"
 							image="images/iiitr.png"
 						/>
-					</Collapse>
-					<Overlay id={`${expand}`}>
-						<Box onClick={()=>handleExpand(item._id)} sx={{ cursor: "pointer" }}>
-							<KeyboardArrowDown sx={{ color: "white" }} />
-						</Box>
-					</Overlay>
 				</Box>
 				<Box sx={{ display: "flex", justifyContent: "space-between", padding: "10px" }}>
 					<Typography variant="body2" sx={{ marginLeft: "2%" }}>
 						{" "}
-						{item.likes.length + color.includes(item._id) ? 1 : 0} likes
+						{item.likes.length} likes
 					</Typography>
 					<Typography variant="body2" sx={{ marginRight: "2%" }}>
 						{item.comments.length} Comments
@@ -211,19 +224,5 @@ function Feed({data}) {
 		</Box>
 	);
 }
-
-const Overlay = styled.div`
-	width: 100%;
-	height: 100%;
-	background: linear-gradient(#f5f7fa95, #b1b9c495);
-	color: black;
-	position: absolute;
-	display: flex;
-	justify-content: center;
-	align-items: flex-end;
-	transition: opacity 0.5s;
-
-	${(props) => (props.id === "true" ? `opacity:0` : ``)}
-`;
 
 export default Feed;

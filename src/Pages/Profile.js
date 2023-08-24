@@ -17,68 +17,80 @@ function Profile({ setLoginUser }) {
 	let id = window.localStorage.getItem("userId");
 
 	const [data2, setData2] = useState([]);
-	const getUserQuestions = async (username) => {
-		//console.log(username)
-		let url = `${BASE_URL}/question/questions/user/${username}`;
-		const response = await fetch(url, {
-			method: "GET",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-			},
-		});
-		const testData = await response.json();
-		setData2(testData);
-		//console.log(testData.question);
-	};
+	const getUserQuestions = useCallback(
+		async (username) => {
+			//console.log(username)
+			let url = `${BASE_URL}/question/questions/user/${username}`;
+			const response = await fetch(url, {
+				method: "GET",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+			});
+			const testData = await response.json();
+			setData2(testData);
+			//console.log(testData.question);
+		},
+		[BASE_URL]
+	);
 
 	const [data1, setData1] = useState([]);
-	const getUserPosts = async (username) => {
-		//console.log(username)
-		let url = `${BASE_URL}/post/myposts/${username}`;
-		const response = await fetch(url, {
-			method: "GET",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-			},
-		});
-		const testData = await response.json();
-		setData1(testData);
-		//console.log(testData.question);
-	};
+	const getUserPosts = useCallback(
+		async (username) => {
+			//console.log(username)
+			let url = `${BASE_URL}/post/myposts/${username}`;
+			const response = await fetch(url, {
+				method: "GET",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+			});
+			const testData = await response.json();
+			setData1(testData);
+			//console.log(testData.question);
+		},
+		[BASE_URL]
+	);
 
 	const [data3, setData3] = useState([]);
-	const getUserSavedQuestions = async (id) => {
-		//console.log(id)
-		let url = `${BASE_URL}/question/getsavequestions/${id}`;
-		const response = await fetch(url, {
-			method: "GET",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-			},
-		});
-		const testData = await response.json();
-		setData3(testData);
-		//console.log(testData.question);
-	};
+	const getUserSavedQuestions = useCallback(
+		async (id) => {
+			//console.log(id)
+			let url = `${BASE_URL}/question/getsavequestions/${id}`;
+			const response = await fetch(url, {
+				method: "GET",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+			});
+			const testData = await response.json();
+			setData3(testData);
+			//console.log(testData.question);
+		},
+		[BASE_URL]
+	);
 
 	const [data4, setData4] = useState([]);
-	const getUserSavedPosts = async (id) => {
-		//console.log(id)
-		let url = `${BASE_URL}/post/getsaveposts/${id}`;
-		const response = await fetch(url, {
-			method: "GET",
-			headers: {
-				Accept: "application/json",
-				"Content-Type": "application/json",
-			},
-		});
-		const testData = await response.json();
-		setData4(testData);
-		//console.log(testData.question);
-	};
+	const getUserSavedPosts = useCallback(
+		async (id) => {
+			//console.log(id)
+			let url = `${BASE_URL}/post/getsaveposts/${id}`;
+			const response = await fetch(url, {
+				method: "GET",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+			});
+			const testData = await response.json();
+			setData4(testData);
+			//console.log(testData.question);
+		},
+		[BASE_URL]
+	);
 
 	const fetchUser = useCallback(async () => {
 		try {
@@ -91,7 +103,7 @@ function Profile({ setLoginUser }) {
 		} catch (error) {
 			console.log(error);
 		}
-	}, [BASE_URL, id]);
+	}, [BASE_URL, getUserPosts, getUserQuestions, getUserSavedPosts, getUserSavedQuestions, id]);
 
 	useEffect(() => {
 		fetchUser();

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
@@ -59,7 +59,7 @@ export default function BasicTabs() {
 	};
 	const [data1, setData1] = useState([]);
 
-	const getAllPosts = async () => {
+	const getAllPosts = useCallback(async () => {
 		let url = `${BASE_URL}/post/allposts`;
 		const response = await fetch(url, {
 			method: "GET",
@@ -71,10 +71,10 @@ export default function BasicTabs() {
 		const testData = await response.json();
 		setData1(testData);
 		//console.log(testData.post);
-	};
+	}, [BASE_URL]);
 	const [data2, setData2] = useState([]);
 
-	const getQuestions = async () => {
+	const getQuestions = useCallback(async () => {
 		let url = `${BASE_URL}/question/allquestions`;
 		const response = await fetch(url, {
 			method: "GET",
@@ -86,11 +86,11 @@ export default function BasicTabs() {
 		const testData = await response.json();
 		setData2(testData);
 		//console.log(testData.question);
-	};
+	}, [BASE_URL]);
 	useMemo(() => {
 		getAllPosts();
 		getQuestions();
-	}, []);
+	}, [getAllPosts, getQuestions]);
 
 	return (
 		<Box sx={{ marginTop: "2%", maxWidth: "100%", display: "flex", justifyContent: "center" }}>

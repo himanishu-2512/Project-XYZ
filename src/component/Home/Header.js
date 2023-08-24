@@ -1,6 +1,7 @@
-import { Mail, Notifications, Pets } from "@mui/icons-material";
+import {  Pets } from "@mui/icons-material";
 import { AppBar, Avatar, Badge, Box, InputBase, Menu, MenuItem, styled, Toolbar, Typography } from "@mui/material";
 import React, { useState } from "react";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import { useNavigate, Link } from "react-router-dom";
 
@@ -42,6 +43,9 @@ const Navbar = ({ setLoginUser, mode, setMode }) => {
     window.localStorage.removeItem('userId')
     navigate('/')
   }
+  const profileChange = () => {
+	navigate('/profile');
+  }
 	return (
 		<AppBar position="sticky" sx={{ background: "background.default" }}>
 			<StyledToolbar>
@@ -56,17 +60,18 @@ const Navbar = ({ setLoginUser, mode, setMode }) => {
 				</Search>
 				<Icons>
 					
-					<Badge badgeContent={4} color="error">
-						<Mail />
+					<Badge sx={{cursor:"pointer"}} onClick={handleChange} >
+						<LogoutIcon/>
 					</Badge>
-					<Badge badgeContent={2} color="error">
-						<Notifications />
-					</Badge>
-					<Avatar sx={{ width: 30, height: 30 }} src="" onClick={(e) => setOpen(true)} />
+					
+					<Avatar sx={{cursor:"pointer"}} onClick = {profileChange} />
 				</Icons>
 				<UserBox onClick={(e) => setOpen(true)}>
-					<Avatar sx={{ width: 30, height: 30 }} src="" />
-					<Typography variant="span">Kunal</Typography>
+				<Badge sx={{cursor:"pointer"}} onClick={handleChange} >
+					<LogoutIcon/>
+				</Badge>
+				<Avatar sx={{cursor:"pointer"}} onClick = {profileChange} />
+					
 				</UserBox>
 			</StyledToolbar>
 			<Menu
@@ -83,11 +88,12 @@ const Navbar = ({ setLoginUser, mode, setMode }) => {
 					horizontal: "right",
 				}}
 			>
-				<MenuItem>
-				<Link style={{textDecoration:"none",color:"black"}} to={"/Profile"}>Profile</Link>
+				<MenuItem 	>
+				&nbsp; &nbsp;Profile &nbsp; &nbsp;
 				</MenuItem>
-				<MenuItem>Saved Posts</MenuItem>
-				<MenuItem onClick={handleChange}>Logout</MenuItem>
+				{/* <MenuItem>Saved Posts</MenuItem> */}
+				<MenuItem onClick={handleChange}>
+				&nbsp; &nbsp;Logout &nbsp; &nbsp;</MenuItem>
 			</Menu>
 			{/* <div onClick={handleChange}></div> */}
 		</AppBar>

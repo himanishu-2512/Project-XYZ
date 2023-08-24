@@ -71,6 +71,39 @@ function Feed({data}) {
 		}
 	};
 
+	const timeDemo=(time)=>{
+	var msPerMinute = 60 * 1000;
+	var msPerHour = msPerMinute * 60;
+	var msPerDay = msPerHour * 24;
+	var msPerMonth = msPerDay * 30;
+	var msPerYear = msPerDay * 365;
+
+	var elapsed = new Date() - new Date(time);
+
+	if (elapsed < msPerMinute) {
+		 return Math.round(elapsed/1000) + ' seconds ago';   
+	}
+
+	else if (elapsed < msPerHour) {
+		 return Math.round(elapsed/msPerMinute) + ' minutes ago';   
+	}
+
+	else if (elapsed < msPerDay ) {
+		 return Math.round(elapsed/msPerHour ) + ' hours ago';   
+	}
+
+	else if (elapsed < msPerMonth) {
+		return '' + Math.round(elapsed/msPerDay) + ' days ago';   
+	}
+
+	else if (elapsed < msPerYear) {
+		return '' + Math.round(elapsed/msPerMonth) + ' months ago';   
+	}
+
+	else {
+		return '' + Math.round(elapsed/msPerYear ) + ' years ago';   
+	}
+	}
 	return (
 		<Box sx={{ maxWidth: "100%", display: "flex", justifyContent: "center", flexDirection:"column" }}>
 			{data.post?.toReversed().map((item, index) => {
@@ -96,7 +129,9 @@ function Feed({data}) {
 						</IconButton>
 					}
 					title={item.userId.username.toUpperCase()}
-					subheader={item.createdAt.split("T")[0] + " " + item.createdAt.split("T")[1].split(".")[0]}
+					// subheader={item.createdAt.split("T")[0] + " " + item.createdAt.split("T")[1].split(".")[0]}
+					subheader={timeDemo(item.createdAt)}
+					
 				/>
 				<CardContent sx={{}}>
 					<Typography variant="body2" sx={{ marginTop: "0px", textDecoration: "none", textAlign: "left" }}>
@@ -126,7 +161,7 @@ function Feed({data}) {
 				<Box sx={{ display: "flex", justifyContent: "space-between", padding: "10px" }}>
 					<Typography variant="body2" sx={{ marginLeft: "2%" }}>
 						{" "}
-						{item.likes.length} likes
+						{item.likes.length + color.includes(item._id) ? 1 : 0} likes
 					</Typography>
 					<Typography variant="body2" sx={{ marginRight: "2%" }}>
 						{item.comments.length} Comments

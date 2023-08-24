@@ -14,7 +14,6 @@ function Profile({ setLoginUser }) {
 	const [edit, setEdit] = useState(false);
 	const [user, setUser] = useState();
 	const [view, setView] = useState("profile");
-	const [readMore, setReadMore] = useState(false);
 	let id = window.localStorage.getItem("userId");
 
 	const [data2, setData2] = useState([]);

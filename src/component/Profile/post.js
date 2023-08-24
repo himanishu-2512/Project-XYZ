@@ -8,17 +8,19 @@ import {
 	Typography,
 	Paper,
 	Divider,
+	Menu,
+	MenuItem,
 } from "@mui/material";
 import { blueGrey } from "@mui/material/colors";
 import React, { useState } from "react";
-import { Favorite, KeyboardArrowDown, MoreVert } from "@mui/icons-material";
+import { Favorite, MoreVert } from "@mui/icons-material";
 import { Box } from "@mui/system";
 import CommentIcon from "@mui/icons-material/Comment";
 import Button from "@mui/material/Button";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-import styled from "styled-components";
 import AddComments from'../Home/Comments/AddComments'
 import UserComments from'../Home/Comments/UserComments'
+import { Link } from "react-router-dom";
 
 function Feed({data, username}) {
 
@@ -61,16 +63,50 @@ function Feed({data, username}) {
 		}
 	};
 
-	const [expand, setExpand] = useState([]); 
-	const handleExpand = (id) => {
-		var index = expand.indexOf(id);
-		if (index > -1) {
-			setExpand(expand.filter(e => e !== id))
-			//console.log(id)
-		} else {
-			setExpand(expand.concat(id))
-		}
+	const [anchorEl, setAnchorEl] = useState(null);
+	const [menuOpenId, setMenuOpenId] = useState(null);
+	const handleAnchor = (e, id) => {
+		setMenuOpenId(id);
+		setAnchorEl(e.currentTarget);
 	};
+	const handleAnchorClose = () => {
+		setMenuOpenId(null);
+		setAnchorEl(null);
+	};
+
+	const timeDemo = (time) => {
+		var msPerMinute = 60 * 1000;
+		var msPerHour = msPerMinute * 60;
+		var msPerDay = msPerHour * 24;
+		var msPerMonth = msPerDay * 30;
+		var msPerYear = msPerDay * 365;
+
+		var elapsed = new Date() - new Date(time);
+
+		if (elapsed < msPerMinute) {
+			return Math.round(elapsed / 1000) + ' seconds ago';
+		}
+
+		else if (elapsed < msPerHour) {
+			return Math.round(elapsed / msPerMinute) + ' minutes ago';
+		}
+
+		else if (elapsed < msPerDay) {
+			return Math.round(elapsed / msPerHour) + ' hours ago';
+		}
+
+		else if (elapsed < msPerMonth) {
+			return '' + Math.round(elapsed / msPerDay) + ' days ago';
+		}
+
+		else if (elapsed < msPerYear) {
+			return '' + Math.round(elapsed / msPerMonth) + ' months ago';
+		}
+
+		else {
+			return '' + Math.round(elapsed / msPerYear) + ' years ago';
+		}
+	}
 
 	return (
 		<Box sx={{ maxWidth: "100%", display: "flex", justifyContent: "center", flexDirection:"column" }}>
@@ -92,20 +128,42 @@ function Feed({data, username}) {
 						</Avatar>
 					}
 					action={
-						<IconButton aria-label="settings">
+						<IconButton aria-label="settings" onClick={(e) => handleAnchor(e, item._id)}>
 							<MoreVert />
 						</IconButton>
 					}
 					title={username?.toUpperCase()}
-					subheader={item.createdAt.split("T")[0] + " " + item.createdAt.split("T")[1].split(".")[0]}
+					subheader={timeDemo(item.createdAt)}
 				/>
+				<Menu
+					id="demo-positioned-menu"
+					aria-labelledby="demo-positioned-button"
+					open={item._id === menuOpenId}
+					anchorEl={anchorEl}
+					onClose={(e) => handleAnchorClose()}
+					anchorOrigin={{
+						vertical: "top",
+						horizontal: "right",
+					}}
+					transformOrigin={{
+						vertical: "top",
+						horizontal: "right",
+					}}
+				>
+					<MenuItem>
+						<Link style={{ textDecoration: "none", color: "black" }} to={"/Profile"}>
+							Profile
+						</Link>
+					</MenuItem>
+					<MenuItem>Saved Posts</MenuItem>
+					<MenuItem onClick={handleChange}>Logout</MenuItem>
+				</Menu>
 				<CardContent sx={{}}>
 					<Typography variant="body2" sx={{ marginTop: "0px", textDecoration: "none", textAlign: "left" }}>
 						{item.caption}
 					</Typography>
 				</CardContent>
 				<Box sx={{ display: "flex", justifyContent: "center", position: "relative" }}>
-					<Collapse in={expand.includes(item._id) ? true : false} collapsedSize={"3rem"} timeout={500}>
 						<CardMedia
 							sx={{
 								display: "block",
@@ -117,12 +175,6 @@ function Feed({data, username}) {
 							component="img"
 							image="images/iiitr.png"
 						/>
-					</Collapse>
-					<Overlay id={`${expand}`}>
-						<Box onClick={()=>handleExpand(item._id)} sx={{ cursor: "pointer" }}>
-							<KeyboardArrowDown sx={{ color: "white" }} />
-						</Box>
-					</Overlay>
 				</Box>
 				<Box sx={{ display: "flex", justifyContent: "space-between", padding: "10px" }}>
 					<Typography variant="body2" sx={{ marginLeft: "2%" }}>
@@ -178,18 +230,5 @@ function Feed({data, username}) {
 	);
 }
 
-const Overlay = styled.div`
-	width: 100%;
-	height: 100%;
-	background: linear-gradient(#f5f7fa95, #b1b9c495);
-	color: black;
-	position: absolute;
-	display: flex;
-	justify-content: center;
-	align-items: flex-end;
-	transition: opacity 0.5s;
-
-	${(props) => (props.id === "true" ? `opacity:0` : ``)}
-`;
 
 export default Feed;

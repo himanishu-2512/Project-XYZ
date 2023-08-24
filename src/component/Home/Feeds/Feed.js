@@ -18,148 +18,63 @@ import Button from "@mui/material/Button";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import styled from "styled-components";
 import AddComments from'../Comments/AddComments'
+import UserComments from'../Comments/UserComments'
 
-function Feed() {
+function Feed({data}) {
 	//Like
-	const [color, setColor] = useState(false);
-	const handleLike = () => {
-		setColor(!color);
+	const [color, setColor] = useState([]);
+	const handleLike = async (id) => {
+		//console.log(id)
+		const newIndex = color.indexOf(id);
+		if (newIndex > -1) { 
+			setColor(color.filter(e => e !== id));
+			// //console.log(color)
+		  }
+		else
+		setColor(color.concat(id));
+		//console.log(newIndex, color)
 	};
 
 	//Comment
-	const [open, setOpen] = useState(false);
-	const handleChange = () => {
-		setOpen(!open);
+	const [open, setOpen] = useState([]);
+	const handleChange = (id) => {
+		var index = open.indexOf(id);
+		if (index > -1) {
+			setOpen(open.filter(e => e !== id))
+			//console.log(id)
+		} else {
+			setOpen(open.concat(id))
+		}
+		//console.log(open)
 	};
 
 	//Save
-	const [save, setSave] = useState(false);
-	const handleSave = () => {
-		setSave(!save);
+	const [save, setSave] = useState([]);
+	const handleSave = (id) => {
+		var index = save.indexOf(id);
+		if (index > -1) {
+			setSave(save.filter(e => e !== id))
+			//console.log(id)
+		} else {
+			setSave(save.concat(id))
+		}
 	};
 
-	const [expand, setExpand] = useState(false);
-	const handleExpand = () => {
-		setExpand(true);
+	const [expand, setExpand] = useState([]); 
+	const handleExpand = (id) => {
+		var index = expand.indexOf(id);
+		if (index > -1) {
+			setExpand(expand.filter(e => e !== id))
+			//console.log(id)
+		} else {
+			setExpand(expand.concat(id))
+		}
 	};
 
 	return (
-		<Box
-			sx={{
-				display: "flex",
-				justifyContent: "center",
-				flexWrap: "wrap",
-				width: { xs: "100%", md: "90%" },
-			}}
-		>
-			<Paper
-				sx={{
-					maxWidth: "100%",
-					variant: "outlined",
-					maxHeight: "100%",
-					borderRadius: {
-						xs: "0px",
-						sm: "10px",
-					},
-					marginBottom: "20px",
-				}}
-				elevation={3}
-			>
-				<CardHeader
-					avatar={
-						<Avatar sx={{ bgcolor: blueGrey[500] }} aria-label="recipe">
-							V.P
-						</Avatar>
-					}
-					action={
-						<IconButton aria-label="settings">
-							<MoreVert />
-						</IconButton>
-					}
-					title="Vishnu Priye"
-					subheader="September 14, 2016"
-				/>
-				<CardContent sx={{}}>
-					<Typography variant="body2" sx={{ marginTop: "0px", textDecoration: "none", textAlign: "left" }}>
-						This impressive paella is a perfect party dish and a fun meal to cook together with your guests.
-						Add 1 cup of frozen peas along with the mussels, if you like.
-					</Typography>
-				</CardContent>
-				<Box sx={{ display: "flex", justifyContent: "center", position: "relative", paddingX: "1%" }}>
-					<Collapse in={expand} collapsedSize={"4rem"} timeout={500}>
-						<CardMedia
-							sx={{
-								display: "block",
-								maxWidth: "450px",
-								maxHeight: "450px",
-								width: "100%",
-								height: "100%",
-							}}
-							component="img"
-							image="images/doodle2_left.jpg"
-						/>
-					</Collapse>
-					<Overlay id={`${expand}`}>
-						<Box onClick={handleExpand} sx={{ cursor: "pointer" }}>
-							<KeyboardArrowDown
-								sx={{
-									color: "white",
-									filter: "drop-shadow(0px 0px 3px black)",
-									fontSize: "30px",
-								}}
-							/>
-						</Box>
-					</Overlay>
-				</Box>
-				<Box sx={{ display: "flex", justifyContent: "space-between", padding: "10px" }}>
-					<Typography variant="body2" sx={{ marginLeft: "2%" }}>
-						{" "}
-						9 likes
-					</Typography>
-					<Typography variant="body2" sx={{ marginRight: "2%" }}>
-						10 comments
-					</Typography>
-				</Box>
-				<Divider />
-				<Box
-					sx={{
-						display: "flex",
-						justifyContent: "space-evenly",
-					}}
-				>
-					<Button
-						startIcon={<Favorite />}
-						onClick={() => handleLike()}
-						style={{ color: color ? "red" : "black" }}
-					>
-						Like
-					</Button>
-					<Button
-						startIcon={<CommentIcon />}
-						sx={{ color: "black" }}
-						expand={open}
-						onClick={() => handleChange()}
-						aria-expanded={true}
-						aria-label="show more"
-					>
-						Comment
-					</Button>
-					<Button
-						startIcon={<BookmarkIcon />}
-						onClick={() => handleSave()}
-						style={{ color: save ? "blue" : "black" }}
-					>
-						Save
-					</Button>
-				</Box>
-				{open && <Divider maxWidth="90%" />}
-				<Collapse in={open} timeout="auto" unmountOnExit>
-					<CardContent>
-						<AddComments/>
-					</CardContent>
-				</Collapse>
-			</Paper>
-			<Paper
+		<Box sx={{ maxWidth: "100%", display: "flex", justifyContent: "center", flexDirection:"column" }}>
+			{data.post?.toReversed().map((item, index) => {
+			return (<Paper
 				sx={{
 					maxWidth: "100%",
 					variant: "outlined",
@@ -180,17 +95,16 @@ function Feed() {
 							<MoreVert />
 						</IconButton>
 					}
-					title="Vishnu Priye"
-					subheader="September 14, 2016"
+					title={item.userId.username.toUpperCase()}
+					subheader={item.createdAt.split("T")[0] + " " + item.createdAt.split("T")[1].split(".")[0]}
 				/>
 				<CardContent sx={{}}>
 					<Typography variant="body2" sx={{ marginTop: "0px", textDecoration: "none", textAlign: "left" }}>
-						This impressive paella is a perfect party dish and a fun meal to cook together with your guests.
-						Add 1 cup of frozen peas along with the mussels, if you like.
+						{item.caption}
 					</Typography>
 				</CardContent>
 				<Box sx={{ display: "flex", justifyContent: "center", position: "relative" }}>
-					<Collapse in={expand} collapsedSize={"4rem"} timeout={500}>
+					<Collapse in={expand.includes(item._id) ? true : false} collapsedSize={"3rem"} timeout={500}>
 						<CardMedia
 							sx={{
 								display: "block",
@@ -200,28 +114,22 @@ function Feed() {
 								height: "100%",
 							}}
 							component="img"
-							image="images/doodle2_left.jpg"
+							image="images/iiitr.png"
 						/>
 					</Collapse>
 					<Overlay id={`${expand}`}>
-						<Box onClick={handleExpand} sx={{ cursor: "pointer" }}>
-							<KeyboardArrowDown
-								sx={{
-									color: "white",
-									filter: "drop-shadow(0px 0px 3px black)",
-									fontSize: "30px",
-								}}
-							/>
+						<Box onClick={()=>handleExpand(item._id)} sx={{ cursor: "pointer" }}>
+							<KeyboardArrowDown sx={{ color: "white" }} />
 						</Box>
 					</Overlay>
 				</Box>
 				<Box sx={{ display: "flex", justifyContent: "space-between", padding: "10px" }}>
 					<Typography variant="body2" sx={{ marginLeft: "2%" }}>
 						{" "}
-						9 likes
+						{item.likes.length} likes
 					</Typography>
 					<Typography variant="body2" sx={{ marginRight: "2%" }}>
-						10 comments
+						{item.comments.length} Comments
 					</Typography>
 				</Box>
 				<Divider />
@@ -233,16 +141,15 @@ function Feed() {
 				>
 					<Button
 						startIcon={<Favorite />}
-						onClick={() => handleLike()}
-						style={{ color: color ? "red" : "black" }}
+						onClick={() => handleLike(item._id)}
+						style={{ color: color.includes(item._id) ? "red" : "black" }}
 					>
 						Like
 					</Button>
 					<Button
 						startIcon={<CommentIcon />}
 						sx={{ color: "black" }}
-						expand={open}
-						onClick={() => handleChange()}
+						onClick={() => handleChange(item._id)}
 						aria-expanded={true}
 						aria-label="show more"
 					>
@@ -250,123 +157,22 @@ function Feed() {
 					</Button>
 					<Button
 						startIcon={<BookmarkIcon />}
-						onClick={() => handleSave()}
-						style={{ color: save ? "blue" : "black" }}
+						onClick={() => handleSave(item._id)}
+						style={{ color: save.includes(item._id) ? "blue" : "black" }}
 					>
-						Save
+						{save.includes(item._id) ? "Saved" : "Save"}
 					</Button>
 				</Box>
-				{open && <Divider maxWidth="90%" />}
-				<Collapse in={open} timeout="auto" unmountOnExit>
+				{open.includes(item._id) ? true : false && <Divider maxWidth="90%" />}
+				<Collapse in={open.includes(item._id) ? true : false } timeout="auto" unmountOnExit>
 					<CardContent>
 						<AddComments/>
+						{item.comments.map((items, index) => {
+			return (
+						<UserComments answers={items} />)})}
 					</CardContent>
 				</Collapse>
-			</Paper>
-			<Paper
-				sx={{
-					maxWidth: "100%",
-					variant: "outlined",
-					maxHeight: "100%",
-					borderRadius: "10px",
-					marginBottom: "20px",
-				}}
-				elevation={3}
-			>
-				<CardHeader
-					avatar={
-						<Avatar sx={{ bgcolor: blueGrey[500] }} aria-label="recipe">
-							V.P
-						</Avatar>
-					}
-					action={
-						<IconButton aria-label="settings">
-							<MoreVert />
-						</IconButton>
-					}
-					title="Vishnu Priye"
-					subheader="September 14, 2016"
-				/>
-				<CardContent sx={{}}>
-					<Typography variant="body2" sx={{ marginTop: "0px", textDecoration: "none", textAlign: "left" }}>
-						This impressive paella is a perfect party dish and a fun meal to cook together with your guests.
-						Add 1 cup of frozen peas along with the mussels, if you like.
-					</Typography>
-				</CardContent>
-				<Box sx={{ display: "flex", justifyContent: "center", position: "relative" }}>
-					<Collapse in={expand} collapsedSize={"4rem"} timeout={500}>
-						<CardMedia
-							sx={{
-								display: "block",
-								maxWidth: "450px",
-								maxHeight: "450px",
-								width: "100%",
-								height: "100%",
-							}}
-							component="img"
-							image="images/doodle2_left.jpg"
-						/>
-					</Collapse>
-					<Overlay id={`${expand}`}>
-						<Box onClick={handleExpand} sx={{ cursor: "pointer" }}>
-							<KeyboardArrowDown
-								sx={{
-									color: "white",
-									filter: "drop-shadow(0px 0px 3px black)",
-									fontSize: "30px",
-								}}
-							/>
-						</Box>
-					</Overlay>
-				</Box>
-				<Box sx={{ display: "flex", justifyContent: "space-between", padding: "10px" }}>
-					<Typography variant="body2" sx={{ marginLeft: "2%" }}>
-						{" "}
-						9 likes
-					</Typography>
-					<Typography variant="body2" sx={{ marginRight: "2%" }}>
-						10 comments
-					</Typography>
-				</Box>
-				<Divider />
-				<Box
-					sx={{
-						display: "flex",
-						justifyContent: "space-evenly",
-					}}
-				>
-					<Button
-						startIcon={<Favorite />}
-						onClick={() => handleLike()}
-						style={{ color: color ? "red" : "black" }}
-					>
-						Like
-					</Button>
-					<Button
-						startIcon={<CommentIcon />}
-						sx={{ color: "black" }}
-						expand={open}
-						onClick={() => handleChange()}
-						aria-expanded={true}
-						aria-label="show more"
-					>
-						Comment
-					</Button>
-					<Button
-						startIcon={<BookmarkIcon />}
-						onClick={() => handleSave()}
-						style={{ color: save ? "blue" : "black" }}
-					>
-						Save
-					</Button>
-				</Box>
-				{open && <Divider maxWidth="90%" />}
-				<Collapse in={open} timeout="auto" unmountOnExit>
-					<CardContent>
-						<AddComments/>
-					</CardContent>
-				</Collapse>
-			</Paper>
+			</Paper>)})}
 		</Box>
 	);
 }
@@ -374,7 +180,7 @@ function Feed() {
 const Overlay = styled.div`
 	width: 100%;
 	height: 100%;
-	background: linear-gradient(#fff, #b1b9c485);
+	background: linear-gradient(#f5f7fa95, #b1b9c495);
 	color: black;
 	position: absolute;
 	display: flex;

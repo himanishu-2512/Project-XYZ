@@ -1,10 +1,10 @@
-import React, { useState, useMemo } from "react";
+import React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
 import PropTypes from "prop-types";
-import Feed from "./Feed";
-import Feed2 from "./Feed2";
+import Feed from "./post";
+import Feed2 from "./question";
 import { Paper } from "@mui/material";
 
 function TabPanel(props) {
@@ -49,46 +49,16 @@ function a11yProps(index) {
 	};
 }
 
-export default function BasicTabs() {
+export default function BasicTabs({post, username, question, savedpost, savedquestion}) {
+	//console.log(question, post, savedpost, savedquestion)
+	let postdata = post ? post.user.posts : savedpost.posts.savedPosts;
+	let questiondata = question ? question.posts.questions : savedquestion.posts.savedQuestions;
+
 	const [value, setValue] = React.useState(0);
 
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
-	const [data1, setData1] = useState([]);
-
-	const getAllPosts = async () =>{
-		let url = `https://project-xyz-backend.vercel.app/api/post/allposts`;
-		const response = await fetch(url, {
-		  method: 'GET',
-		  headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		  },
-		});
-		const testData = await response.json();
-		setData1(testData);
-		//console.log(testData.post);
-	  }
-	  const [data2, setData2] = useState([]);
-
-	  const getQuestions = async () =>{
-		  let url = `https://project-xyz-backend.vercel.app/api/question/allquestions`;
-		  const response = await fetch(url, {
-			method: 'GET',
-			headers: {
-			  Accept: 'application/json',
-			  'Content-Type': 'application/json',
-			},
-		  });
-		  const testData = await response.json();
-		  setData2(testData);
-		  //console.log(testData.question);
-		}
-		useMemo(()=>{
-			getAllPosts();
-			getQuestions();
-		}, [])
 
 	return (
 		<Box sx={{ marginTop: "2%", maxWidth: "100%", display: "flex", justifyContent: "center" }}>
@@ -121,10 +91,10 @@ export default function BasicTabs() {
 					</Box>
 				</Paper>
 				<TabPanel value={value} index={0}>
-					<Feed data = {data1}/>
+					<Feed data = {postdata} username={username}/>
 				</TabPanel>
 				<TabPanel value={value} index={1}>
-					<Feed2 data = {data2}/>
+					<Feed2 data = {questiondata} username ={username}/>
 				</TabPanel>
 			</Box>
 		</Box>

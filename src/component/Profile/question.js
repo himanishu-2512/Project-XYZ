@@ -17,10 +17,10 @@ import CommentIcon from "@mui/icons-material/Comment";
 import Button from "@mui/material/Button";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import styled from "styled-components";
-import AddComments from'../Comments/AddComments'
-import UserComments from'../Comments/UserComments'
+import AddComments from'../Home/Comments/AddComments'
+import UserComments from'../Home/Comments/UserComments'
 
-function Feed({data}) {
+function Feed({data, username}) {
 	//Like
 	const [color, setColor] = useState([]);
 	const handleLike = async (id) => {
@@ -73,7 +73,7 @@ function Feed({data}) {
 
 	return (
 		<Box sx={{ maxWidth: "100%", display: "flex", justifyContent: "center", flexDirection:"column" }}>
-			{data.question?.toReversed().map((item, index) => {
+			{data?.toReversed().map((item, index) => {
 			return (<Paper
 				sx={{
 					maxWidth: "100%",
@@ -95,7 +95,7 @@ function Feed({data}) {
 							<MoreVert />
 						</IconButton>
 					}
-					title={item.userId.username}
+					title={username.toUpperCase()}
 					subheader={item.createdAt}
 				/>
 				<CardContent sx={{}}>

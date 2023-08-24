@@ -7,7 +7,6 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
-import UserComments from "./UserComments";
 
 function Comments() {
   return (

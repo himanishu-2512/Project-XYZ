@@ -10,7 +10,7 @@ import {
 	Divider,
 } from "@mui/material";
 import { blueGrey } from "@mui/material/colors";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { Favorite, KeyboardArrowDown, MoreVert } from "@mui/icons-material";
 import { Box } from "@mui/system";
 import CommentIcon from "@mui/icons-material/Comment";

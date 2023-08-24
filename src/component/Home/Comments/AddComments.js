@@ -53,7 +53,6 @@ function Comments() {
           mt: "20px",
         }}
       >
-        <UserComments />
       </Box>
     </Box>
   );

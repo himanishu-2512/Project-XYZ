@@ -4,6 +4,7 @@ import NavBar from "../component/Home/Header";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import UserInfo from "../component/Profile/UserInfo";
+import FeedSwitch from "../component/Profile/FeedSwtich";
 import { Edit } from "@mui/icons-material";
 import axios from "axios";
 import { blue, green, red } from "@mui/material/colors";
@@ -15,10 +16,78 @@ function Profile({ setLoginUser }) {
 	const [view, setView] = useState("profile");
 	let id = window.localStorage.getItem("userId");
 
+	const [data2, setData2] = useState([])
+	const getUserQuestions = async (username) =>{
+		//console.log(username)
+		let url = `https://project-xyz-backend.vercel.app/api/question/questions/user/${username}`;
+		const response = await fetch(url, {
+		  method: 'GET',
+		  headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+		  },
+		});
+		const testData = await response.json();
+		setData2(testData);
+		//console.log(testData.question);
+	  }
+
+	  const [data1, setData1] = useState([])
+	  const getUserPosts = async (username) =>{
+		  //console.log(username)
+		  let url = `https://project-xyz-backend.vercel.app/api/post/myposts/${username}`;
+		  const response = await fetch(url, {
+			method: 'GET',
+			headers: {
+			  Accept: 'application/json',
+			  'Content-Type': 'application/json',
+			},
+		  });
+		  const testData = await response.json();
+		  setData1(testData);
+		  //console.log(testData.question);
+		}
+
+		const [data3, setData3] = useState([])
+	const getUserSavedQuestions = async (id) =>{
+		//console.log(id)
+		let url = `https://project-xyz-backend.vercel.app/api/question/getsavequestions/${id}`;
+		const response = await fetch(url, {
+		  method: 'GET',
+		  headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+		  },
+		});
+		const testData = await response.json();
+		setData3(testData);
+		//console.log(testData.question);
+	  }
+
+	  const [data4, setData4] = useState([])
+	  const getUserSavedPosts = async (id) =>{
+		  //console.log(id)
+		  let url = `https://project-xyz-backend.vercel.app/api/post/getsaveposts/${id}`;
+		  const response = await fetch(url, {
+			method: 'GET',
+			headers: {
+			  Accept: 'application/json',
+			  'Content-Type': 'application/json',
+			},
+		  });
+		  const testData = await response.json();
+		  setData4(testData);
+		  //console.log(testData.question);
+		}
+
 	const fetchUser = useCallback(async () => {
 		try {
 			const userInfo = await axios.get(`${BASE_URL}/auth/user/${id}`);
 			setUser(userInfo.data.user);
+			getUserQuestions(userInfo.data.user.username)
+			getUserPosts(userInfo.data.user.username)
+			getUserSavedQuestions(userInfo.data.user._id)
+			getUserSavedPosts(userInfo.data.user._id)
 		} catch (error) {
 			console.log(error);
 		}
@@ -49,7 +118,6 @@ function Profile({ setLoginUser }) {
 		fetchUser();
 		setEdit(false);
 	};
-
 	return (
 		<>
 			{user && (
@@ -279,11 +347,13 @@ function Profile({ setLoginUser }) {
 								{view === "posts" && (
 									<>
 										<Typography variant="h4">Posts</Typography>
+										<FeedSwitch post={data1} username = {user.username} question={data2}/>
 									</>
 								)}
 								{view === "saved" && (
 									<>
 										<Typography variant="h4">Saved Posts</Typography>
+										<FeedSwitch savedpost={data4} username = {user.username} savedquestion={data3}/>
 									</>
 								)}
 							</Box>

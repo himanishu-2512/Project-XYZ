@@ -17,10 +17,10 @@ import CommentIcon from "@mui/icons-material/Comment";
 import Button from "@mui/material/Button";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import styled from "styled-components";
-import AddComments from'../Comments/AddComments'
-import UserComments from'../Comments/UserComments'
+import AddComments from'../Home/Comments/AddComments'
+import UserComments from'../Home/Comments/UserComments'
 
-function Feed({data}) {
+function Feed({data, username}) {
 	//Like
 	const [color, setColor] = useState([]);
 	const handleLike = async (id) => {
@@ -73,7 +73,7 @@ function Feed({data}) {
 
 	return (
 		<Box sx={{ maxWidth: "100%", display: "flex", justifyContent: "center", flexDirection:"column" }}>
-			{data.post?.toReversed().map((item, index) => {
+			{data?.toReversed().map((item, index) => {
 			return (<Paper
 				sx={{
 					maxWidth: "100%",
@@ -95,12 +95,12 @@ function Feed({data}) {
 							<MoreVert />
 						</IconButton>
 					}
-					title={item.userId.username.toUpperCase()}
-					subheader={item.createdAt.split("T")[0] + " " + item.createdAt.split("T")[1].split(".")[0]}
+					title={username.toUpperCase()}
+					subheader={item.createdAt}
 				/>
 				<CardContent sx={{}}>
 					<Typography variant="body2" sx={{ marginTop: "0px", textDecoration: "none", textAlign: "left" }}>
-						{item.caption}
+						{item.description}
 					</Typography>
 				</CardContent>
 				<Box sx={{ display: "flex", justifyContent: "center", position: "relative" }}>
@@ -129,7 +129,7 @@ function Feed({data}) {
 						{item.likes.length} likes
 					</Typography>
 					<Typography variant="body2" sx={{ marginRight: "2%" }}>
-						{item.comments.length} Comments
+						{item.answers.length} Answers
 					</Typography>
 				</Box>
 				<Divider />
@@ -153,7 +153,7 @@ function Feed({data}) {
 						aria-expanded={true}
 						aria-label="show more"
 					>
-						Comment
+						Answer
 					</Button>
 					<Button
 						startIcon={<BookmarkIcon />}
@@ -167,7 +167,7 @@ function Feed({data}) {
 				<Collapse in={open.includes(item._id) ? true : false } timeout="auto" unmountOnExit>
 					<CardContent>
 						<AddComments/>
-						{item.comments.map((items, index) => {
+						{item.answers.map((items, index) => {
 			return (
 						<UserComments answers={items} />)})}
 					</CardContent>

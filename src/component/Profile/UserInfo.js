@@ -121,9 +121,9 @@ function UserInfo({ checked, user, setUser }) {
 			<Box>
 				{(user.skills.length > 0 || checked) && (
 					<Box
-						sx={{ margin: "30px 0", border: "solid 2px rgba(200,200,200,0.7)", borderRadius: "1em", padding: "1.5em" }}
+						sx={{ margin: "30px 0", border: "solid 1px rgba(200,200,200,0.7)", borderRadius: "1em", padding: "1.5em" }}
 					>
-						<Typography sx={{ marginBottom: "1.5em" }} variant="h5">
+						<Typography sx={{ marginBottom: "1.5em" }} variant="h6">
 							Skills
 						</Typography>
 						<Box
@@ -156,14 +156,13 @@ function UserInfo({ checked, user, setUser }) {
 								)}
 								{userSkills.map((skill) => {
 									return (
-										<Grid key={`user${skill}`} item xs={4} sx={{ display: "flex" }}>
+										<Grid key={`user${skill}`} item xs={2} sx={{ display: "flex" }}>
 											<Chip
 												label={skill}
 												variant="outlined"
 												sx={{
 													width: "100%",
 													fontSize: "15px",
-													fontWeight: "bold",
 												}}
 											/>
 											{checked && (
@@ -189,9 +188,9 @@ function UserInfo({ checked, user, setUser }) {
 					</Box>
 				)}
 				<Box
-					sx={{ margin: "30px 0", border: "solid 2px rgba(200,200,200,0.7)", borderRadius: "1em", padding: "1.5em" }}
+					sx={{ margin: "30px 0", border: "solid 1px rgba(200,200,200,0.7)", borderRadius: "1em", padding: "1.5em" }}
 				>
-					<Typography sx={{ marginBottom: "1.5em" }} variant="h5">
+					<Typography sx={{ marginBottom: "1.5em" }} variant="h6">
 						Education
 					</Typography>
 					<Box sx={{ display: "flex", marginTop: "10px" }}>
@@ -207,20 +206,19 @@ function UserInfo({ checked, user, setUser }) {
 							<Typography sx={{ fontWeight: "bold", fontSize: "16px" }}>
 								Indian Institute of Information Technology, Ranchi
 							</Typography>
-							<Typography variant="subtitle2">Bachelor of Technology - BTech, Computer Science</Typography>
-							<Typography variant="caption">2020 - 2024</Typography>
+							<Typography variant="subtitle2">Bachelor of Technology</Typography>
 						</Box>
 					</Box>
 				</Box>
 				<Box
 					sx={{
-						border: "solid 2px rgba(200,200,200,0.7)",
+						border: "solid 1px rgba(200,200,200,0.7)",
 						borderRadius: "1em",
 						padding: "1.5em",
 						marginBottom: "30px",
 					}}
 				>
-					<Typography sx={{ marginBottom: "1.5em" }} variant="h5">
+					<Typography sx={{ marginBottom: "1.5em" }} variant="h6">
 						Personal Information
 					</Typography>
 					<LocalizationProvider dateAdapter={AdapterDayjs}>

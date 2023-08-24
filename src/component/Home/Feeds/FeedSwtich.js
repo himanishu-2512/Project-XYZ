@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
@@ -50,6 +50,8 @@ function a11yProps(index) {
 }
 
 export default function BasicTabs() {
+	const BASE_URL = process.env.REACT_APP_BASE_URL;
+
 	const [value, setValue] = React.useState(0);
 
 	const handleChange = (event, newValue) => {
@@ -57,38 +59,38 @@ export default function BasicTabs() {
 	};
 	const [data1, setData1] = useState([]);
 
-	const getAllPosts = async () =>{
-		let url = `https://project-xyz-backend.vercel.app/api/post/allposts`;
+	const getAllPosts = useCallback(async () => {
+		let url = `${BASE_URL}/post/allposts`;
 		const response = await fetch(url, {
-		  method: 'GET',
-		  headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		  },
+			method: "GET",
+			headers: {
+				Accept: "application/json",
+				"Content-Type": "application/json",
+			},
 		});
 		const testData = await response.json();
 		setData1(testData);
 		//console.log(testData.post);
-	  }
-	  const [data2, setData2] = useState([]);
+	}, [BASE_URL]);
+	const [data2, setData2] = useState([]);
 
-	  const getQuestions = async () =>{
-		  let url = `https://project-xyz-backend.vercel.app/api/question/allquestions`;
-		  const response = await fetch(url, {
-			method: 'GET',
+	const getQuestions = useCallback(async () => {
+		let url = `${BASE_URL}/question/allquestions`;
+		const response = await fetch(url, {
+			method: "GET",
 			headers: {
-			  Accept: 'application/json',
-			  'Content-Type': 'application/json',
+				Accept: "application/json",
+				"Content-Type": "application/json",
 			},
-		  });
-		  const testData = await response.json();
-		  setData2(testData);
-		  //console.log(testData.question);
-		}
-		useMemo(()=>{
-			getAllPosts();
-			getQuestions();
-		}, [])
+		});
+		const testData = await response.json();
+		setData2(testData);
+		//console.log(testData.question);
+	}, [BASE_URL]);
+	useMemo(() => {
+		getAllPosts();
+		getQuestions();
+	}, [getAllPosts, getQuestions]);
 
 	return (
 		<Box sx={{ marginTop: "2%", maxWidth: "100%", display: "flex", justifyContent: "center" }}>
@@ -121,10 +123,10 @@ export default function BasicTabs() {
 					</Box>
 				</Paper>
 				<TabPanel value={value} index={0}>
-					<Feed data = {data1}/>
+					<Feed data={data1} />
 				</TabPanel>
 				<TabPanel value={value} index={1}>
-					<Feed2 data = {data2}/>
+					<Feed2 data={data2} />
 				</TabPanel>
 			</Box>
 		</Box>

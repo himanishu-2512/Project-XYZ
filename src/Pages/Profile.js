@@ -16,82 +16,94 @@ function Profile({ setLoginUser }) {
 	const [view, setView] = useState("profile");
 	let id = window.localStorage.getItem("userId");
 
-	const [data2, setData2] = useState([])
-	const getUserQuestions = async (username) =>{
-		//console.log(username)
-		let url = `https://project-xyz-backend.vercel.app/api/question/questions/user/${username}`;
-		const response = await fetch(url, {
-		  method: 'GET',
-		  headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		  },
-		});
-		const testData = await response.json();
-		setData2(testData);
-		//console.log(testData.question);
-	  }
+	const [data2, setData2] = useState([]);
+	const getUserQuestions = useCallback(
+		async (username) => {
+			//console.log(username)
+			let url = `${BASE_URL}/question/questions/user/${username}`;
+			const response = await fetch(url, {
+				method: "GET",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+			});
+			const testData = await response.json();
+			setData2(testData);
+			//console.log(testData.question);
+		},
+		[BASE_URL]
+	);
 
-	  const [data1, setData1] = useState([])
-	  const getUserPosts = async (username) =>{
-		  //console.log(username)
-		  let url = `https://project-xyz-backend.vercel.app/api/post/myposts/${username}`;
-		  const response = await fetch(url, {
-			method: 'GET',
-			headers: {
-			  Accept: 'application/json',
-			  'Content-Type': 'application/json',
-			},
-		  });
-		  const testData = await response.json();
-		  setData1(testData);
-		  //console.log(testData.question);
-		}
+	const [data1, setData1] = useState([]);
+	const getUserPosts = useCallback(
+		async (username) => {
+			//console.log(username)
+			let url = `${BASE_URL}/post/myposts/${username}`;
+			const response = await fetch(url, {
+				method: "GET",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+			});
+			const testData = await response.json();
+			setData1(testData);
+			//console.log(testData.question);
+		},
+		[BASE_URL]
+	);
 
-		const [data3, setData3] = useState([])
-	const getUserSavedQuestions = async (id) =>{
-		//console.log(id)
-		let url = `https://project-xyz-backend.vercel.app/api/question/getsavequestions/${id}`;
-		const response = await fetch(url, {
-		  method: 'GET',
-		  headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		  },
-		});
-		const testData = await response.json();
-		setData3(testData);
-		//console.log(testData.question);
-	  }
+	const [data3, setData3] = useState([]);
+	const getUserSavedQuestions = useCallback(
+		async (id) => {
+			//console.log(id)
+			let url = `${BASE_URL}/question/getsavequestions/${id}`;
+			const response = await fetch(url, {
+				method: "GET",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+			});
+			const testData = await response.json();
+			setData3(testData);
+			//console.log(testData.question);
+		},
+		[BASE_URL]
+	);
 
-	  const [data4, setData4] = useState([])
-	  const getUserSavedPosts = async (id) =>{
-		  //console.log(id)
-		  let url = `https://project-xyz-backend.vercel.app/api/post/getsaveposts/${id}`;
-		  const response = await fetch(url, {
-			method: 'GET',
-			headers: {
-			  Accept: 'application/json',
-			  'Content-Type': 'application/json',
-			},
-		  });
-		  const testData = await response.json();
-		  setData4(testData);
-		  //console.log(testData.question);
-		}
+	const [data4, setData4] = useState([]);
+	const getUserSavedPosts = useCallback(
+		async (id) => {
+			//console.log(id)
+			let url = `${BASE_URL}/post/getsaveposts/${id}`;
+			const response = await fetch(url, {
+				method: "GET",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+			});
+			const testData = await response.json();
+			setData4(testData);
+			//console.log(testData.question);
+		},
+		[BASE_URL]
+	);
 
 	const fetchUser = useCallback(async () => {
 		try {
 			const userInfo = await axios.get(`${BASE_URL}/auth/user/${id}`);
 			setUser(userInfo.data.user);
-			getUserQuestions(userInfo.data.user.username)
-			getUserPosts(userInfo.data.user.username)
-			getUserSavedQuestions(userInfo.data.user._id)
-			getUserSavedPosts(userInfo.data.user._id)
+			getUserQuestions(userInfo.data.user.username);
+			getUserPosts(userInfo.data.user.username);
+			getUserSavedQuestions(userInfo.data.user._id);
+			getUserSavedPosts(userInfo.data.user._id);
 		} catch (error) {
 			console.log(error);
 		}
-	}, [BASE_URL, id]);
+	}, [BASE_URL, getUserPosts, getUserQuestions, getUserSavedPosts, getUserSavedQuestions, id]);
 
 	useEffect(() => {
 		fetchUser();
@@ -129,6 +141,11 @@ function Profile({ setLoginUser }) {
 								<Button
 									sx={{
 										justifyContent: "flex-start",
+										backgroundColor: view === "profile" ? "#d4f4fa" : "",
+										borderRadius: "0 2em 2em 0",
+										"&:hover": {
+											backgroundColor: view === "profile" ? "#d4f4fa" : "",
+										},
 									}}
 									disableRipple
 									onClick={() => setView("profile")}
@@ -137,7 +154,7 @@ function Profile({ setLoginUser }) {
 										sx={{
 											marginLeft: "2rem",
 											padding: "0.5rem 1rem",
-											fontSize: "1.5em",
+											fontSize: "1.25em",
 											textTransform: "none",
 											color: view === "profile" ? "blue[300]" : "rgb(100, 100, 100)",
 										}}
@@ -149,6 +166,11 @@ function Profile({ setLoginUser }) {
 									disableRipple
 									sx={{
 										justifyContent: "flex-start",
+										backgroundColor: view === "posts" ? "#d4f4fa" : "",
+										borderRadius: "0 2em 2em 0",
+										"&:hover": {
+											backgroundColor: view === "posts" ? "#d4f4fa" : "",
+										},
 									}}
 									onClick={() => setView("posts")}
 								>
@@ -156,7 +178,7 @@ function Profile({ setLoginUser }) {
 										sx={{
 											marginLeft: "2rem",
 											padding: "0.5rem 1rem",
-											fontSize: "1.5em",
+											fontSize: "1.25em",
 											textTransform: "none",
 											color: view === "posts" ? "blue[300]" : "rgb(100, 100, 100)",
 										}}
@@ -168,6 +190,11 @@ function Profile({ setLoginUser }) {
 									disableRipple
 									sx={{
 										justifyContent: "flex-start",
+										backgroundColor: view === "saved" ? "#d4f4fa" : "",
+										borderRadius: "0 2em 2em 0",
+										"&:hover": {
+											backgroundColor: view === "saved" ? "#d4f4fa" : "",
+										},
 									}}
 									onClick={() => setView("saved")}
 								>
@@ -175,7 +202,7 @@ function Profile({ setLoginUser }) {
 										sx={{
 											marginLeft: "2rem",
 											padding: "0.5rem 1rem",
-											fontSize: "1.5em",
+											fontSize: "1.25em",
 											textTransform: "none",
 											color: view === "saved" ? "blue[300]" : "rgb(100, 100, 100)",
 										}}
@@ -185,11 +212,11 @@ function Profile({ setLoginUser }) {
 								</Button>
 							</Stack>
 
-							<Box sx={{ width: "80%", padding: "2em 3em 0 3em" }}>
+							<Box sx={{ width: "80%", padding: "2em 3em 0 6em" }}>
 								{view === "profile" && (
 									<>
 										<Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: "2em" }}>
-											<Typography variant="h4">Profile</Typography>
+											<Typography sx={{ fontSize: "1.75em" }}>Profile</Typography>
 											<Button
 												onClick={() => setEdit(true)}
 												disableRipple
@@ -202,15 +229,17 @@ function Profile({ setLoginUser }) {
 														borderColor: blue[400],
 														backgroundColor: "transparent",
 													},
+													fontSize: "14px",
+													textTransform: "none",
 												}}
 											>
-												<Edit sx={{ marginRight: "5px" }} />
+												<Edit sx={{ marginRight: "5px", fontSize: "16px" }} />
 												Edit Profile
 											</Button>
 										</Box>
 										<Box
 											sx={{
-												border: "solid 2px rgba(200,200,200,0.7)",
+												border: "solid 1px rgba(200,200,200,0.7)",
 												borderRadius: "1em",
 												padding: "1.5em",
 												display: "flex",
@@ -220,7 +249,7 @@ function Profile({ setLoginUser }) {
 											<Avatar
 												alt={user.name}
 												src="/link-here"
-												sx={{ height: 150, width: 150, fontSize: "3rem", marginLeft: "0.5em" }}
+												sx={{ height: 100, width: 100, fontSize: "3rem", marginLeft: "0.5em" }}
 											/>
 											<Box sx={{ flexGrow: 7, marginX: "3em" }}>
 												<TextField
@@ -236,7 +265,7 @@ function Profile({ setLoginUser }) {
 													sx={{
 														fieldset: !edit ? { border: "none" } : {},
 														input: {
-															fontSize: "2rem",
+															fontSize: "1.25rem",
 															fontWeight: "bold",
 															paddingX: !edit ? "0" : "",
 															paddingY: edit ? "1rem" : 0,
@@ -261,6 +290,7 @@ function Profile({ setLoginUser }) {
 													InputProps={{
 														readOnly: !edit,
 													}}
+													inputProps={{ maxLength: 150 }}
 													sx={{
 														fieldset: !edit ? { border: "none" } : {},
 														".MuiInputBase-root": {
@@ -272,6 +302,13 @@ function Profile({ setLoginUser }) {
 														},
 													}}
 												/>
+												{edit && (
+													<Typography
+														sx={{ color: "gray", fontSize: "12px", margin: "0.5em 0 0 1em", fontWeight: "bold" }}
+													>
+														{user.bio.length}/150
+													</Typography>
+												)}
 											</Box>
 											<Box sx={{ flexGrow: 3, display: "flex", flexDirection: "column" }}>
 												<Typography>
@@ -346,14 +383,14 @@ function Profile({ setLoginUser }) {
 								)}
 								{view === "posts" && (
 									<>
-										<Typography variant="h4">Posts</Typography>
-										<FeedSwitch post={data1} username = {user.username} question={data2}/>
+										<Typography sx={{ fontSize: "1.75em" }}>Posts</Typography>
+										<FeedSwitch post={data1} username={user.username} question={data2} />
 									</>
 								)}
 								{view === "saved" && (
 									<>
-										<Typography variant="h4">Saved Posts</Typography>
-										<FeedSwitch savedpost={data4} username = {user.username} savedquestion={data3}/>
+										<Typography sx={{ fontSize: "1.75em" }}>Saved Posts</Typography>
+										<FeedSwitch savedpost={data4} username={user.username} savedquestion={data3} />
 									</>
 								)}
 							</Box>

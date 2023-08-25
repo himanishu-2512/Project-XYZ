@@ -8,6 +8,7 @@ import FeedSwitch from "../component/Profile/FeedSwtich";
 import { Edit } from "@mui/icons-material";
 import axios from "axios";
 import { blue, green, red } from "@mui/material/colors";
+import { useParams } from "react-router";
 
 function Profile({ setLoginUser }) {
 	const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -15,6 +16,9 @@ function Profile({ setLoginUser }) {
 	const [user, setUser] = useState();
 	const [view, setView] = useState("profile");
 	let id = window.localStorage.getItem("userId");
+	let currentUsername = window.localStorage.getItem("username");
+	let authUsername = useParams()
+	authUsername = authUsername.username 
 
 	const [data2, setData2] = useState([]);
 	const getUserQuestions = useCallback(
@@ -94,16 +98,18 @@ function Profile({ setLoginUser }) {
 
 	const fetchUser = useCallback(async () => {
 		try {
-			const userInfo = await axios.get(`${BASE_URL}/auth/user/${id}`);
+			const userInfo = await axios.get(`${BASE_URL}/auth/user/${authUsername}`);
 			setUser(userInfo.data.user);
 			getUserQuestions(userInfo.data.user.username);
 			getUserPosts(userInfo.data.user.username);
-			getUserSavedQuestions(userInfo.data.user._id);
-			getUserSavedPosts(userInfo.data.user._id);
+			if(currentUsername === authUsername){
+				getUserSavedQuestions(userInfo.data.user._id);
+				getUserSavedPosts(userInfo.data.user._id);
+			}
 		} catch (error) {
 			console.log(error);
 		}
-	}, [BASE_URL, getUserPosts, getUserQuestions, getUserSavedPosts, getUserSavedQuestions, id]);
+	}, [BASE_URL, getUserPosts, getUserQuestions, getUserSavedPosts, getUserSavedQuestions, authUsername]);
 
 	useEffect(() => {
 		fetchUser();
@@ -186,7 +192,7 @@ function Profile({ setLoginUser }) {
 										Posts
 									</Typography>
 								</Button>
-								<Button
+								{currentUsername === authUsername && <Button
 									disableRipple
 									sx={{
 										justifyContent: "flex-start",
@@ -209,7 +215,7 @@ function Profile({ setLoginUser }) {
 									>
 										Saved
 									</Typography>
-								</Button>
+								</Button>}
 							</Stack>
 
 							<Box sx={{ width: "80%", padding: "2em 3em 0 6em" }}>
@@ -217,7 +223,7 @@ function Profile({ setLoginUser }) {
 									<>
 										<Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: "2em" }}>
 											<Typography sx={{ fontSize: "1.75em" }}>Profile</Typography>
-											<Button
+											{currentUsername === authUsername && <Button
 												onClick={() => setEdit(true)}
 												disableRipple
 												sx={{
@@ -235,7 +241,7 @@ function Profile({ setLoginUser }) {
 											>
 												<Edit sx={{ marginRight: "5px", fontSize: "16px" }} />
 												Edit Profile
-											</Button>
+											</Button>}
 										</Box>
 										<Box
 											sx={{

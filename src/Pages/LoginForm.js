@@ -120,6 +120,7 @@ const [loading2, setLoading2] = useState(false);
 					setLoginUser(res.data.user);
 					window.localStorage.setItem("isLoggedIn", true);
 					window.localStorage.setItem("userId", res.data.user._id);
+					window.localStorage.setItem("username", res.data.user.username);
 					Navigate("/");
 				}
 				else {

@@ -109,7 +109,7 @@ function Profile({ setLoginUser }) {
 		} catch (error) {
 			console.log(error);
 		}
-	}, [BASE_URL, getUserPosts, getUserQuestions, getUserSavedPosts, getUserSavedQuestions, authUsername]);
+	}, [BASE_URL, getUserPosts, getUserQuestions, getUserSavedPosts, getUserSavedQuestions, authUsername, currentUsername]);
 
 	useEffect(() => {
 		fetchUser();

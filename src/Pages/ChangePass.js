@@ -52,8 +52,8 @@ function ChangePass() {
 	return (
 		<Containers>
 			<ToastContainer autoClose={5000} position="top-center" closeOnClick pauseOnHover draggable />
-			<div class="container" id="container">
-				<div class="Fpass">
+			<div className="container" id="container">
+				<div className="Fpass">
 					<form action="#">
 						<h1>Forgot Your Password</h1>
 						<input type="text" name="user" onChange={val} placeholder="Username or Email" />

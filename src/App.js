@@ -16,7 +16,7 @@ function App() {
     dob: "",
     pass: "",
   });
-  console.log(user._id);
+  // console.log(user._id);
 
   return (
     <div className="App">

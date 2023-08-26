@@ -10,20 +10,54 @@ import {
 	Divider,
 	Menu,
 	MenuItem,
+	styled,
+	Modal,
+	TextField,
+	ButtonGroup,
 } from "@mui/material";
 import { blueGrey } from "@mui/material/colors";
-import React, { useState } from "react";
-import { Favorite, MoreVert } from "@mui/icons-material";
+import React, { useEffect, useState } from "react";
+import { Favorite, Image, MoreVert } from "@mui/icons-material";
 import { Box } from "@mui/system";
 import CommentIcon from "@mui/icons-material/Comment";
 import Button from "@mui/material/Button";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import AddComments from'../Home/Comments/AddComments'
 import UserComments from'../Home/Comments/UserComments'
-import { Link } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from "axios";
 
-function Feed({data, username}) {
+const SytledModal = styled(Modal)({
+	display: "flex",
+	alignItems: "center",
+	justifyContent: "center",
+});
 
+function Feed(props) {
+	const BASE_URL = process.env.REACT_APP_BASE_URL;
+	const [isAdded, setIsAdded] = useState("");
+	const [comment, setComment] = useState([]);
+	const [edit, setEdit] = useState("");
+	const Id = localStorage.getItem("userId");
+	const [title, setTitle] = useState("");
+	const [caption, setCaption] = useState("")
+
+	useEffect(() => {
+		if (open.length > 0) handleComments(open);
+		// eslint-disable-next-line
+	}, [isAdded]);
+	const handleComments = async (postId) => {
+		// console.log("yes");
+		await axios
+			.get(`${BASE_URL}/post/getpostcomments/${postId}`)
+			.then((res) => {
+				setComment(res.data.post.comments);
+			})
+			.catch((error) => {
+				toast.error(error, { pauseOnHover: "false" })
+			});
+	};
 	//Like
 	const [color, setColor] = useState([]);
 	const handleLike = async (id) => {
@@ -41,14 +75,8 @@ function Feed({data, username}) {
 	//Comment
 	const [open, setOpen] = useState([]);
 	const handleChange = (id) => {
-		var index = open.indexOf(id);
-		if (index > -1) {
-			setOpen(open.filter(e => e !== id))
-			//console.log(id)
-		} else {
-			setOpen(open.concat(id))
-		}
-		//console.log(open)
+		if (open === id) setOpen(null);
+		else setOpen(id);
 	};
 
 	//Save
@@ -72,6 +100,25 @@ function Feed({data, username}) {
 	const handleAnchorClose = () => {
 		setMenuOpenId(null);
 		setAnchorEl(null);
+	};
+
+	const [imageUrl, setImageUrl] = useState(null);
+
+	const handleFileUpload = (event) => {
+		const file = event.target.files[0];
+		const reader = new FileReader();
+		// const formData = new FormData();
+		// formData.append("image", file);
+
+		reader.onloadend = () => {
+			setImageUrl(reader.result);
+		};
+		if (file) {
+			reader.readAsDataURL(file);
+		}
+	};
+	const remove = () => {
+		setImageUrl(null);
 	};
 
 	const timeDemo = (time) => {
@@ -108,9 +155,53 @@ function Feed({data, username}) {
 		}
 	}
 
+	const val = (e) => {
+		e.preventDefault();
+		const { value, name } = e.target;
+		if (name === "title") setTitle(value)
+		else setCaption(value)
+	};
+
+	const handleClickPost = (e, id) => {
+		e.preventDefault();
+		const post = { userId: Id, title, caption }
+		if (Id && title && caption) {
+			axios.post(`${BASE_URL}/post/updatepost/${Id}/${id}`, post).then((res) => {
+				toast.success(res.data.message, { pauseOnHover: "false" });
+				props.setCreate(!(props.create))
+			});
+		} else {
+			toast.warning("Post needs both a title and a caption", { pauseOnHover: "false" });
+		}
+		setEdit("");
+	};
+
+	const handleEdit = (id) => {
+		setMenuOpenId(null)
+		setEdit(id);
+	};
+
+	const handleDelete = async (id) => {
+		try {
+			const res = await axios.delete(`${BASE_URL}/post/deletepost/${Id}/${id}`);
+			toast.success(res.data.message, { pauseOnHover: "false" })
+			props.setCreate(!(props.create))
+		} catch (error) {
+			toast.error(error, { pauseOnHover: "false" })
+		}
+
+	}
+
+	const handleShare = (id) => {
+		navigator.clipboard.writeText(`${BASE_URL}/post/getpost/${id}`)
+		toast.success("Link copied to clipboard", { pauseOnHover: "false" })
+		setMenuOpenId(null)
+	}
+
 	return (
 		<Box sx={{ maxWidth: "100%", display: "flex", justifyContent: "center", flexDirection:"column" }}>
-			{data?.toReversed().map((item, index) => {
+			<ToastContainer autoClose={3000} position="bottom-right" hideProgressBar />
+			{props.data?.toReversed().map((item) => {
 			return (<Paper
 				sx={{
 					maxWidth: "100%",
@@ -120,11 +211,12 @@ function Feed({data, username}) {
 					marginBottom: "20px",
 				}}
 				elevation={3}
+				key={item._id}
 			>
 				<CardHeader
 					avatar={
 						<Avatar sx={{ bgcolor: blueGrey[500] }} aria-label="recipe">
-							M.P
+							{props.username[0].toUpperCase()}
 						</Avatar>
 					}
 					action={
@@ -132,7 +224,7 @@ function Feed({data, username}) {
 							<MoreVert />
 						</IconButton>
 					}
-					title={username?.toUpperCase()}
+					title={props.username}
 					subheader={timeDemo(item.createdAt)}
 				/>
 				<Menu
@@ -150,14 +242,113 @@ function Feed({data, username}) {
 						horizontal: "right",
 					}}
 				>
-					<MenuItem>
-						<Link style={{ textDecoration: "none", color: "black" }} to={"/Profile"}>
+					{item.userId === Id &&  
+						<MenuItem onClick={() => {
+							setTitle(item.title)
+							setCaption(item.caption)
+							handleEdit(item._id)
+						}}>
 							Edit
-						</Link>
-					</MenuItem>
-					<MenuItem>Delete</MenuItem>
-					<MenuItem onClick={handleChange}>Share</MenuItem>
+						</MenuItem>
+			}
+					{item.userId=== Id && <MenuItem onClick={() => handleDelete(item._id)}>Delete</MenuItem>}
+					<MenuItem onClick={() => handleShare(item._id)} >Share</MenuItem>
 				</Menu>
+				<SytledModal
+					open={edit === item._id}
+					onClose={(e) => {
+						setEdit("");
+						setTitle("");
+						setCaption("")
+						setImageUrl(null);
+					}}
+					aria-labelledby="modal-modal-title"
+					aria-describedby="modal-modal-description"
+				>
+					<Box
+						width={400}
+						bgcolor={"white"}
+						color={"text.primary"}
+						p={3}
+						borderRadius={5}
+						sx={{ display: "flex", flexDirection: "column", gap: 3 }}
+					>
+
+						<TextField
+							sx={{ width: "100%" }}
+							id="standard-multiline-static"
+							name="title"
+							value={title}
+							placeholder="Title"
+							variant="outlined"
+							onChange={val}
+						/>
+						<TextField
+							sx={{ width: "100%" }}
+							id="standard-multiline-static"
+							multiline
+							value={caption}
+							name="caption"
+							rows={3}
+							placeholder="What's on your mind?"
+							variant="outlined"
+							onChange={val}
+						/>
+
+						<label
+							htmlFor="upload-image"
+							style={{ backgroundColor: "lightyellow" }}
+						>
+							<Button
+								variant="contained"
+								component="span"
+								sx={{
+									backgroundColor: "transparent",
+									"&:hover": { backgroundColor: "transparent" },
+									// display: "inline"
+									color: "black",
+									textTransform: "none",
+									width: "100%",
+								}}
+							>
+								Upload Image{" "}
+								<Image color="secondary" sx={{ marginLeft: "8px" }} />
+							</Button>
+							<input
+								id="upload-image"
+								hidden
+								accept="image/*"
+								type="file"
+								onChange={handleFileUpload}
+							/>
+						</label>
+
+						{imageUrl && (
+							<>
+								<Box
+									width="auto"
+									height={100}
+									sx={{
+										backgroundImage: `url(${imageUrl})`,
+										backgroundPosition: "center",
+										backgroundSize: "contain",
+										backgroundRepeat: "no-repeat",
+									}}
+								></Box>
+								<Button onClick={() => remove()}>remove image</Button>
+							</>
+						)}
+						<ButtonGroup
+							// sx={{ marginTop: "5px" }}
+							fullWidth
+							variant="contained"
+							aria-label="outlined primary button group"
+							onClick={(e) => handleClickPost(e, item._id)}
+						>
+							<Button>Edit</Button>
+						</ButtonGroup>
+					</Box>
+				</SytledModal>
 				<CardContent sx={{}}>
 					<Typography variant="body2" sx={{ marginTop: "0px", textDecoration: "none", textAlign: "left" }}>
 						{item.caption}
@@ -173,7 +364,7 @@ function Feed({data, username}) {
 								height: "100%",
 							}}
 							component="img"
-							image="images/iiitr.png"
+							image="/images/iiitr.png"
 						/>
 				</Box>
 				<Box sx={{ display: "flex", justifyContent: "space-between", padding: "10px" }}>
@@ -216,13 +407,21 @@ function Feed({data, username}) {
 						{save.includes(item._id) ? "Saved" : "Save"}
 					</Button>
 				</Box>
-				{open.includes(item._id) ? true : false && <Divider maxWidth="90%" />}
-				<Collapse in={open.includes(item._id) ? true : false } timeout="auto" unmountOnExit>
+				{open === item._id ? true : false && <Divider maxWidth="90%" />}
+				<Collapse in={open === item._id ? true : false} timeout="auto" unmountOnExit>
 					<CardContent>
-						<AddComments/>
-						{item.comments.map((items, index) => {
-			return (
-						<UserComments answers={items} />)})}
+						<AddComments
+							postId={item._id}
+							setIsAdded={setIsAdded}
+							isAdded={isAdded}
+							setComments={setComment}
+							comment={comment}
+							type={"post"} />
+						{comment?.length > 0
+							? comment.toReversed().map((items, index) => {
+								return <UserComments answers={items} key={index} />;
+							})
+							: ""}
 					</CardContent>
 				</Collapse>
 			</Paper>)})}

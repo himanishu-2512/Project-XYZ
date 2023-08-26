@@ -35,7 +35,7 @@ function RightBar() {
 			<Box sx={{ display: "flex", flexDirection: "column", width: "100%", height: "100%" }}>
 				<Container>
 					<Box
-						class="Recents"
+						className="Recents"
 						sx={{
 							marginBottom: "5%",
 						}}
@@ -247,7 +247,7 @@ function RightBar() {
 
 				<Container>
 					<Box
-						class="Recents"
+						className="Recents"
 						sx={{
 							marginBottom: "5%",
 						}}

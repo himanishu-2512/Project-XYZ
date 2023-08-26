@@ -70,9 +70,10 @@ export default function BasicTabs(props) {
 			},
 		});
 		const testData = await response.json();
-		setData1(testData);
+		// setData1(testData);
+		setData1({testData,setCreate:props.setCreate,create:props.create});
 		//console.log(testData.post);
-	}, [BASE_URL]);
+	}, [BASE_URL,props.setCreate,props.create]);
 	const [data2, setData2] = useState([]);
 
 	const getQuestions = useCallback(async () => {
@@ -86,9 +87,9 @@ export default function BasicTabs(props) {
 		});
 
 		const testData = await response.json();
-		setData2(testData);
+		setData2({ testData, setCreate: props.setCreate, create: props.create });
 		//console.log(testData.question);
-	}, [BASE_URL]);
+	}, [BASE_URL, props.setCreate, props.create]);
     useEffect(()=>{
       getQuestions();
       getAllPosts();

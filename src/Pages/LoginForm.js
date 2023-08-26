@@ -9,7 +9,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 const LoginForm = ({ setLoginUser }) => {
 	const [loading1, setLoading1] = useState(false);
-const [loading2, setLoading2] = useState(false);
+	const [loading2, setLoading2] = useState(false);
 	const BASE_URL = process.env.REACT_APP_BASE_URL
 	useEffect(() => {
 		const loader = document.getElementById("preloader");
@@ -26,7 +26,7 @@ const [loading2, setLoading2] = useState(false);
 			return () => window.removeEventListener('load', onPageLoad);
 		}
 	}, []);
-	
+
 
 
 	//Forgot Password
@@ -78,7 +78,7 @@ const [loading2, setLoading2] = useState(false);
 				}
 				console.log(res.data.user)
 
-			}).catch(error=>{
+			}).catch(error => {
 				toast.error(error.message);
 			});
 		} else {
@@ -107,7 +107,7 @@ const [loading2, setLoading2] = useState(false);
 	};
 
 	//SignIn button
-	const handleChange = async(e) => {
+	const handleChange = async (e) => {
 		setLoading2(true)
 		e.preventDefault();
 		const { username, password } = user;
@@ -128,11 +128,11 @@ const [loading2, setLoading2] = useState(false);
 						position: "top-center"
 					})
 				}
-				
+
 			})
-			.catch(error=>{
-				toast.error(error.message);
-			});
+				.catch(error => {
+					toast.error(error.message);
+				});
 		} else {
 			toast.error("Invalid data", {
 				position: "top-center"
@@ -144,11 +144,11 @@ const [loading2, setLoading2] = useState(false);
 	return (
 		<>
 			<Containers>
-				<ToastContainer autoClose={5000} position="top-center" closeOnClick pauseOnHover draggable/>
+				<ToastContainer autoClose={5000} position="top-center" closeOnClick pauseOnHover draggable />
 				<div id="preloader"></div>
-				<div class={`container ${active ? "right-panel-active" : ""}`} id="container">
-					<div class={`form-container sign-up-container ${active ? "right-panel-active":""}`}>
-						<form action="#" class="sign-up-form">
+				<div className={`container ${active ? "right-panel-active" : ""}`} id="container">
+					<div className={`form-container sign-up-container ${active ? "right-panel-active" : ""}`}>
+						<form action="#" className="sign-up-form">
 							<div className="sign-up-background">
 								<h1>Create Account</h1>
 								<input type="text" name="name" onChange={val} placeholder="Name" />
@@ -169,8 +169,8 @@ const [loading2, setLoading2] = useState(false);
 							</div>
 						</form>
 					</div>
-					<div class="form-container sign-in-container">
-						<form action="#" class="sign-in-form">
+					<div className="form-container sign-in-container">
+						<form action="#" className="sign-in-form">
 							<div className="sign-in-background">
 								<h1>Sign In</h1>
 
@@ -188,20 +188,20 @@ const [loading2, setLoading2] = useState(false);
 							</div>
 						</form>
 					</div>
-					<div class="overlay-container">
-						<div class="overlay">
+					<div className="overlay-container">
+						<div className="overlay">
 							<div className="overlay-subcontainer">
-								<div class="overlay-panel overlay-left">
+								<div className="overlay-panel overlay-left">
 									<h1>Welcome Back!</h1>
 									<p>To keep connected with us please login with your personal info</p>
-									<button class="ghost" id="signIn" onClick={Change}>
+									<button className="ghost" id="signIn" onClick={Change}>
 										Sign In
 									</button>
 								</div>
-								<div class="overlay-panel overlay-right">
+								<div className="overlay-panel overlay-right">
 									<h1>Hello, Friend!</h1>
 									<p>Enter your personal details and start journey with us</p>
-									<button class="ghost" id="signUp" onClick={Change}>
+									<button className="ghost" id="signUp" onClick={Change}>
 										Sign Up
 									</button>
 								</div>

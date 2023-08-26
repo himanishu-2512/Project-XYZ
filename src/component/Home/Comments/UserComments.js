@@ -3,7 +3,7 @@ import React from "react";
 
 function UserComments(props) {
   const {answers} = props;
-  console.log(answers, "answers");
+
   return (
     <Box>
       <Box

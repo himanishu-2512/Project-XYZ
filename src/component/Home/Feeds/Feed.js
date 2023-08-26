@@ -1,5 +1,5 @@
 import {
-    Avatar,
+	Avatar,
 	CardContent,
 	CardHeader,
 	CardMedia,
@@ -10,7 +10,7 @@ import {
 	Divider,
 	Menu,
 	MenuItem,
-	Link,
+
 } from "@mui/material";
 import { blueGrey } from "@mui/material/colors";
 import React, { useState, useEffect } from "react";
@@ -19,17 +19,26 @@ import { Box } from "@mui/system";
 import CommentIcon from "@mui/icons-material/Comment";
 import Button from "@mui/material/Button";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-import AddComments from "../Comments/AddComments";
-import UserComments from "../Comments/UserComments";
+import { Link } from "react-router-dom";
+import AddComments from'../Comments/AddComments'
+import UserComments from'../Comments/UserComments'
+import axios from "axios";
+
+
+
+
+function Feed({data}) {
 
   const [isAdded, setIsAdded] = useState("");
   const [comment, setComment] = useState([]);
+  const [open, setOpen] = useState("");
   //   console.log(comment.reverse())
   useEffect(() => {
     handleComments(open);
-  }, [isAdded]);
+    // eslint-disable-next-line
+  },[isAdded]);
   const handleComments = async (postId) => {
-    console.log("yes");
+    // console.log("yes");
     await axios
       .get(`${process.env.REACT_APP_BASE_URL}/post/getpostcomments/${postId}`)
       .then((res) => {
@@ -54,7 +63,7 @@ import UserComments from "../Comments/UserComments";
 	};
 
 	//Comment
-	const [open, setOpen] = useState([]);
+	
 	const handleChange = (id) => {
     if (open === id) setOpen(null);
     else setOpen(id);

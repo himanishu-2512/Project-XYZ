@@ -41,10 +41,12 @@ const Navbar = ({ setLoginUser, mode, setMode }) => {
     setLoginUser({})
     window.localStorage.removeItem('isLoggedIn')
     window.localStorage.removeItem('userId')
+	window.localStorage.removeItem('username')
     navigate('/')
   }
   const profileChange = () => {
-	navigate('/profile');
+	let username = window.localStorage.getItem("username")
+	navigate(`/profile/${username}`);
   }
 	return (
 		<AppBar position="sticky" sx={{ background: "background.default" }}>

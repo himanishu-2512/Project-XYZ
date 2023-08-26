@@ -1,16 +1,16 @@
 import {
-  Avatar,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Collapse,
-  IconButton,
-  Typography,
-  Paper,
-  Divider,
-  Menu,
-  MenuItem,
-  Link,
+    Avatar,
+	CardContent,
+	CardHeader,
+	CardMedia,
+	Collapse,
+	IconButton,
+	Typography,
+	Paper,
+	Divider,
+	Menu,
+	MenuItem,
+	Link,
 } from "@mui/material";
 import { blueGrey } from "@mui/material/colors";
 import React, { useState, useEffect } from "react";
@@ -19,12 +19,8 @@ import { Box } from "@mui/system";
 import CommentIcon from "@mui/icons-material/Comment";
 import Button from "@mui/material/Button";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
-import AddComments from'../Comments/AddComments'
-import UserComments from'../Comments/UserComments'
-import axios from "axios";
-
-
-function Feed({data}) {
+import AddComments from "../Comments/AddComments";
+import UserComments from "../Comments/UserComments";
 
   const [isAdded, setIsAdded] = useState("");
   const [comment, setComment] = useState([]);
@@ -136,7 +132,7 @@ function Feed({data}) {
 				<CardHeader
 					avatar={
 						<Avatar sx={{ bgcolor: blueGrey[500] }} aria-label="recipe">
-							V.P
+							M.P
 						</Avatar>
 					}
 					action={
@@ -164,11 +160,11 @@ function Feed({data}) {
 				>
 					<MenuItem>
 						<Link style={{ textDecoration: "none", color: "black" }} to={"/Profile"}>
-							Profile
+							Edit
 						</Link>
 					</MenuItem>
-					<MenuItem>Saved Posts</MenuItem>
-					<MenuItem onClick={handleChange}>Logout</MenuItem>
+					<MenuItem>Delete</MenuItem>
+					<MenuItem onClick={handleChange}>Share</MenuItem>
 				</Menu>
 				<CardContent sx={{}}>
 					<Typography variant="body2" sx={{ marginTop: "0px", textDecoration: "none", textAlign: "left" }}>

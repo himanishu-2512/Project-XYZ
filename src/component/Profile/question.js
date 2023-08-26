@@ -134,7 +134,7 @@ function Feed({data, username}) {
 				<CardHeader
 					avatar={
 						<Avatar sx={{ bgcolor: blueGrey[500] }} aria-label="recipe">
-							V.P
+							M.P
 						</Avatar>
 					}
 					action={
@@ -162,11 +162,11 @@ function Feed({data, username}) {
 				>
 					<MenuItem>
 						<Link style={{ textDecoration: "none", color: "black" }} to={"/Profile"}>
-							Profile
+							Edit
 						</Link>
 					</MenuItem>
-					<MenuItem>Saved Posts</MenuItem>
-					<MenuItem onClick={handleChange}>Logout</MenuItem>
+					<MenuItem>Delete</MenuItem>
+					<MenuItem onClick={handleChange}>Share</MenuItem>
 				</Menu>
 				<CardContent sx={{}}>
 					<Typography variant="body2" sx={{ marginTop: "0px", textDecoration: "none", textAlign: "left" }}>

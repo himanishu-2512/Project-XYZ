@@ -90,9 +90,10 @@ export default function BasicTabs(props) {
 		//console.log(testData.question);
 	}, [BASE_URL]);
     useEffect(()=>{
-     getQuestions();
-	 getAllPosts();
-	},[props.create])
+      getQuestions();
+      getAllPosts();
+      //eslint-disable-next-line
+    },[props.create])
 
 	useMemo(() => {
 		getAllPosts();

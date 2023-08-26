@@ -1,30 +1,25 @@
 import axios from "axios";
 import {
-  Avatar,
+
   Button,
   ButtonGroup,
   Fab,
   Modal,
-  Stack,
   styled,
   TextField,
   Tooltip,
-  Typography,
-  Container,
+
 } from "@mui/material";
 import React, { useState } from "react";
 import {
   Add as AddIcon,
-  EmojiEmotions,
   Image,
-  PersonAdd,
-  VideoCameraBack,
+
 } from "@mui/icons-material";
 import { Box } from "@mui/system";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
 import { Paper } from "@mui/material";
 
 const SytledModal = styled(Modal)({
@@ -33,12 +28,7 @@ const SytledModal = styled(Modal)({
   justifyContent: "center",
 });
 
-const UserBox = styled(Box)({
-  display: "flex",
-  alignItems: "center",
-  gap: "10px",
-  marginBottom: "20px",
-});
+
 
 const Add = (props) => {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -88,7 +78,7 @@ const Add = (props) => {
     });
   };
   const handlClick = (e) => {
-    if(value == "0"){
+    if(value === "0"){
       handlClickPost(e);
     }else{
       handlClickQuestion(e);

@@ -18,6 +18,7 @@ function Profile({ setLoginUser }) {
 	const [followCount, setFollowCount ] = useState(null)
 	const [authUserId, setAuthUserId] = useState(null);
 	const [alreadyfollow, setAlreadyFollow] = useState(false);
+	const [create, setCreate] = useState(false)
 	let id = window.localStorage.getItem("userId");
 	let currentUsername = window.localStorage.getItem("username");
 	let authUsername = useParams()
@@ -26,7 +27,7 @@ function Profile({ setLoginUser }) {
 	const [data2, setData2] = useState([]);
 	const getUserQuestions = useCallback(
 		async (username) => {
-			console.log("get user questions")
+			// console.log("get user questions")
 			//console.log(username)
 			let url = `${BASE_URL}/question/questions/user/${username}`;
 			const response = await fetch(url, {
@@ -40,13 +41,14 @@ function Profile({ setLoginUser }) {
 			setData2(testData);
 			//console.log(testData.question);
 		},
-		[BASE_URL]
+		// eslint-disable-next-line
+		[BASE_URL,create]
 	);
 
 	const [data1, setData1] = useState([]);
 	const getUserPosts = useCallback(
 		async (username) => {
-			console.log("get user posts")
+			// console.log("get user posts")
 			//console.log(username)
 			let url = `${BASE_URL}/post/myposts/${username}`;
 			const response = await fetch(url, {
@@ -60,14 +62,15 @@ function Profile({ setLoginUser }) {
 			setData1(testData);
 			//console.log(testData.question);
 		},
-		[BASE_URL]
+		// eslint-disable-next-line
+		[BASE_URL, create]
 	);
 
 	const [data3, setData3] = useState([]);
 	const getUserSavedQuestions = useCallback(
 		async (id) => {
 			//console.log(id)
-			console.log("get saved questions")
+			// console.log("get saved questions")
 			let url = `${BASE_URL}/question/getsavequestions/${id}`;
 			const response = await fetch(url, {
 				method: "GET",
@@ -80,14 +83,15 @@ function Profile({ setLoginUser }) {
 			setData3(testData);
 			//console.log(testData.question);
 		},
-		[BASE_URL]
+		// eslint-disable-next-line
+		[BASE_URL, create]
 	);
 
 	const [data4, setData4] = useState([]);
 	const getUserSavedPosts = useCallback(
 		async (id) => {
 			//console.log(id)
-			console.log("get saved posts")
+			// console.log("get saved posts")
 			let url = `${BASE_URL}/post/getsaveposts/${id}`;
 			const response = await fetch(url, {
 				method: "GET",
@@ -100,7 +104,8 @@ function Profile({ setLoginUser }) {
 			setData4(testData);
 			//console.log(testData.question);
 		},
-		[BASE_URL]
+		// eslint-disable-next-line
+		[BASE_URL, create]
 	);
 
 	const fetchUser = useCallback(async () => {
@@ -283,7 +288,7 @@ function Profile({ setLoginUser }) {
 												alt={user.name}
 												src="/link-here"
 												sx={{ height: 100, width: 100, fontSize: "3rem", marginLeft: "0.5em" }}
-											/>
+											>{authUsername[0].toUpperCase()}</Avatar>
 											<Box sx={{ flexGrow: 7, marginX: "3em" }}>
 												<TextField
 													id="outlined-static"
@@ -373,19 +378,6 @@ function Profile({ setLoginUser }) {
 													<span style={{ fontWeight: "bold" }}>{user.following.length}</span> Following
 												</Typography>
 
-												{/* {true && (
-                        <>
-                          <Button variant="outlined">
-                            <Typography variant="caption">Following</Typography>
-                          </Button>
-                        </>
-                      )}
-                      {true && (
-                        <Button variant="outlined">
-                          <PersonAdd />
-                          <Typography variant="caption">Follow</Typography>
-                        </Button>
-                      )} */}
 											</Box>
 										</Box>
 										<UserInfo checked={edit} user={user} setUser={setUser} />
@@ -436,13 +428,13 @@ function Profile({ setLoginUser }) {
 								{view === "posts" && (
 									<>
 										<Typography sx={{ fontSize: "1.75em" }}>Posts</Typography>
-										<FeedSwitch post={data1} username={user.username} question={data2} />
+										<FeedSwitch post={data1} username={user.username} question={data2} setCreate={setCreate} create={create} />
 									</>
 								)}
 								{view === "saved" && (
 									<>
 										<Typography sx={{ fontSize: "1.75em" }}>Saved Posts</Typography>
-										<FeedSwitch savedpost={data4} username={user.username} savedquestion={data3} />
+										<FeedSwitch savedpost={data4} username={user.username} savedquestion={data3} setCreate={setCreate} create={create} />
 									</>
 								)}
 							</Box>

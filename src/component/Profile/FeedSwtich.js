@@ -49,7 +49,7 @@ function a11yProps(index) {
 	};
 }
 
-export default function BasicTabs({post, username, question, savedpost, savedquestion}) {
+export default function BasicTabs({post, username, question, savedpost, savedquestion, setCreate, create}) {
 	//console.log(question, post, savedpost, savedquestion)
 	let postdata = post ? post.user.posts : savedpost.posts.savedPosts;
 	let questiondata = question ? question.posts.questions : savedquestion.posts.savedQuestions;
@@ -91,10 +91,10 @@ export default function BasicTabs({post, username, question, savedpost, savedque
 					</Box>
 				</Paper>
 				<TabPanel value={value} index={0}>
-					<Feed data = {postdata} username={username}/>
+					<Feed data = {postdata} username={username} setCreate={setCreate} create={create}/>
 				</TabPanel>
 				<TabPanel value={value} index={1}>
-					<Feed2 data = {questiondata} username ={username}/>
+					<Feed2 data={questiondata} username={username} setCreate={setCreate} create={create} />
 				</TabPanel>
 			</Box>
 		</Box>

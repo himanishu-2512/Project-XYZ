@@ -85,7 +85,6 @@ const Add = (props) => {
     }
   }
 
-  console.log("POST",post);
 
   const handlClickPost = (e) => {
     e.preventDefault();

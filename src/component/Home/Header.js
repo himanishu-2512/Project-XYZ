@@ -37,6 +37,7 @@ const UserBox = styled(Box)(({ theme }) => ({
 const Navbar = ({ setLoginUser, mode, setMode }) => {
 	const [open, setOpen] = useState(false);
 	const navigate = useNavigate();
+	const username = window.localStorage.getItem("username")
 	const handleChange = () => {
     setLoginUser({})
     window.localStorage.removeItem('isLoggedIn')
@@ -45,7 +46,6 @@ const Navbar = ({ setLoginUser, mode, setMode }) => {
     navigate('/')
   }
   const profileChange = () => {
-	let username = window.localStorage.getItem("username")
 	navigate(`/profile/${username}`);
   }
 	return (
@@ -66,13 +66,13 @@ const Navbar = ({ setLoginUser, mode, setMode }) => {
 						<LogoutIcon/>
 					</Badge>
 					
-					<Avatar sx={{cursor:"pointer"}} onClick = {profileChange} />
+					<Avatar sx={{ cursor: "pointer" }} onClick={profileChange} >{username[0].toUpperCase()}</Avatar>
 				</Icons>
 				<UserBox onClick={(e) => setOpen(true)}>
 				<Badge sx={{cursor:"pointer"}} onClick={handleChange} >
 					<LogoutIcon/>
 				</Badge>
-				<Avatar sx={{cursor:"pointer"}} onClick = {profileChange} />
+				<Avatar sx={{cursor:"pointer"}} onClick = {profileChange} >{username[0].toUpperCase()}</Avatar>
 					
 				</UserBox>
 			</StyledToolbar>

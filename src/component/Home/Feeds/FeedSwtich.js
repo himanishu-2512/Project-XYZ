@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback,useEffect } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
@@ -49,7 +49,8 @@ function a11yProps(index) {
 	};
 }
 
-export default function BasicTabs() {
+export default function BasicTabs(props) {
+	
 	const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 	const [value, setValue] = React.useState(0);
@@ -83,10 +84,17 @@ export default function BasicTabs() {
 				"Content-Type": "application/json",
 			},
 		});
+
 		const testData = await response.json();
 		setData2(testData);
 		//console.log(testData.question);
 	}, [BASE_URL]);
+    useEffect(()=>{
+      getQuestions();
+      getAllPosts();
+      //eslint-disable-next-line
+    },[props.create])
+
 	useMemo(() => {
 		getAllPosts();
 		getQuestions();

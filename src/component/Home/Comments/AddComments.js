@@ -7,7 +7,7 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
-import { useState,useEffect } from "react";
+import { useState} from "react";
 import axios from "axios";
 import { useRef } from "react";
 

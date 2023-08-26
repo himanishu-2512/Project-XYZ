@@ -15,6 +15,9 @@ function Profile({ setLoginUser }) {
 	const [edit, setEdit] = useState(false);
 	const [user, setUser] = useState();
 	const [view, setView] = useState("profile");
+	const [followCount, setFollowCount ] = useState(null)
+	const [authUserId, setAuthUserId] = useState(null);
+	const [alreadyfollow, setAlreadyFollow] = useState(false);
 	let id = window.localStorage.getItem("userId");
 	let currentUsername = window.localStorage.getItem("username");
 	let authUsername = useParams()
@@ -23,6 +26,7 @@ function Profile({ setLoginUser }) {
 	const [data2, setData2] = useState([]);
 	const getUserQuestions = useCallback(
 		async (username) => {
+			console.log("get user questions")
 			//console.log(username)
 			let url = `${BASE_URL}/question/questions/user/${username}`;
 			const response = await fetch(url, {
@@ -42,6 +46,7 @@ function Profile({ setLoginUser }) {
 	const [data1, setData1] = useState([]);
 	const getUserPosts = useCallback(
 		async (username) => {
+			console.log("get user posts")
 			//console.log(username)
 			let url = `${BASE_URL}/post/myposts/${username}`;
 			const response = await fetch(url, {
@@ -62,6 +67,7 @@ function Profile({ setLoginUser }) {
 	const getUserSavedQuestions = useCallback(
 		async (id) => {
 			//console.log(id)
+			console.log("get saved questions")
 			let url = `${BASE_URL}/question/getsavequestions/${id}`;
 			const response = await fetch(url, {
 				method: "GET",
@@ -81,6 +87,7 @@ function Profile({ setLoginUser }) {
 	const getUserSavedPosts = useCallback(
 		async (id) => {
 			//console.log(id)
+			console.log("get saved posts")
 			let url = `${BASE_URL}/post/getsaveposts/${id}`;
 			const response = await fetch(url, {
 				method: "GET",
@@ -102,9 +109,15 @@ function Profile({ setLoginUser }) {
 			setUser(userInfo.data.user);
 			getUserQuestions(userInfo.data.user.username);
 			getUserPosts(userInfo.data.user.username);
+			setAuthUserId(userInfo.data.user._id)
 			if(currentUsername === authUsername){
 				getUserSavedQuestions(userInfo.data.user._id);
 				getUserSavedPosts(userInfo.data.user._id);
+			}
+			setFollowCount(userInfo.data.user.follower.length)
+			if(userInfo.data.user.follower.some(follower => follower.username === currentUsername))
+			{
+				setAlreadyFollow(true)
 			}
 		} catch (error) {
 			console.log(error);
@@ -132,6 +145,20 @@ function Profile({ setLoginUser }) {
 		setUser(updatedUser.data.userUp);
 	};
 
+	const handleFollow = async (e) =>{
+		e.preventDefault();
+		if(alreadyfollow === true)
+		{
+			setFollowCount(followCount-1)
+		} else {
+			setFollowCount(followCount+1)
+		}
+		setAlreadyFollow(!alreadyfollow)
+
+		await axios.post(`${BASE_URL}/follow/${authUserId}/${id}`);
+
+	}
+	// console.log(followCount)
 	const handleCancel = () => {
 		fetchUser();
 		setEdit(false);
@@ -317,11 +344,30 @@ function Profile({ setLoginUser }) {
 												)}
 											</Box>
 											<Box sx={{ flexGrow: 3, display: "flex", flexDirection: "column" }}>
+											{currentUsername !== authUsername && <Button
+												onClick={(e) => handleFollow(e)}
+												disableRipple
+												sx={{
+													border: "solid 1px rgba(200,200,200,0.7)",
+													borderRadius: "2em",
+													color: "rgb(100,100,100)",
+													"&:hover": {
+														color: blue[400],
+														borderColor: blue[400],
+														backgroundColor: "transparent",
+													},
+													fontSize: "14px",
+													textTransform: "none",
+												}}
+											>
+												
+												{( alreadyfollow) ? "Following"  : "Follow"}
+											</Button>}
 												<Typography>
 													<span style={{ fontWeight: "bold" }}>{user.posts.length + user.questions.length}</span> Posts
 												</Typography>
 												<Typography>
-													<span style={{ fontWeight: "bold" }}>{user.followerCount.length}</span> Followers
+													<span style={{ fontWeight: "bold" }}>{followCount}</span> Followers
 												</Typography>
 												<Typography>
 													<span style={{ fontWeight: "bold" }}>{user.following.length}</span> Following

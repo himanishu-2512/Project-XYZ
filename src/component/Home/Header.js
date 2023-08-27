@@ -1,4 +1,4 @@
-import {  Pets } from "@mui/icons-material";
+import { Pets } from "@mui/icons-material";
 import { AppBar, Avatar, Badge, Box, InputBase, Menu, MenuItem, styled, Toolbar, Typography } from "@mui/material";
 import React, { useState } from "react";
 import LogoutIcon from '@mui/icons-material/Logout';

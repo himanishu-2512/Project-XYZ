@@ -63,15 +63,22 @@ function Feed(props) {
 	};
 	//Like
 	const [color, setColor] = useState([]);
-	const handleLike = async (id) => {
+	const handleLike = async (questionId) => {
 		//console.log(id)
-		const newIndex = color.indexOf(id);
+		await axios
+			.post(`${BASE_URL}/like/question/${questionId}/${Id}`)
+			.then((res) => {
+			})
+			.catch((error) => {
+				toast.error(error, { pauseOnHover: "false" })
+			});
+		const newIndex = color.indexOf(questionId);
 		if (newIndex > -1) { 
-			setColor(color.filter(e => e !== id));
+			setColor(color.filter(e => e !== questionId));
 			// //console.log(color)
 		  }
 		else
-		setColor(color.concat(id));
+		setColor(color.concat(questionId));
 		//console.log(newIndex, color)
 	};
 
@@ -84,13 +91,22 @@ function Feed(props) {
 
 	//Save
 	const [save, setSave] = useState([]);
-	const handleSave = (id) => {
-		var index = save.indexOf(id);
+	const handleSave = async(postId) => {
+		const userId = window.localStorage.getItem("userId")
+		const body = { userId: userId }
+		await axios
+			.post(`${BASE_URL}/question/questions/savequestions/${postId}`, body)
+			.then((res) => {
+			})
+			.catch((error) => {
+				toast.error(error, { pauseOnHover: "false" })
+			});
+		var index = save.indexOf(postId);
 		if (index > -1) {
-			setSave(save.filter(e => e !== id))
-			//console.log(id)
+			setSave(save.filter(e => e !== postId))
+			//console.log(postId)
 		} else {
-			setSave(save.concat(id))
+			setSave(save.concat(postId))
 		}
 	};
 

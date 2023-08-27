@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
@@ -21,6 +21,60 @@ function RightBar() {
 	const handleExpandQuestions = () => {
 		setExpandQuestions(!expandQuestions);
 	};
+	const [data, setData] = useState({})
+	const BASE_URL = process.env.REACT_APP_BASE_URL;
+	const getRecents = useCallback(
+		async () => {
+			let url = `${BASE_URL}/recents/get-recents`;
+			const response = await fetch(url, {
+				method: "GET",
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+			});
+			const testData = await response.json();
+			setData(testData);
+			//eslint-disable-next-line
+		},[BASE_URL, expandOpportunities, expandQuestions]
+	);
+	useEffect(() => {
+		getRecents();
+	}, [getRecents]);
+
+	const timeDemo=(time)=>{
+		var msPerMinute = 60 * 1000;
+		var msPerHour = msPerMinute * 60;
+		var msPerDay = msPerHour * 24;
+		var msPerMonth = msPerDay * 30;
+		var msPerYear = msPerDay * 365;
+	
+		var elapsed = new Date() - new Date(time);
+	
+		if (elapsed < msPerMinute) {
+			 return Math.round(elapsed/1000) + ' seconds ago';   
+		}
+	
+		else if (elapsed < msPerHour) {
+			 return Math.round(elapsed/msPerMinute) + ' minutes ago';   
+		}
+	
+		else if (elapsed < msPerDay ) {
+			 return Math.round(elapsed/msPerHour ) + ' hours ago';   
+		}
+	
+		else if (elapsed < msPerMonth) {
+			return '' + Math.round(elapsed/msPerDay) + ' days ago';   
+		}
+	
+		else if (elapsed < msPerYear) {
+			return '' + Math.round(elapsed/msPerMonth) + ' months ago';   
+		}
+	
+		else {
+			return '' + Math.round(elapsed/msPerYear ) + ' years ago';   
+		}
+		}
 
 	return (
 		<Box
@@ -66,12 +120,14 @@ function RightBar() {
 							sx={{ padding: "0  8% 0 3%", position: "relative", maxHeight: "35vh", overflowY: "scroll" }}
 						>
 							<List>
-								<ListItem alignItems="flex-start">
+								{data.recent?.recentPosts?.map((item, index)=>{
+									return(<>
+										<ListItem alignItems="flex-start">
 									<ListItemAvatar>
 										<Avatar alt="" src="" />
 									</ListItemAvatar>
 									<ListItemText
-										primary="Opportunity 1 description!!"
+										primary={`${item.title}`}
 										secondary={
 											<React.Fragment>
 												<Typography
@@ -80,166 +136,16 @@ function RightBar() {
 													variant="body2"
 													color="text.primary"
 												>
-													Prakhar
+													{item.userId.username}
 												</Typography>
-												{" — 1 day ago"}
+												{" — " + timeDemo(item.createdAt)}
 											</React.Fragment>
 										}
 									/>
-								</ListItem>
-								<Divider variant="inset" component="li" />
-								<ListItem alignItems="flex-start">
-									<ListItemAvatar>
-										<Avatar alt="" src="" />
-									</ListItemAvatar>
-									<ListItemText
-										primary="Opportunity 1 description!!"
-										secondary={
-											<React.Fragment>
-												<Typography
-													sx={{ display: "inline" }}
-													component="span"
-													variant="body2"
-													color="text.primary"
-												>
-													Prakhar
-												</Typography>
-												{" — 1 day ago"}
-											</React.Fragment>
-										}
-									/>
-								</ListItem>
-								<Divider variant="inset" component="li" />
-								<ListItem alignItems="flex-start">
-									<ListItemAvatar>
-										<Avatar alt="" src="" />
-									</ListItemAvatar>
-									<ListItemText
-										primary="Opportunity 1 description!!"
-										secondary={
-											<React.Fragment>
-												<Typography
-													sx={{ display: "inline" }}
-													component="span"
-													variant="body2"
-													color="text.primary"
-												>
-													Prakhar
-												</Typography>
-												{" — 1 day ago"}
-											</React.Fragment>
-										}
-									/>
-								</ListItem>
-								<Divider variant="inset" component="li" />
-								<ListItem alignItems="flex-start">
-									<ListItemAvatar>
-										<Avatar alt="" src="" />
-									</ListItemAvatar>
-									<ListItemText
-										primary="Opportunity 1 description!!"
-										secondary={
-											<React.Fragment>
-												<Typography
-													sx={{ display: "inline" }}
-													component="span"
-													variant="body2"
-													color="text.primary"
-												>
-													Prakhar
-												</Typography>
-												{" — 1 day ago"}
-											</React.Fragment>
-										}
-									/>
-								</ListItem>
-								<Divider variant="inset" component="li" />
-								<ListItem alignItems="flex-start">
-									<ListItemAvatar>
-										<Avatar alt="" src="" />
-									</ListItemAvatar>
-									<ListItemText
-										primary="Opportunity 1 description!!"
-										secondary={
-											<React.Fragment>
-												<Typography
-													sx={{ display: "inline" }}
-													component="span"
-													variant="body2"
-													color="text.primary"
-												>
-													Prakhar
-												</Typography>
-												{" — 1 day ago"}
-											</React.Fragment>
-										}
-									/>
-								</ListItem>
-								<Divider variant="inset" component="li" />
-								<ListItem alignItems="flex-start">
-									<ListItemAvatar>
-										<Avatar alt="Travis Howard" src="" />
-									</ListItemAvatar>
-									<ListItemText
-										primary="Opportunity 2 description!!"
-										secondary={
-											<React.Fragment>
-												<Typography
-													sx={{ display: "inline" }}
-													component="span"
-													variant="body2"
-													color="text.primary"
-												>
-													Vikrant
-												</Typography>
-												{" — 2 days ago"}
-											</React.Fragment>
-										}
-									/>
-								</ListItem>
-								<Divider variant="inset" component="li" />
-								<ListItem alignItems="flex-start">
-									<ListItemAvatar>
-										<Avatar alt="Cindy Baker" src="" />
-									</ListItemAvatar>
-									<ListItemText
-										primary="Opportunity 3 description!!"
-										secondary={
-											<React.Fragment>
-												<Typography
-													sx={{ display: "inline" }}
-													component="span"
-													variant="body2"
-													color="text.primary"
-												>
-													Kunal
-												</Typography>
-												{" — 3 days ago"}
-											</React.Fragment>
-										}
-									/>
-								</ListItem>
-								<ListItem alignItems="flex-start">
-									<ListItemAvatar>
-										<Avatar alt="Cindy Baker" src="" />
-									</ListItemAvatar>
-									<ListItemText
-										primary="Opportunity 3 description!!"
-										secondary={
-											<React.Fragment>
-												<Typography
-													sx={{ display: "inline" }}
-													component="span"
-													variant="body2"
-													color="text.primary"
-												>
-													Kunal
-												</Typography>
-												{" — 3 days ago"}
-											</React.Fragment>
-										}
-									/>
-								</ListItem>
+									</ListItem>
+									<Divider variant="inset" component="li" /> 
+									</>)
+								})}
 							</List>
 						</Collapse>
 					</Box>
@@ -278,144 +184,14 @@ function RightBar() {
 							sx={{ padding: "0  8% 0 3%", position: "relative", maxHeight: "35vh", overflowY: "scroll" }}
 						>
 							<List>
-								<ListItem alignItems="flex-start">
-									<ListItemAvatar>
-										<Avatar alt="" src="" />
-									</ListItemAvatar>
-									<ListItemText
-										primary="Opportunity 1 description!!"
-										secondary={
-											<React.Fragment>
-												<Typography
-													sx={{ display: "inline" }}
-													component="span"
-													variant="body2"
-													color="text.primary"
-												>
-													Prakhar
-												</Typography>
-												{" — 1 day ago"}
-											</React.Fragment>
-										}
-									/>
-								</ListItem>
-								<Divider variant="inset" component="li" />
-								<ListItem alignItems="flex-start">
-									<ListItemAvatar>
-										<Avatar alt="" src="" />
-									</ListItemAvatar>
-									<ListItemText
-										primary="Opportunity 1 description!!"
-										secondary={
-											<React.Fragment>
-												<Typography
-													sx={{ display: "inline" }}
-													component="span"
-													variant="body2"
-													color="text.primary"
-												>
-													Prakhar
-												</Typography>
-												{" — 1 day ago"}
-											</React.Fragment>
-										}
-									/>
-								</ListItem>
-								<Divider variant="inset" component="li" />
-								<ListItem alignItems="flex-start">
-									<ListItemAvatar>
-										<Avatar alt="" src="" />
-									</ListItemAvatar>
-									<ListItemText
-										primary="Opportunity 1 description!!"
-										secondary={
-											<React.Fragment>
-												<Typography
-													sx={{ display: "inline" }}
-													component="span"
-													variant="body2"
-													color="text.primary"
-												>
-													Prakhar
-												</Typography>
-												{" — 1 day ago"}
-											</React.Fragment>
-										}
-									/>
-								</ListItem>
-								<Divider variant="inset" component="li" />
-								<ListItem alignItems="flex-start">
-									<ListItemAvatar>
-										<Avatar alt="" src="" />
-									</ListItemAvatar>
-									<ListItemText
-										primary="Opportunity 1 description!!"
-										secondary={
-											<React.Fragment>
-												<Typography
-													sx={{ display: "inline" }}
-													component="span"
-													variant="body2"
-													color="text.primary"
-												>
-													Prakhar
-												</Typography>
-												{" — 1 day ago"}
-											</React.Fragment>
-										}
-									/>
-								</ListItem>
-								<Divider variant="inset" component="li" />
-								<ListItem alignItems="flex-start">
-									<ListItemAvatar>
-										<Avatar alt="" src="" />
-									</ListItemAvatar>
-									<ListItemText
-										primary="Opportunity 1 description!!"
-										secondary={
-											<React.Fragment>
-												<Typography
-													sx={{ display: "inline" }}
-													component="span"
-													variant="body2"
-													color="text.primary"
-												>
-													Prakhar
-												</Typography>
-												{" — 1 day ago"}
-											</React.Fragment>
-										}
-									/>
-								</ListItem>
-								<Divider variant="inset" component="li" />
-								<ListItem alignItems="flex-start">
-									<ListItemAvatar>
-										<Avatar alt="Travis Howard" src="" />
-									</ListItemAvatar>
-									<ListItemText
-										primary="Opportunity 2 description!!"
-										secondary={
-											<React.Fragment>
-												<Typography
-													sx={{ display: "inline" }}
-													component="span"
-													variant="body2"
-													color="text.primary"
-												>
-													Vikrant
-												</Typography>
-												{" — 2 days ago"}
-											</React.Fragment>
-										}
-									/>
-								</ListItem>
-								<Divider variant="inset" component="li" />
+							{data.recent?.recentQuestions?.map((item, index)=>{
+									return(<>
 								<ListItem alignItems="flex-start">
 									<ListItemAvatar>
 										<Avatar alt="Cindy Baker" src="" />
 									</ListItemAvatar>
 									<ListItemText
-										primary="Opportunity 3 description!!"
+										primary={`${item.title}`}
 										secondary={
 											<React.Fragment>
 												<Typography
@@ -424,34 +200,15 @@ function RightBar() {
 													variant="body2"
 													color="text.primary"
 												>
-													Kunal
+													{item.userId.username}
 												</Typography>
-												{" — 3 days ago"}
+												{" — " + timeDemo(item.createdAt)}
 											</React.Fragment>
 										}
 									/>
 								</ListItem>
-								<ListItem alignItems="flex-start">
-									<ListItemAvatar>
-										<Avatar alt="Cindy Baker" src="" />
-									</ListItemAvatar>
-									<ListItemText
-										primary="Opportunity 3 description!!"
-										secondary={
-											<React.Fragment>
-												<Typography
-													sx={{ display: "inline" }}
-													component="span"
-													variant="body2"
-													color="text.primary"
-												>
-													Kunal
-												</Typography>
-												{" — 3 days ago"}
-											</React.Fragment>
-										}
-									/>
-								</ListItem>
+								<Divider variant="inset" component="li" />
+								</>)})}
 							</List>
 						</Collapse>
 					</Box>

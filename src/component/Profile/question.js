@@ -54,7 +54,7 @@ function Feed(props) {
 		await axios
 			.get(`${BASE_URL}/question/getquestionscomments/${postId}`)
 			.then((res) => {
-				console.log(res.data);
+				// console.log(res.data);
 				setComment(res.data.questions.answers);
 			})
 			.catch((error) => {
@@ -152,38 +152,40 @@ function Feed(props) {
 	};
 
 	const timeDemo = (time) => {
-		var msPerMinute = 60 * 1000;
-		var msPerHour = msPerMinute * 60;
-		var msPerDay = msPerHour * 24;
-		var msPerMonth = msPerDay * 30;
-		var msPerYear = msPerDay * 365;
+    var msPerMinute = 60 * 1000;
+    var msPerHour = msPerMinute * 60;
+    var msPerDay = msPerHour * 24;
+    var msPerMonth = msPerDay * 30;
+    var msPerYear = msPerDay * 365;
 
-		var elapsed = new Date() - new Date(time);
+    var elapsed = new Date() - new Date(time);
 
-		if (elapsed < msPerMinute) {
-			return Math.round(elapsed / 1000) + ' seconds ago';
-		}
-
-		else if (elapsed < msPerHour) {
-			return Math.round(elapsed / msPerMinute) + ' minutes ago';
-		}
-
-		else if (elapsed < msPerDay) {
-			return Math.round(elapsed / msPerHour) + ' hours ago';
-		}
-
-		else if (elapsed < msPerMonth) {
-			return '' + Math.round(elapsed / msPerDay) + ' days ago';
-		}
-
-		else if (elapsed < msPerYear) {
-			return '' + Math.round(elapsed / msPerMonth) + ' months ago';
-		}
-
-		else {
-			return '' + Math.round(elapsed / msPerYear) + ' years ago';
-		}
-	}
+    if (elapsed < msPerMinute) {
+      return Math.round(elapsed / 1000) === 1
+        ? Math.round(elapsed / 1000) + " second ago"
+        : Math.round(elapsed / 1000) + " seconds ago";
+    } else if (elapsed < msPerHour) {
+      return Math.round(elapsed / msPerMinute) === 1
+        ? Math.round(elapsed / msPerMinute) + " minute ago"
+        : Math.round(elapsed / msPerMinute) + " minutes ago";
+    } else if (elapsed < msPerDay) {
+      return Math.round(elapsed / msPerHour) === 1
+        ? Math.round(elapsed / msPerHour) + " hour ago"
+        : Math.round(elapsed / msPerHour) + " hours ago";
+    } else if (elapsed < msPerMonth) {
+      return Math.round(elapsed / msPerDay) === 1
+        ? "" + Math.round(elapsed / msPerDay) + " day ago"
+        : "" + Math.round(elapsed / msPerDay) + " days ago";
+    } else if (elapsed < msPerYear) {
+      return Math.round(elapsed / msPerMonth) === 1
+        ? "" + Math.round(elapsed / msPerMonth) + " month ago"
+        : "" + Math.round(elapsed / msPerMonth) + " months ago";
+    } else {
+      return Math.round(elapsed / msPerYear) === 1
+        ? "" + Math.round(elapsed / msPerYear) + " year ago"
+        : "" + Math.round(elapsed / msPerYear) + " years ago";
+    }
+  };
 
 	const handleEdit = (id) => {
 		setMenuOpenId(null)
@@ -430,7 +432,8 @@ function Feed(props) {
 					<Button
 						startIcon={<CommentIcon />}
 						sx={{ color: "black" }}
-						onClick={() => handleChange(item._id)}
+						onClick={() => {handleChange(item._id);
+						handleComments(item._id);}}
 						aria-expanded={true}
 						aria-label="show more"
 					>

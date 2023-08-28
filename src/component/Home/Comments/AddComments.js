@@ -10,7 +10,7 @@ import InputBase from "@mui/material/InputBase";
 import { useState} from "react";
 import axios from "axios";
 import { useRef } from "react";
-import { toast ,ToastContainer} from "react-toastify";
+import { toast} from "react-toastify";
 
 
 function Comments(props) {

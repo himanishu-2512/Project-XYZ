@@ -49,7 +49,6 @@ const Navbar = ({ setLoginUser, mode, setMode }) => {
 	navigate(`/profile/${username}`);
   }
 	return (
-<<<<<<< Updated upstream
     <AppBar position="sticky" sx={{ background: "background.default" }}>
       <StyledToolbar>
         <Typography variant="h6" sx={{ display: { xs: "none", sm: "block" } }}>
@@ -109,59 +108,6 @@ const Navbar = ({ setLoginUser, mode, setMode }) => {
       {/* <div onClick={handleChange}></div> */}
     </AppBar>
   );
-=======
-		<AppBar position="sticky" sx={{ background: "background.default" }}>
-			<StyledToolbar>
-				<Typography variant="h6" sx={{ display: { xs: "none", sm: "block" } }}>
-					<Link to = {"/"} style={{color:"white", textDecoration:"none", fontWeight:"700"}}>
-					Ask & Grow
-					</Link>
-				</Typography>
-				<Pets sx={{ display: { xs: "block", sm: "none" } }} />
-				<Search>
-					<InputBase placeholder="Search..." sx={{ color: "black" }} />
-				</Search>
-				<Icons>
-					
-					<Badge sx={{cursor:"pointer"}} onClick={handleChange} >
-						<LogoutIcon/>
-					</Badge>
-					
-					<Avatar sx={{ cursor: "pointer" }} onClick={profileChange} >{username?username[0].toUpperCase():null}</Avatar>
-				</Icons>
-				<UserBox onClick={(e) => setOpen(true)}>
-				<Badge sx={{cursor:"pointer"}} onClick={handleChange} >
-					<LogoutIcon/>
-				</Badge>
-				<Avatar sx={{cursor:"pointer"}} onClick = {profileChange} >{username?username[0].toUpperCase():null}</Avatar>
-					
-				</UserBox>
-			</StyledToolbar>
-			<Menu
-				id="demo-positioned-menu"
-				aria-labelledby="demo-positioned-button"
-				open={open}
-				onClose={(e) => setOpen(false)}
-				anchorOrigin={{
-					vertical: "top",
-					horizontal: "right",
-				}}
-				transformOrigin={{
-					vertical: "top",
-					horizontal: "right",
-				}}
-			>
-				<MenuItem 	>
-				&nbsp; &nbsp;Profile &nbsp; &nbsp;
-				</MenuItem>
-				{/* <MenuItem>Saved Posts</MenuItem> */}
-				<MenuItem onClick={handleChange}>
-				&nbsp; &nbsp;Logout &nbsp; &nbsp;</MenuItem>
-			</Menu>
-			{/* <div onClick={handleChange}></div> */}
-		</AppBar>
-	);
->>>>>>> Stashed changes
 };
 
 export default Navbar;

@@ -10,6 +10,7 @@ import InputBase from "@mui/material/InputBase";
 import { useState} from "react";
 import axios from "axios";
 import { useRef } from "react";
+import { toast ,ToastContainer} from "react-toastify";
 
 
 function Comments(props) {
@@ -39,13 +40,13 @@ props.type === "post"? handleClickPost(e) : handleClickQuestion(e)
         )
         .then((res) => {
           
-          alert(res.data.message);
+          toast.success(res.data.message);
           props.setIsAdded(!(props.isAdded));
           input.current.firstChild.value="";
           console.log(props.isAdded)
         });
     } else {
-      alert("No empty comments");
+      toast.warning("No empty comments" , { pauseOnHover: "false" });
     }
     
   };
@@ -59,13 +60,13 @@ props.type === "post"? handleClickPost(e) : handleClickQuestion(e)
           body
         )
         .then((res) => {
-          alert(res.data.message);
+          toast.success(res.data.message);
           props.setIsAdded(!props.isAdded);
           input.current.firstChild.value = "";
           console.log(props.isAdded);
         });
     } else {
-      alert("No empty answers");
+      toast.warning("No empty answers" , { pauseOnHover: "false" });
     }
     
   };
@@ -80,6 +81,7 @@ props.type === "post"? handleClickPost(e) : handleClickQuestion(e)
         }}
       >
         <Avatar />
+       
         <Paper
           component="form"
           fullWidth

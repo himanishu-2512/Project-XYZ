@@ -9,6 +9,7 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import { toast } from "react-toastify";
 
 const StyledAutocomplete = styled(Autocomplete)((props) => ({
 	width: "30%",
@@ -109,7 +110,7 @@ function UserInfo({ checked, user, setUser }) {
 					setLoadingText(gotCities.length > 0 ? "Loading..." : "No city found");
 					setCities(updatedCities);
 				} catch (error) {
-					console.log(error);
+					toast.error(error, { pauseOnHover: "false" })
 				}
 			}, 750);
 			return () => clearTimeout(fetchCities);

@@ -1,4 +1,5 @@
 import axios from "axios";
+import {toast } from "react-toastify";
 import {
 
   Button,
@@ -21,6 +22,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import { Paper } from "@mui/material";
+
 
 const SytledModal = styled(Modal)({
   display: "flex",
@@ -91,11 +93,11 @@ const Add = (props) => {
     const { userId, title, caption } = post;
     if (userId && title && caption) {
       axios.post(`${BASE_URL}/post/newpost`, post).then((res) => {
-        alert(res.data.message);
+        toast.success(res.data.message);
         props.setCreate(!(props.create))
       });
     } else {
-      alert("Post needs both a title and a caption");
+      toast.warning("Post needs both a title and a caption", { pauseOnHover: "false" });
     }
     setOpen(false);
   };
@@ -106,11 +108,11 @@ const Add = (props) => {
     const { userId, title, description } = post;
     if (userId && title && description) {
       axios.post(`${BASE_URL}/question/newquestion`, post).then((res) => {
-        alert(res.data.message);
+        toast.success(res.data.message);
         props.setCreate(!props.create);
       });
     } else {
-      alert("Question needs both a title and a description");
+      toast.warning("Question needs both a title and a description", { pauseOnHover: "false" });
     }
     setOpen(false);
   };

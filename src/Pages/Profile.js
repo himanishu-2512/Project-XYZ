@@ -9,6 +9,9 @@ import { Edit } from "@mui/icons-material";
 import axios from "axios";
 import { blue, green, red } from "@mui/material/colors";
 import { useParams } from "react-router";
+import { toast ,ToastContainer} from "react-toastify";;
+
+
 
 function Profile({ setLoginUser }) {
 	const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -146,8 +149,11 @@ function Profile({ setLoginUser }) {
 	const handleSave = async (e) => {
 		e.preventDefault();
 		const updatedUser = await axios.post(`${BASE_URL}/auth/updateuser/${id}`, user);
+		
 		setEdit(false);
+		toast.success("Profile Updated Successfully ",  { pauseOnHover: "false" });
 		setUser(updatedUser.data.userUp);
+		
 	};
 
 	const handleFollow = async (e) =>{
@@ -166,10 +172,13 @@ function Profile({ setLoginUser }) {
 	// console.log(followCount)
 	const handleCancel = () => {
 		fetchUser();
+		
 		setEdit(false);
 	};
 	return (
 		<>
+
+		<ToastContainer/>
 			{user && (
 				<div>
 					<Box>

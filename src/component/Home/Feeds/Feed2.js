@@ -224,7 +224,7 @@ function Feed(props) {
       toast.success(res.data.message, { pauseOnHover: "false" })
       props.data.setCreate(!(props.data.create))
     } catch (error) {
-      console.log(error);
+      toast.error(error, { pauseOnHover: "false" })
     }
 
   }

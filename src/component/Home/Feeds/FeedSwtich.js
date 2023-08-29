@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import Feed from "./Feed";
 import Feed2 from "./Feed2";
 import { Paper } from "@mui/material";
+import { toast } from "react-toastify";
 
 function TabPanel(props) {
 	const { children, value, index, ...other } = props;
@@ -77,6 +78,7 @@ export default function BasicTabs(props) {
 	const [data2, setData2] = useState([]);
 
 	const getQuestions = useCallback(async () => {
+		try{
 		let url = `${BASE_URL}/question/allquestions`;
 		const response = await fetch(url, {
 			method: "GET",
@@ -88,6 +90,9 @@ export default function BasicTabs(props) {
 
 		const testData = await response.json();
 		setData2({ testData, setCreate: props.setCreate, create: props.create });
+	}  catch (error) {
+		toast.error(error, { pauseOnHover: "false" })
+	}
 		//console.log(testData.question);
 	}, [BASE_URL, props.setCreate, props.create]);
     useEffect(()=>{

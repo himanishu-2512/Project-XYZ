@@ -128,7 +128,7 @@ function Profile({ setLoginUser }) {
 				setAlreadyFollow(true)
 			}
 		} catch (error) {
-			console.log(error);
+			toast.error(error, { pauseOnHover: "false" })
 		}
 	}, [BASE_URL, getUserPosts, getUserQuestions, getUserSavedPosts, getUserSavedQuestions, authUsername, currentUsername]);
 

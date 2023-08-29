@@ -19,7 +19,7 @@ function App() {
   // console.log(user._id);
 
   return (
-    <div className="App">
+    <div className="App" style={{ backgroundColor:"#0F172A"}}>
       <BrowserRouter>
         <Routes>
           <Route

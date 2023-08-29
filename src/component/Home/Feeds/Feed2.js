@@ -201,6 +201,14 @@ function Feed(props) {
 		setMenuOpenId(null);
 		setEdit(id);
 	};
+  const handleDelete = async (id) => {
+    try {
+      const res = await axios.delete(`${BASE_URL}/question/deletequestion/${Id}/${id}`);
+      toast.success(res.data.message, { pauseOnHover: "false" })
+      props.data.setCreate(!(props.data.create))
+    } catch (error) {
+      toast.error(error, { pauseOnHover: "false" })
+    }
 
 	const handleDelete = async (id) => {
 		try {

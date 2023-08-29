@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback,useEffect } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Box from "@mui/material/Box";
@@ -50,14 +50,21 @@ function a11yProps(index) {
 }
 
 export default function BasicTabs(props) {
-	
+
 	const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 	const [value, setValue] = React.useState(0);
 
+	//Skeleton Loading boolians
+	const [isLoading1, setIsLoading1] = useState(false);
+	const [isLoading2, setIsLoading2] = useState(false);
+
+
 	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
+
+	//data1=Post data sent to Feed
 	const [data1, setData1] = useState([]);
 
 	const getAllPosts = useCallback(async () => {
@@ -71,9 +78,12 @@ export default function BasicTabs(props) {
 		});
 		const testData = await response.json();
 		// setData1(testData);
-		setData1({testData,setCreate:props.setCreate,create:props.create});
+		setData1({ testData, setCreate: props.setCreate, create: props.create });
+		setIsLoading1(true);
 		//console.log(testData.post);
-	}, [BASE_URL,props.setCreate,props.create]);
+	}, [BASE_URL, props.setCreate, props.create]);
+
+	//data2=Question data sent to Feed
 	const [data2, setData2] = useState([]);
 
 	const getQuestions = useCallback(async () => {
@@ -88,13 +98,14 @@ export default function BasicTabs(props) {
 
 		const testData = await response.json();
 		setData2({ testData, setCreate: props.setCreate, create: props.create });
+		setIsLoading2(true);
 		//console.log(testData.question);
 	}, [BASE_URL, props.setCreate, props.create]);
-    useEffect(()=>{
-      getQuestions();
-      getAllPosts();
-      //eslint-disable-next-line
-    },[props.create])
+	useEffect(() => {
+		getQuestions();
+		getAllPosts();
+		//eslint-disable-next-line
+	}, [props.create])
 
 	useMemo(() => {
 		getAllPosts();
@@ -102,7 +113,7 @@ export default function BasicTabs(props) {
 	}, [getAllPosts, getQuestions]);
 
 	return (
-		<Box sx={{ marginTop: "2%", maxWidth: "100%", display: "flex", justifyContent: "center" }}>
+		<Box sx={{ marginTop: "2%", width: "100%", display: "flex", justifyContent: "center"}}>
 			<Box
 				sx={{
 					width: {
@@ -113,9 +124,11 @@ export default function BasicTabs(props) {
 					display: "flex",
 					flexDirection: "column",
 					justifyContent: "center",
+					
+					
 				}}
 			>
-				<Paper elevation={0}>
+				<Paper elevation={0} sx={{ bgcolor:"transparent"}}>
 					<Box
 						sx={{
 							borderBottom: 1,
@@ -123,19 +136,21 @@ export default function BasicTabs(props) {
 							width: "100%",
 							justifyContent: "space-evenly",
 							display: "flex",
+							bgcolor: "#1E293B",
+							borderRadius: '5px'
 						}}
 					>
 						<Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
-							<Tab label="Opportunities" {...a11yProps(0)} />
-							<Tab label="Questions" {...a11yProps(1)} />
+							<Tab label="Opportunities" {...a11yProps(0)} sx={{ color: "white", ".MuiButtonBase-root.MuiTab-root.Mui-selected ": {color: "red"}}}/>
+							<Tab label="Questions" {...a11yProps(1)} sx={{ color: "white" }} />
 						</Tabs>
 					</Box>
 				</Paper>
 				<TabPanel value={value} index={0}>
-					<Feed data={data1} />
+					<Feed data={data1} loading={isLoading1} />
 				</TabPanel>
 				<TabPanel value={value} index={1}>
-					<Feed2 data={data2} />
+					<Feed2 data={data2} loading={isLoading2} />
 				</TabPanel>
 			</Box>
 		</Box>

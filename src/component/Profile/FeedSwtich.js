@@ -49,10 +49,13 @@ function a11yProps(index) {
 	};
 }
 
-export default function BasicTabs({post, username, question, savedpost, savedquestion, setCreate, create}) {
-	//console.log(question, post, savedpost, savedquestion)
-	let postdata = post ? post.user.posts : savedpost.posts.savedPosts;
-	let questiondata = question ? question.posts.questions : savedquestion.posts.savedQuestions;
+export default function BasicTabs({ post, username, question, savedpost, savedquestion, setCreate, create, loading1, loading2 }) {
+	console.log("POST", post)
+	let postdata = post ? post?.user?.posts : savedpost?.posts?.savedPosts;
+	console.log(savedpost)
+	let questiondata = question ? question?.posts?.questions : savedquestion?.posts?.savedQuestions;
+	console.log("Question", question);
+	console.log(savedquestion)
 
 	const [value, setValue] = React.useState(0);
 
@@ -74,7 +77,7 @@ export default function BasicTabs({post, username, question, savedpost, savedque
 					justifyContent: "center",
 				}}
 			>
-				<Paper elevation={0}>
+				<Paper elevation={0} sx={{ bgcolor: "#0F172A" }}>
 					<Box
 						sx={{
 							borderBottom: 1,
@@ -82,19 +85,21 @@ export default function BasicTabs({post, username, question, savedpost, savedque
 							width: "100%",
 							justifyContent: "space-evenly",
 							display: "flex",
+							bgcolor: "#1E293B",
+							borderRadius: '5px'
 						}}
 					>
 						<Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
-							<Tab label="Opportunities" {...a11yProps(0)} />
-							<Tab label="Questions" {...a11yProps(1)} />
+							<Tab label="Opportunities" {...a11yProps(0)} sx={{ color: "white" }} />
+							<Tab label="Questions" {...a11yProps(1)} sx={{ color: "white" }} />
 						</Tabs>
 					</Box>
 				</Paper>
 				<TabPanel value={value} index={0}>
-					<Feed data = {postdata} username={username} setCreate={setCreate} create={create}/>
+					<Feed data={postdata} loading={loading1} username={username} setCreate={setCreate} create={create} />
 				</TabPanel>
 				<TabPanel value={value} index={1}>
-					<Feed2 data={questiondata} username={username} setCreate={setCreate} create={create} />
+					<Feed2 data={questiondata} loading={loading2} username={username} setCreate={setCreate} create={create} />
 				</TabPanel>
 			</Box>
 		</Box>

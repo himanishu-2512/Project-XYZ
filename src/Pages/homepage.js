@@ -31,7 +31,6 @@ const Homepage = ({ setLoginUser }) => {
     <ThemeProvider theme={darkTheme}>
       <div className="homepage">
         <Box
-          bgcolor={"background.default"}
           color={"text.primary"}
           height={"100%"}
         >
@@ -51,6 +50,7 @@ const Homepage = ({ setLoginUser }) => {
                   md: "4",
                   lg: "6",
                 },
+                width:"100%",
               }}
             >
               <Share setCreate={setCreate} create={create} />

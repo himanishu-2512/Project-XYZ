@@ -1,5 +1,5 @@
 import axios from "axios";
-import {toast } from "react-toastify";
+import { toast } from "react-toastify";
 import {
 
   Button,
@@ -28,6 +28,8 @@ const SytledModal = styled(Modal)({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  background: "rgb(80,80,80,0.2)",
+  backdropFilter: "blur(10px)"
 });
 
 
@@ -38,7 +40,7 @@ const Add = (props) => {
   const [post, setPost] = useState({});
   const [value, setValue] = useState("0");
   const Id = localStorage.getItem("userId");
-    
+
 
   //image upload
   const handleChange = (event, newValue) => {
@@ -54,7 +56,7 @@ const Add = (props) => {
 
     reader.onloadend = () => {
       setImageUrl(reader.result);
-          console.log(value);
+      console.log(value);
 
     };
     if (file) {
@@ -66,7 +68,7 @@ const Add = (props) => {
   };
   //image upload
 
-  
+
 
   const val = (e) => {
     e.preventDefault();
@@ -80,9 +82,9 @@ const Add = (props) => {
     });
   };
   const handlClick = (e) => {
-    if(value === "0"){
+    if (value === "0") {
       handlClickPost(e);
-    }else{
+    } else {
       handlClickQuestion(e);
     }
   }
@@ -143,24 +145,23 @@ const Add = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box
-          width={400}
-          // height={330}
+          width={500}
           bgcolor={"background.default"}
           color={"text.primary"}
           p={3}
           borderRadius={5}
-          sx={{ display: "flex", flexDirection: "column", gap: 3 }}
+          sx={{ display: "flex", flexDirection: "column", gap: 5, backgroundColor: "#0F172A", border: "2px solid rgb(29,35,43)" }}
         >
-          <Paper elevation={0}>
-            <Box sx={{ width: "100%", typography: "body1" }}>
+          <Paper elevation={0} sx={{ backgroundColor: "transparent", }}>
+            <Box sx={{ width: "100%", typography: "body1", backgroundColor: "#1E293B", borderRadius: '5px' }}>
               <TabContext value={value}>
-                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <Box sx={{ borderBottom: 1, borderColor: "divider", display: "flex", justifyContent: "center" }}>
                   <TabList
                     onChange={handleChange}
                     aria-label="lab API tabs example"
                   >
-                    <Tab label="Create Post" value="0" />
-                    <Tab label="Ask a Question" value="1" />
+                    <Tab sx={{ color: "white" }} label="Create Post" value="0" />
+                    <Tab sx={{ color: "white" }} label="Ask a Question" value="1" />
                   </TabList>
                 </Box>
               </TabContext>
@@ -168,28 +169,28 @@ const Add = (props) => {
           </Paper>
 
           <TextField
-            sx={{ width: "100%" }} //, marginBottom: "1rem" }}
-            id="standard-multiline-static"
+            sx={{ width: "100%", backgroundColor: "#5D7987", borderRadius: "5px", "input": { color: "#f4f6f8" } }}
+            id="outlined-static"
+            variant="outlined"
             name="title"
             rows={3}
             placeholder="Title"
-            variant="standard"
             onChange={val}
           />
           <TextField
-            sx={{ width: "100%" }}
+            sx={{ width: "100%", backgroundColor: "#5D7987", borderRadius: "5px", "textarea": { color: "#f4f6f8" } }}
             id="standard-multiline-static"
             multiline
-            name={value==="0"?"caption":"description"}
+            name={value === "0" ? "caption" : "description"}
             rows={3}
             placeholder="What's on your mind?"
-            variant="standard"
+            variant="outlined"
             onChange={val}
           />
 
           <label
             htmlFor="upload-image"
-            style={{ backgroundColor: "lightyellow" }}
+            style={{ backgroundColor: "#afb38b", borderRadius: "5px" }}
           >
             <Button
               variant="contained"

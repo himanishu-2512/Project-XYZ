@@ -1,9 +1,45 @@
 import { Avatar, Box, Button, Paper, Typography } from "@mui/material";
 import React from "react";
+import {toast } from "react-toastify";
+import axios from "axios";
+
 
 function UserComments(props) {
   const {answers} = props;
+  const userId = window.localStorage.getItem("userId")
 
+  const handleClick = (e) => {
+    props.type === "post" ? handleDeletePost(e) : handleDeleteQuestion(e);
+  };
+
+ const handleDeletePost=async(commentId)=>{
+try {
+   await axios
+     .post(
+       `${process.env.REACT_APP_BASE_URL}/comment/post/${props.postId}/${userId}/${commentId}/deletecomment`
+     )
+     .then((res) => {
+       toast.success(res.data.message, { pauseOnHover: "false" });
+       props.setIsAdded(!props.isAdded)
+     });
+} catch (error) {
+  toast.error(error, { pauseOnHover: "false" });
+}
+ }
+ const handleDeleteQuestion=async(commentId)=>{
+try {
+   await axios
+     .post(
+       `${process.env.REACT_APP_BASE_URL}/question/answer/deleteanswer/${userId}/${props.postId}/${commentId}`
+     )
+     .then((res) => {
+       toast.success(res.data.message, { pauseOnHover: "false" });
+       props.setIsAdded(!props.isAdded);
+     });
+} catch (error) {
+  toast.error(error, { pauseOnHover: "false" });
+}
+ }
   const timeDemo = (time) => {
     var msPerMinute = 60 * 1000;
     var msPerHour = msPerMinute * 60;
@@ -74,16 +110,19 @@ function UserComments(props) {
               {answers.author.username}
             </Typography>
           </Box>
-          <Box
-            sx={{
-              ml: "10px",
-              mb: "5px",
-            }}
-          >
-            <Typography variant="body2" sx={{}}>
-              {answers.body}
-            </Typography>
-          </Box>
+          
+            <Box
+              sx={{
+                ml: "10px",
+                mb: "5px",
+              }}
+            >
+              <Typography variant="body2" sx={{}}>
+                {answers.body}
+              </Typography>
+            </Box>
+            
+          
         </Paper>
       </Box>
       <Box
@@ -97,8 +136,12 @@ function UserComments(props) {
         <Button sx={{ margin: "0" }} size="small">
           Like
         </Button>
-        <Button size="small">reply</Button>
-        <Typography variant="body2" sx={{ fontWeight: "light", ml: "10px", color:"gray"}}>
+        {(props.postOwnerId === userId || answers.author._id === userId) ? <Button size="small" onClick={()=>handleClick(answers._id)}>DELETE</Button>: ""}
+        
+        <Typography
+          variant="body2"
+          sx={{ fontWeight: "light", ml: "10px", color: "gray" }}
+        >
           {timeDemo(answers.createdAt)}
         </Typography>
       </Box>

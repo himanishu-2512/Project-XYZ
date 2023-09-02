@@ -27,6 +27,11 @@ function Profile({ setLoginUser }) {
 	let authUsername = useParams()
 	authUsername = authUsername.username 
 
+	const [loading1, setLoading1] = useState(false);
+	const [loading2, setLoading2] = useState(false);
+	const [loading3, setLoading3] = useState(false);
+	const [loading4, setLoading4] = useState(false);
+
 	const [data2, setData2] = useState([]);
 	const getUserQuestions = useCallback(
 		async (username) => {
@@ -42,6 +47,7 @@ function Profile({ setLoginUser }) {
 			});
 			const testData = await response.json();
 			setData2(testData);
+			setLoading2(true);
 			//console.log(testData.question);
 		},
 		// eslint-disable-next-line
@@ -62,7 +68,10 @@ function Profile({ setLoginUser }) {
 				},
 			});
 			const testData = await response.json();
+			console.log("DATA1 Res:", testData);
 			setData1(testData);
+			setLoading1(true);
+
 			//console.log(testData.question);
 		},
 		// eslint-disable-next-line
@@ -84,6 +93,8 @@ function Profile({ setLoginUser }) {
 			});
 			const testData = await response.json();
 			setData3(testData);
+			setLoading3(true);
+
 			//console.log(testData.question);
 		},
 		// eslint-disable-next-line
@@ -105,6 +116,7 @@ function Profile({ setLoginUser }) {
 			});
 			const testData = await response.json();
 			setData4(testData);
+			setLoading4(true);
 			//console.log(testData.question);
 		},
 		// eslint-disable-next-line
@@ -263,7 +275,7 @@ function Profile({ setLoginUser }) {
 								{view === "profile" && (
 									<>
 										<Box sx={{ display: "flex", justifyContent: "space-between", marginBottom: "2em" }}>
-											<Typography sx={{ fontSize: "1.75em" }}>Profile</Typography>
+											<Typography sx={{ fontSize: "1.75em", color: "white" }}>Profile</Typography>
 											{currentUsername === authUsername && <Button
 												onClick={() => setEdit(true)}
 												disableRipple
@@ -436,14 +448,14 @@ function Profile({ setLoginUser }) {
 								)}
 								{view === "posts" && (
 									<>
-										<Typography sx={{ fontSize: "1.75em" }}>Posts</Typography>
-										<FeedSwitch post={data1} username={user.username} question={data2} setCreate={setCreate} create={create} />
+										<Typography sx={{ fontSize: "1.75em", color: "white" }}>Posts</Typography>
+										<FeedSwitch post={data1} loading1={loading1} username={user.username} question={data2} loading2={loading2} setCreate={setCreate} create={create} />
 									</>
 								)}
 								{view === "saved" && (
 									<>
-										<Typography sx={{ fontSize: "1.75em" }}>Saved Posts</Typography>
-										<FeedSwitch savedpost={data4} username={user.username} savedquestion={data3} setCreate={setCreate} create={create} />
+										<Typography sx={{ fontSize: "1.75em", color: "white" }}>Saved Posts</Typography>
+										<FeedSwitch savedpost={data4} loading4={loading4} username={user.username} savedquestion={data3} loading3={loading3} setCreate={setCreate} create={create} />
 									</>
 								)}
 							</Box>

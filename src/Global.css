@@ -1,24 +1,18 @@
-/* Scrollbar CSS */
- 
-  * {
-		scrollbar-width: auto;
-    scrollbar-color: rgba(0, 0, 0, 0.4) rgb(255, 255, 255);
-  }
-	
-  /* Safari, Chrome and Edge */
-  *::-webkit-scrollbar {
-		width: 10px;
-		background-color: rgba(0, 0, 0, 0.1);
-		position:	absolute;
-  }
-	
-  *::-webkit-scrollbar-track {
-		background: rgb(255, 255, 255);
-  }
-	
-  *::-webkit-scrollbar-thumb {
-		height: 20px;
-		background-color: rgba(0, 0, 0, 0.4);
-    border-radius: 20px;
-    border: 2px solid rgb(255, 255, 255);
-  }
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #5e687d #0f172a;
+  box-sizing: border-box;
+}
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #5e687d;
+  border-radius: 10px;
+  border: 2px solid #0f172a;
+}

@@ -1,126 +1,99 @@
-import { Avatar, Box } from "@mui/material";
+import { Avatar, Box, CircularProgress } from "@mui/material";
 import React from "react";
 import IconButton from "@mui/material/IconButton";
 import SendIcon from "@mui/icons-material/Send";
 import GifIcon from "@mui/icons-material/Gif";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import Divider from "@mui/material/Divider";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
-import { useState} from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useRef } from "react";
-import { toast} from "react-toastify";
-
+import { toast } from "react-toastify";
 
 function Comments(props) {
-  const BASE_URL = process.env.REACT_APP_BASE_URL;
-  const [comment, setComment] = useState("");
-  const input=useRef(null)
- 
-// console.log(props)
-const handleClick = (e) => {
-props.type === "post"? handleClickPost(e) : handleClickQuestion(e)
-}
-  const Id = localStorage.getItem("userId");
+	const BASE_URL = process.env.REACT_APP_BASE_URL;
+	const [comment, setComment] = useState("");
+	const [isPosting, setIsPosting] = useState(false);
+	const input = useRef(null);
 
-  const val = (e) => {
-    e.preventDefault();
-    setComment(e.target.value);
-  };
+	// console.log(props)
+	const handleClick = (e) => {
+		props.type === "post" ? handleClickPost(e) : handleClickQuestion(e);
+	};
+	const Id = localStorage.getItem("userId");
 
-  const handleClickPost = (e) => {
-    e.preventDefault();
-    const body ={"body" : comment};
-    if (Id && props.postId && comment) {
-      axios
-        .post(
-          `${BASE_URL}/comment/post/${props.postId}/${Id}/newcomment`,
-          body
-        )
-        .then((res) => {
-          
-          toast.success(res.data.message);
-          props.setIsAdded(!(props.isAdded));
-          input.current.firstChild.value="";
-          console.log(props.isAdded)
-        });
-    } else {
-      toast.warning("No empty comments" , { pauseOnHover: "false" });
-    }
-    
-  };
-  const handleClickQuestion = (e) => {
-    e.preventDefault();
-    const body ={"body" : comment};
-    if (Id && props.postId && comment) {
-      axios
-        .post(
-          `${BASE_URL}/question/answer/newanswer/${Id}/${props.postId}`,
-          body
-        )
-        .then((res) => {
-          toast.success(res.data.message);
-          props.setIsAdded(!props.isAdded);
-          input.current.firstChild.value = "";
-          console.log(props.isAdded);
-        });
-    } else {
-      toast.warning("No empty answers" , { pauseOnHover: "false" });
-    }
-    
-  };
+	const val = (e) => {
+		e.preventDefault();
+		setComment(e.target.value);
+	};
 
-  return (
-    <Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-evenly",
-        }}
-      >
-        <Avatar />
-       
-        <Paper
-          component="form"
-          fullWidth
-          sx={{ display: "flex", alignItems: "center", width: "87%" }}
-        >
-          <InputBase
-          ref={input}
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Write a comment..."
-            inputProps={{ "aria-label": "write a comment..." }}
-            onChange={(e)=>val(e)}
-            name = "body"
-          />
-          <IconButton
-            type="button"
-            color="primary"
-            sx={{ p: "10px" }}
-            aria-label="send"
-            onClick={(e)=>handleClick(e)}
-          >
-            <SendIcon />
-          </IconButton>
-          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-          <IconButton color="primary" sx={{ p: "10px" }} aria-label="Add image">
-            <CameraAltIcon />
-          </IconButton>
-          <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
-          <IconButton color="primary" sx={{ p: "10px" }} aria-label="Add GIF">
-            <GifIcon />
-          </IconButton>
-        </Paper>
-      </Box>
-      <Box
-        sx={{
-          mt: "20px",
-        }}
-      ></Box>
-    </Box>
-  );
+	const handleClickPost = async (e) => {
+		setIsPosting(true);
+		e.preventDefault();
+		const body = { body: comment };
+		if (Id && props.postId && comment) {
+			const res = await axios.post(`${BASE_URL}/comment/post/${props.postId}/${Id}/newcomment`, body);
+			toast.success(res.data.message);
+			props.setIsAdded(!props.isAdded);
+			input.current.firstChild.value = "";
+		} else {
+			toast.warning("No empty comments", { pauseOnHover: "false" });
+		}
+		setIsPosting(false);
+	};
+	const handleClickQuestion = async (e) => {
+		setIsPosting(true);
+		e.preventDefault();
+		const body = { body: comment };
+		if (Id && props.postId && comment) {
+			const res = await axios.post(`${BASE_URL}/question/answer/newanswer/${Id}/${props.postId}`, body);
+			toast.success(res.data.message);
+			props.setIsAdded(!props.isAdded);
+			input.current.firstChild.value = "";
+		} else {
+			toast.warning("No empty answers", { pauseOnHover: "false" });
+		}
+		setIsPosting(false);
+	};
+	return (
+		<Box>
+			<Box
+				sx={{
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "space-evenly",
+				}}
+			>
+				<Avatar />
+
+				<Paper component="form" fullWidth sx={{ display: "flex", alignItems: "center", width: "87%" }}>
+					<InputBase
+						ref={input}
+						sx={{ ml: 1, flex: 1 }}
+						placeholder="Write a comment..."
+						inputProps={{ "aria-label": "write a comment..." }}
+						onChange={(e) => val(e)}
+						name="body"
+					/>
+					<IconButton color="primary" sx={{ p: "10px" }} aria-label="Add GIF">
+						<GifIcon />
+					</IconButton>
+					<Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+
+					<IconButton
+						type="button"
+						color="primary"
+						sx={{ p: "10px" }}
+						aria-label="send"
+						onClick={(e) => handleClick(e)}
+					>
+						{isPosting ? <CircularProgress size={24} /> : <SendIcon />}
+					</IconButton>
+				</Paper>
+			</Box>
+		</Box>
+	);
 }
 
 export default Comments;

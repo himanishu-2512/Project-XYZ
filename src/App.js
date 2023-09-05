@@ -21,7 +21,7 @@ function App() {
 	// console.log(user._id);
 
 	return (
-		<div className="App" style={{ backgroundColor: "#0F172A" }}>
+		<div className="App" style={{ backgroundColor: "rgba(4, 23, 46, 1)" }}>
 			<BrowserRouter>
 				<Routes>
 					<Route

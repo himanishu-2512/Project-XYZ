@@ -66,6 +66,8 @@ const UserBox = styled(Box)(({ theme }) => ({
 }));
 const Navbar = ({ setLoginUser, mode, setMode }) => {
   const [open, setOpen] = useState(false);
+  const [isHover,setIsHover]=useState(null);
+  const [searchOpen, setSearchOpen] = useState(false);
   const navigate = useNavigate();
   const username = window.localStorage.getItem("username")
   const handleChange = () => {
@@ -78,38 +80,130 @@ const Navbar = ({ setLoginUser, mode, setMode }) => {
   const profileChange = () => {
     navigate(`/profile/${username}`);
   }
+
+  
   return (
-    <AppBar position="sticky" color="transparent" sx={{ backdropFilter: "blur(20px)", backgroundColor: "rgb(15, 23, 42,0.85)" }}>
-      <StyledToolbar >
-        <Typography variant="h6" sx={{ display: { xs: "none", sm: "block" } }}>
+    <AppBar position="sticky" color="transparent" sx={{ backdropFilter: "blur(20px)", backgroundColor: "rgb(15, 23, 42,0.85)",justifyContent:"space-between",display:"flex",flexDirection:"column", }}>
+      <StyledToolbar>
+        <Typography variant="h6" sx={{ display: { xs: "none", sm: "flex" },justifyContent:"space-around",margin:"5px",alignItems:"center",
+              }}>
           <Link
             to={"/"}
-            style={{
+          style={{
               color: "white",
               textDecoration: "none",
               fontWeight: "700",
+              margin:"25px",
+              alignItems:"center",
+              justifyContent:"center",
+              
             }}
+            
           >
             Ask & Grow
+            
+          </Link>
+          <Link
+          
+            to={"/"}
+            style={{
+              color:isHover===0?"#0C8CE9":"white",
+              textDecoration: "none",
+              
+              margin:"25px",
+              
+            }}
+            onMouseEnter={()=>setIsHover(0)}
+            onMouseLeave={()=>setIsHover(null)}
+          >
+            Home
+            
+          </Link>
+
+          <Link
+            to={`/profile/${username}`}
+           
+            style={{
+              color:isHover===1?"#0C8CE9":"white",
+              textDecoration: "none",
+              
+              margin:"25px",
+              
+
+            }}
+            onMouseEnter={()=>setIsHover(1)}
+            onMouseLeave={()=>setIsHover(null)}
+          >
+            Profile
+            
+          </Link>
+
+          <Link
+            to={`/profile/${username}`}
+           
+            style={{
+              color:isHover===2?"#0C8CE9":"white",
+              textDecoration: "none",
+              
+              margin:"25px",
+             
+              
+
+            }}
+            onMouseEnter={()=>setIsHover(2)}
+            onMouseLeave={()=>setIsHover(null)}
+          >
+            Post
+            
+          </Link>
+
+          <Link
+            to={`/profile/${username}`}
+           
+            style={{
+              color:isHover===3?"#0C8CE9":"white",
+              textDecoration: "none",
+              
+              margin:"25px"
+             
+              
+
+            }}
+            onMouseEnter={()=>setIsHover(3)}
+            onMouseLeave={()=>setIsHover(null)}
+          >
+            Saved
+            
           </Link>
         </Typography>
+
         <Pets sx={{ display: { xs: "block", sm: "none" } }} />
         <Search sx={{
-          width: "15%", marginLeft: "auto", alignItems: "center", display: 'flex',
+           widht:"auto", marginLeft: "auto", alignItems: "center", display: 'flex',
           padding:"8px 0px 8px 0px"
         }}>
-          <SearchIconWrapper>
-            <SearchIcon />
+          <SearchIconWrapper >
+            <SearchIcon  />
           </SearchIconWrapper>
-          <StyledInputBase
-            placeholder="Search…"
-            inputProps={{ 'aria-label': 'search' }}
-          />
+          {searchOpen && 
+          <StyledInputBase onClick={()=>{
+            setSearchOpen(true)
+          }}
+          placeholder="Search…"
+          inputProps={{ 'aria-label': 'search' }}
+        />
+
+          }
+          
         </Search>
+
+
         <Icons>
           <Badge sx={{ cursor: "pointer", color: "white" }} onClick={handleChange}>
             <LogoutIcon />
           </Badge>
+
+
 
           <Avatar sx={{ cursor: "pointer" }} onClick={profileChange}>
             {username ? username[0].toUpperCase() : null}

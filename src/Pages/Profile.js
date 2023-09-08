@@ -25,7 +25,7 @@ import dayjs from "dayjs";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useNavigate } from "react-router-dom";
-
+import Pskel from "../component/Profile/profileSkeleton";
 const StyledAutocomplete = styled(Autocomplete)({
 	marginBlock: 8,
 	marginInline: 6,
@@ -324,11 +324,7 @@ function Profile({ setLoginUser }) {
 
 	if (isLoading)
 		return (
-			<Box sx={{ height: "100vh", width: "100vw", display: "flex", alignItems: "center", justifyContent: "center" }}>
-				<Typography variant="h1" sx={{ color: "white" }}>
-					LOADING...
-				</Typography>
-			</Box>
+			<Pskel />
 		);
 
 	return (

@@ -5,10 +5,13 @@ import LeftBar from "../component/Home/RightBar/RightBar";
 import FeedSwitch from "../component/Home/Feeds/FeedSwtich";
 import Header from "../component/Home/Header";
 import Share from "../component/Home/share";
+import BottomNavbar from "../component/Home/BottomNavbar";
+
 
 const Homepage = ({ setLoginUser }) => {
-	const [create,setCreate]=useState(false)
-	//Theme
+const [create, setCreate] = useState(false);
+const [open, setOpen] = useState(false);	
+//Theme
 	const [mode, setMode] = useState("light");
 
 	const darkTheme = createTheme({
@@ -30,10 +33,8 @@ const Homepage = ({ setLoginUser }) => {
 	return (
     <ThemeProvider theme={darkTheme}>
       <div className="homepage">
-        <Box
-          color={"text.primary"}
-          height={"100%"}
-        >
+        <Box color={"text.primary"} height={"100%"}>
+          <BottomNavbar mode={"home"} open={open} setOpen={setOpen} />
           <Header setLoginUser={setLoginUser} setMode={setMode} mode={mode} />
           <div style={{ display: "flex" }}>
             <Box
@@ -50,12 +51,16 @@ const Homepage = ({ setLoginUser }) => {
                   md: "4",
                   lg: "6",
                 },
-                width:"100%",
+                width: "100%",
               }}
             >
-              <Share setCreate={setCreate} create={create} />
+              <Share
+                setCreate={setCreate}
+                create={create}
+                open={open}
+                setOpen={setOpen}
+              />
               <FeedSwitch setCreate={setCreate} create={create} />
-              
             </Box>
             <Box
               sx={{

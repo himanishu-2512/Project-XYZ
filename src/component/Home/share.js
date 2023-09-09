@@ -104,7 +104,7 @@ const Add = (props) => {
           position: "fixed",
           bottom: 20,
           left: { xs: "calc(50% - 25px)", md: 30 },
-          display: { xs: "none", sm: "none", md: "block" },
+          display: { xs: "none", sm: "none", md: "flex" },
         }}
       >
         <Fab color="primary" aria-label="add">

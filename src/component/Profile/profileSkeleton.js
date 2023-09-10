@@ -1,15 +1,15 @@
 import { Box, Skeleton } from '@mui/material'
 import Header from '../Home/Header'
 
-function Pskel() {
+function ProfileSkeleton() {
   return (
-    <Box sx={{height: '100vh',display:"flex",flexDirection:"column"}}>
+    <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <Header />
       <Box
         sx={{
           display: 'flex',
           backgroundColor: '#05081D',
-          flexGrow:1
+          flexGrow: 1,
         }}
       >
         <Box
@@ -19,7 +19,7 @@ function Pskel() {
             gap: 6,
             width: '50%',
             alignItems: 'center',
-            paddingY:4
+            paddingY: 4,
           }}
         >
           <Skeleton
@@ -45,7 +45,7 @@ function Pskel() {
               gap: 4,
               position: 'relative',
               width: '70%',
-             flexGrow:1
+              flexGrow: 1,
             }}
           >
             <Skeleton
@@ -63,7 +63,8 @@ function Pskel() {
                 width: '100%',
                 height: '10%',
               }}
-            /><Skeleton
+            />
+            <Skeleton
               animation="wave"
               sx={{
                 backgroundColor: '#5d7987',
@@ -265,4 +266,4 @@ function Pskel() {
   )
 }
 
-export default Pskel
+export default ProfileSkeleton

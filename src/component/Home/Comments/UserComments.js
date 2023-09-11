@@ -78,14 +78,14 @@ try {
   
 
   return (
-    <Box>
+    <Box >
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-evenly",
-          mt: "10px",
-          mb: "2px",
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-evenly',
+          mt: '10px',
+          mb: '2px',
         }}
       >
         <Avatar />
@@ -93,60 +93,73 @@ try {
           component="form"
           fullWidth
           sx={{
-            display: "flex",
-            alignItems: "flex-start",
-            flexDirection: "column",
-            width: "87%",
+            display: 'flex',
+            alignItems: 'flex-start',
+            flexDirection: 'column',
+            width: '87%',
+            backgroundColor: '#4D5567',
+            pl:0.5
           }}
         >
           <Box
             sx={{
-              ml: "10px",
-              mt: "10px",
-              mb: "5px",
+              ml: '10px',
+              mt: '10px',
+              mb: '5px',
             }}
           >
-            <Typography variant="body2" sx={{ fontWeight: "550" }}>
+            <Typography
+              variant="body2"
+              sx={{ fontWeight: '550', color: 'white' }}
+            >
               {answers.author.username}
             </Typography>
           </Box>
-          
-            <Box
-              sx={{
-                ml: "10px",
-                mb: "5px",
-              }}
-            >
-              <Typography variant="body2" sx={{}}>
-                {answers.body}
-              </Typography>
-            </Box>
-            
-          
+
+          <Box
+            sx={{
+              ml: '10px',
+              mb: '5px',
+            }}
+          >
+            <Typography variant="body2" sx={{ color: 'white', marginBottom: 0.5 }}>
+              {answers.body}
+            </Typography>
+          </Box>
         </Paper>
       </Box>
       <Box
         sx={{
-          ml: "50px",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
+          ml: '50px',
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
         }}
       >
-        <Button sx={{ margin: "0" }} size="small">
+        <Button sx={{ margin: '0', color: '#42a5f5' }} size="small">
           Like
         </Button>
-        {(props.postOwnerId === userId || answers.author._id === userId) ? <Button size="small" onClick={()=>handleClick(answers._id)}>DELETE</Button>: ""}
-        
+        {props.postOwnerId === userId || answers.author._id === userId ? (
+          <Button
+            sx={{ color: '#42a5f5' }}
+            size="small"
+            onClick={() => handleClick(answers._id)}
+          >
+            DELETE
+          </Button>
+        ) : (
+          ''
+        )}
+
         <Typography
           variant="body2"
-          sx={{ fontWeight: "light", ml: "10px", color: "gray" }}
+          sx={{ fontWeight: 'light', ml: '10px', color: 'gray' }}
         >
           {timeDemo(answers.createdAt)}
         </Typography>
       </Box>
     </Box>
-  );
+  )
 }
 
 export default UserComments;

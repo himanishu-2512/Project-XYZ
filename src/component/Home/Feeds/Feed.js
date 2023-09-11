@@ -14,6 +14,7 @@ import {
   Modal,
   TextField,
   ButtonGroup,
+  CircularProgress,
 } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
 import React, { useState, useEffect } from 'react'
@@ -36,8 +37,10 @@ const SytledModal = styled(Modal)({
 })
 
 function Feed(props) {
+  // console.log(props)
   const BASE_URL = process.env.REACT_APP_BASE_URL
   const [isAdded, setIsAdded] = useState('')
+  const [isCommentLoading, setIsCommentLoading] = useState(false)
   const [comment, setComment] = useState([])
   const [open, setOpen] = useState('')
   const [edit, setEdit] = useState('')
@@ -53,6 +56,7 @@ function Feed(props) {
   }, [isAdded])
   const handleComments = async (postId) => {
     // console.log("yes");
+    setIsCommentLoading(true)
     await axios
       .get(`${BASE_URL}/post/getpostcomments/${postId}`)
       .then((res) => {
@@ -61,18 +65,18 @@ function Feed(props) {
       .catch((error) => {
         toast.error(error, { pauseOnHover: 'false' })
       })
+    setIsCommentLoading(false)
   }
 
   //Like
   const [color, setColor] = useState([])
   const handleLike = async (postId) => {
     const newIndex = color.indexOf(postId)
+    // console.log(newIndex);
     if (newIndex > -1) {
       setColor(color.filter((e) => e !== postId))
       // //console.log(color)
     } else setColor(color.concat(postId))
-    //console.log(newIndex, color)
-
     //console.log(id)
     await axios
       .post(`${BASE_URL}/like/post/${postId}/${Id}`)
@@ -81,6 +85,19 @@ function Feed(props) {
         toast.error(error, { pauseOnHover: 'false' })
       })
   }
+
+  // const handleLike = async (postId) => {
+  //   if (liked) setLikeCount(likeCount - 1)
+  //   else setLikeCount(likeCount + 1)
+  //   setLiked(!liked)
+  //   await axios
+  //     .post(`${BASE_URL}/like/post/${postId}/${Id}`)
+  //     .then((res) => {})
+  //     .catch((error) => {
+  //       toast.error(error, { pauseOnHover: 'false' })
+  //     })
+  // }
+
   //Comment
 
   const handleChange = (id) => {
@@ -251,7 +268,7 @@ function Feed(props) {
                   maxHeight: '100%',
                   borderRadius: '10px',
                   marginBottom: '20px',
-                  color: '#e4eefa',
+                  color: '#E4EEFA',
                   boxShadow: '0px -2px #242f41',
                   padding: 1,
                 }}
@@ -449,36 +466,21 @@ function Feed(props) {
                 <Box
                   sx={{
                     display: 'flex',
-                    justifyContent: 'space-between',
-                    paddingTop: '20px',
-                  }}
-                >
-                  <Typography variant="body2" sx={{ marginLeft: '2%' }}>
-                    {' '}
-                    {item.likes.length} likes
-                  </Typography>
-                  <Typography variant="body2" sx={{ marginRight: '2%' }}>
-                    {item.comments.length} Comments
-                  </Typography>
-                </Box>
-                <Divider />
-                <Box
-                  sx={{
-                    display: 'flex',
                     justifyContent: 'space-evenly',
+                    paddingTop: 1,
                   }}
                 >
                   <Button
                     startIcon={<Favorite />}
-                    sx={{
-                      textTransform: 'none',
-                    }}
                     onClick={() => handleLike(item._id)}
                     style={{
                       color: color.includes(item._id) ? '#C70039' : 'white',
+                      textTransform: 'none',
                     }}
                   >
-                    Like
+                    {item.likes.length === 1
+                      ? `${item.likes.length} Like`
+                      : `${item.likes.length} Likes`}
                   </Button>
                   <Button
                     startIcon={<CommentIcon />}
@@ -487,8 +489,9 @@ function Feed(props) {
                       textTransform: 'none',
                     }}
                     onClick={() => {
+                      setComment([])
                       handleChange(item._id)
-                      handleComments(item._id)
+                      if (item.comments.length > 0) handleComments(item._id)
                     }}
                     aria-expanded={true}
                     aria-label="show more"
@@ -523,8 +526,17 @@ function Feed(props) {
                       comment={comment}
                       type={'post'}
                     />
-                    {comment?.length > 0
-                      ? comment.toReversed().map((items, index) => {
+                    <Box sx={{ marginTop: 4 }}>
+                      {isCommentLoading ? (
+                        <CircularProgress
+                          size={24}
+                          sx={{
+                            color: '#42a5f5',
+                            marginLeft: '50%',
+                          }}
+                        />
+                      ) : comment?.length > 0 ? (
+                        comment.toReversed().map((items, index) => {
                           return (
                             <UserComments
                               answers={items}
@@ -539,7 +551,10 @@ function Feed(props) {
                             />
                           )
                         })
-                      : ''}
+                      ) : (
+                        ''
+                      )}
+                    </Box>
                   </CardContent>
                 </Collapse>
               </Paper>
@@ -547,8 +562,7 @@ function Feed(props) {
           })}
         </Box>
       ) : (
-        
-          <FeedSkeleton loading={props.loading} data={props.data} />
+        <FeedSkeleton loading={props.loading} data={props.data} />
       )}
     </>
   )

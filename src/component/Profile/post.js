@@ -408,6 +408,8 @@ function Feed(props) {
                     variant="body2"
                     sx={{
                       marginTop: "0px",
+
+                
                       textDecoration: "none",
                       textAlign: "left",
                     }}

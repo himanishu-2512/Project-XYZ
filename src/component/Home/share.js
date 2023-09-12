@@ -1,110 +1,124 @@
-import axios from "axios";
-import { toast } from "react-toastify";
-import { Button, ButtonGroup, Fab, Modal, styled, TextField, Tooltip } from "@mui/material";
-import React, { useState } from "react";
-import { Add as AddIcon, Image } from "@mui/icons-material";
-import { Box } from "@mui/system";
-import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import { Paper } from "@mui/material";
+import axios from 'axios'
+import { toast } from 'react-toastify'
+import {
+  Button,
+  ButtonGroup,
+  Fab,
+  FormControl,
+  InputLabel,
+  Modal,
+  OutlinedInput,
+  styled,
+  Tooltip,
+} from '@mui/material'
+import React, { useState } from 'react'
+import { Add as AddIcon, Image } from '@mui/icons-material'
+import { Box } from '@mui/system'
+import Tab from '@mui/material/Tab'
+import TabContext from '@mui/lab/TabContext'
+import TabList from '@mui/lab/TabList'
+import { Paper } from '@mui/material'
 
 const SytledModal = styled(Modal)({
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "center",
-	background: "#4b5561BB",
-	backdropFilter: "blur(5px)",
-});
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  background: '#4b5561BB',
+  backdropFilter: 'blur(5px)',
+})
 
 const Add = (props) => {
-	const BASE_URL = process.env.REACT_APP_BASE_URL;
-	const [post, setPost] = useState({});
-	const [value, setValue] = useState("0");
-	const Id = localStorage.getItem("userId");
+  const BASE_URL = process.env.REACT_APP_BASE_URL
+  const [post, setPost] = useState({})
+  const [value, setValue] = useState('0')
+  const Id = localStorage.getItem('userId')
 
-	//image upload
-	const handleChange = (event, newValue) => {
-		setValue(newValue);
-	};
-	const [imageUrl, setImageUrl] = useState(null);
+  //image upload
+  const handleChange = (event, newValue) => {
+    setValue(newValue)
+  }
+  const [imageUrl, setImageUrl] = useState(null)
 
-	const handleFileUpload = (event) => {
-		const file = event.target.files[0];
-		const reader = new FileReader();
-		// const formData = new FormData();
-		// formData.append("image", file);
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0]
+    const reader = new FileReader()
+    // const formData = new FormData();
+    // formData.append("image", file);
 
-		reader.onloadend = () => {
-			setImageUrl(reader.result);
-			console.log(value);
-		};
-		if (file) {
-			reader.readAsDataURL(file);
-		}
-	};
-	const remove = () => {
-		setImageUrl(null);
-	};
-	//image upload
+    reader.onloadend = () => {
+      setImageUrl(reader.result)
+      console.log(value)
+    }
+    if (file) {
+      reader.readAsDataURL(file)
+    }
+  }
+  const remove = () => {
+    setImageUrl(null)
+  }
+  //image upload
 
-	const val = (e) => {
-		e.preventDefault();
-		const { value, name } = e.target;
-		setPost(() => {
-			return {
-				...post,
-				[name]: value,
-				userId: Id,
-			};
-		});
-	};
-	const handlClick = (e) => {
-		if (value === "0") {
-			handlClickPost(e);
-		} else {
-			handlClickQuestion(e);
-		}
-	};
+  const val = (e) => {
+    e.preventDefault()
+    const { value, name } = e.target
+    setPost(() => {
+      return {
+        ...post,
+        [name]: value,
+        userId: Id,
+      }
+    })
+  }
+  const handlClick = (e) => {
+    if (value === '0') {
+      handlClickPost(e)
+    } else {
+      handlClickQuestion(e)
+    }
+  }
 
-	const handlClickPost = (e) => {
-		e.preventDefault();
-		const { userId, title, caption } = post;
-		if (userId && title && caption) {
-			axios.post(`${BASE_URL}/post/newpost`, post).then((res) => {
-				toast.success(res.data.message);
-				props.setCreate(!props.create);
-			});
-		} else {
-			toast.warning("Post needs both a title and a caption", { pauseOnHover: "false" });
-		}
-		props.setOpen(false);
-	};
+  const handlClickPost = (e) => {
+    e.preventDefault()
+    const { userId, title, caption } = post
+    if (userId && title && caption) {
+      axios.post(`${BASE_URL}/post/newpost`, post).then((res) => {
+        toast.success(res.data.message)
+        props.setCreate(!props.create)
+      })
+    } else {
+      toast.warning('Post needs both a title and a caption', {
+        pauseOnHover: 'false',
+      })
+    }
+    props.setOpen(false)
+  }
 
-	const handlClickQuestion = (e) => {
-		e.preventDefault();
-		const { userId, title, description } = post;
-		if (userId && title && description) {
-			axios.post(`${BASE_URL}/question/newquestion`, post).then((res) => {
-				toast.success(res.data.message);
-				props.setCreate(!props.create);
-			});
-		} else {
-			toast.warning("Question needs both a title and a description", { pauseOnHover: "false" });
-		}
-		props.setOpen(false);
-	};
+  const handlClickQuestion = (e) => {
+    e.preventDefault()
+    const { userId, title, description } = post
+    if (userId && title && description) {
+      axios.post(`${BASE_URL}/question/newquestion`, post).then((res) => {
+        toast.success(res.data.message)
+        props.setCreate(!props.create)
+      })
+    } else {
+      toast.warning('Question needs both a title and a description', {
+        pauseOnHover: 'false',
+      })
+    }
+    props.setOpen(false)
+  }
 
-	return (
+  return (
     <>
       <Tooltip
         onClick={(e) => props.setOpen(true)}
         title="Add Post"
         sx={{
-          position: "fixed",
+          position: 'fixed',
           bottom: 20,
-          left: { xs: "calc(50% - 25px)", md: 30 },
-          display: { xs: "none", sm: "none", md: "flex" },
+          left: { xs: 'calc(50% - 25px)', md: 30 },
+          display: { xs: 'none', sm: 'none', md: 'flex' },
         }}
       >
         <Fab color="primary" aria-label="add">
@@ -114,56 +128,58 @@ const Add = (props) => {
       <SytledModal
         open={props.open}
         onClose={(e) => {
-          props.setOpen(false);
-          setPost({});
-          setImageUrl(null);
+          props.setOpen(false)
+          setPost({})
+          setImageUrl(null)
         }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box
           width={500}
-          bgcolor={"background.default"}
-          color={"text.primary"}
           p={3}
           borderRadius={5}
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 5,
-            backgroundColor: "#0F172A",
-            border: "2px solid rgb(29,35,43)",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 3,
+            background:
+              'linear-gradient(180deg, #05081D 0%, rgba(37, 57, 48,0) 100%)',
+            backgroundColor: 'rgba(4, 23, 46, 1)',
+            color: 'white',
+            padding: 4,
           }}
         >
-          <Paper elevation={0} sx={{ backgroundColor: "transparent" }}>
+          <Paper
+            elevation={0}
+            sx={{ backgroundColor: 'transparent', width: '100%' }}
+          >
             <Box
               sx={{
-                width: "100%",
-                typography: "body1",
-                backgroundColor: "#1E293B",
-                borderRadius: "5px",
+                width: '100%',
+                typography: 'body1',
+                backgroundColor: '#1E293B',
+                borderRadius: '5px',
               }}
             >
               <TabContext value={value}>
                 <Box
                   sx={{
                     borderBottom: 1,
-                    borderColor: "divider",
-                    display: "flex",
-                    justifyContent: "center",
+                    borderColor: 'divider',
+                    display: 'flex',
+                    justifyContent: 'center',
                   }}
                 >
-                  <TabList
-                    onChange={handleChange}
-                    aria-label="lab API tabs example"
-                  >
+                  <TabList onChange={handleChange}>
                     <Tab
-                      sx={{ color: "white" }}
+                      sx={{ color: 'white' }}
                       label="Create Post"
                       value="0"
                     />
                     <Tab
-                      sx={{ color: "white" }}
+                      sx={{ color: 'white' }}
                       label="Ask a Question"
                       value="1"
                     />
@@ -172,58 +188,111 @@ const Add = (props) => {
               </TabContext>
             </Box>
           </Paper>
-
-          <TextField
+          <Box
             sx={{
-              width: "100%",
-              backgroundColor: "rgba(71, 130, 182, 0.50)",
-              borderRadius: "5px",
-              input: { color: "#f4f6f8" },
+              flexGrow: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100%',
+              gap: 4,
+              '.MuiInputBase-root': { borderRadius: '10px' },
+              'label.MuiInputLabel-shrink ': {
+                color: '#c6c6c6',
+              },
+              fieldset: {
+                border: '2px solid  #455e87',
+              },
+              '.MuiInputBase-root:hover fieldset': {
+                border: '2px solid  #455e87',
+              },
+              '.MuiInputBase-root.Mui-focused fieldset': {
+                border: '2px solid #b5b5b5',
+              },
+              '.MuiInputBase-root.Mui-focused label.MuiInputLabel-shrink': {
+                color: '#b5b5b5',
+              },
+              overflow: 'auto',
+              '&::-webkit-scrollbar': {
+                display: 'none',
+              },
+              padding: 1,
             }}
-            id="outlined-static"
-            variant="outlined"
-            name="title"
-            rows={3}
-            placeholder="Title"
-            onChange={val}
-          />
-          <TextField
-            sx={{
-              width: "100%",
-              backgroundColor: "rgba(71, 130, 182, 0.50)",
-              borderRadius: "5px",
-              textarea: { color: "#f4f6f8" },
-            }}
-            id="standard-multiline-static"
-            multiline
-            name={value === "0" ? "caption" : "description"}
-            rows={3}
-            placeholder="What's on your mind?"
-            variant="outlined"
-            onChange={val}
-          />
-
+          >
+            <FormControl
+              fullWidth
+              sx={{
+                backgroundColor: '#1e293bbb',
+                borderRadius: '10px',
+              }}
+            >
+              <InputLabel
+                htmlFor="standard-multiline-static"
+                sx={{
+                  color: '#8aa6aa',
+                }}
+              >
+                Title
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-static"
+                name="title"
+                label="Title"
+                placeholder="Title"
+                sx={{ color: '#cad8e8' }}
+                onChange={val}
+                variant="outlined"
+              />
+            </FormControl>
+            <FormControl
+              fullWidth
+              sx={{
+                backgroundColor: '#1e293bbb',
+                borderRadius: '10px',
+              }}
+            >
+              <InputLabel
+                htmlFor="standard-multiline-static"
+                sx={{
+                  color: '#8aa6aa',
+                }}
+              >
+                Caption
+              </InputLabel>
+              <OutlinedInput
+                id="standard-multiline-static"
+                name={value === '0' ? 'caption' : 'description'}
+                label="Caption"
+                multiline
+                rows={3}
+                placeholder="What's on your mind?"
+                sx={{ color: '#cad8e8' }}
+                onChange={val}
+                variant="outlined"
+              />
+            </FormControl>
+          </Box>
           <label
             htmlFor="upload-image"
             style={{
-              backgroundColor: "rgba(31, 90, 142, 0.80)",
-              borderRadius: "5px",
-              color: "white",
+              backgroundColor: '#d5eaed',
+              borderRadius: '20px',
+              width: '100%',
             }}
           >
             <Button
               variant="contained"
               component="span"
               sx={{
-                backgroundColor: "transparent",
-                "&:hover": { backgroundColor: "transparent" },
+                backgroundColor: 'transparent',
+                '&:hover': { backgroundColor: 'transparent' },
                 // display: "inline"
-                color: "white",
-                textTransform: "none",
-                width: "100%",
+                color: 'black',
+                textTransform: 'none',
+                width: '100%',
               }}
             >
-              Upload Image <Image color="primary" sx={{ marginLeft: "8px" }} />
+              Upload Image{' '}
+              <Image color="secondary" sx={{ marginLeft: '8px' }} />
             </Button>
             <input
               id="upload-image"
@@ -237,31 +306,52 @@ const Add = (props) => {
           {imageUrl && (
             <>
               <Box
-                width="auto"
-                height={100}
+                // width="auto"
+                height={125}
                 sx={{
                   backgroundImage: `url(${imageUrl})`,
-                  backgroundPosition: "center",
-                  backgroundSize: "contain",
-                  backgroundRepeat: "no-repeat",
+                  backgroundPosition: 'center',
+                  backgroundSize: 'contain',
+                  backgroundRepeat: 'no-repeat',
+                  minWidth: '300px',
                 }}
               ></Box>
-              <Button onClick={() => remove()}>remove image</Button>
+              <Button
+                sx={{
+                  border: '2px solid #455e87',
+                  borderRadius: '20px',
+                  width: '40%',
+                  color: '#8aa6aa',
+                  '&:hover': { color: '#cad8e8' },
+                }}
+                onClick={() => remove()}
+              >
+                Remove
+              </Button>
             </>
           )}
           <ButtonGroup
-            // sx={{ marginTop: "5px" }}
+            sx={{ backgroundColor: 'transparent' }}
             fullWidth
             variant="contained"
-            aria-label="outlined primary button group"
+            aria-label="button group"
             onClick={handlClick}
           >
-            <Button>Post</Button>
+            <Button
+              sx={{
+                borderRadius: '20px',
+                paddingX: 2,
+                color: 'white',
+                '&:hover': { color: '#cad8e8' },
+              }}
+            >
+              Post
+            </Button>
           </ButtonGroup>
         </Box>
       </SytledModal>
     </>
-  );
-};
+  )
+}
 
-export default Add;
+export default Add

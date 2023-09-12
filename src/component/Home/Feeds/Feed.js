@@ -12,9 +12,11 @@ import {
   MenuItem,
   styled,
   Modal,
-  TextField,
   ButtonGroup,
   CircularProgress,
+  FormControl,
+  InputLabel,
+  OutlinedInput,
 } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
 import React, { useState, useEffect } from 'react'
@@ -28,12 +30,14 @@ import UserComments from '../Comments/UserComments'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import axios from 'axios'
-import FeedSkeleton from '../skeleton'
+import FeedSkeleton from '../Skeleton'
 
 const SytledModal = styled(Modal)({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  background: '#4b5561BB',
+  backdropFilter: 'blur(5px)',
 })
 
 function Feed(props) {
@@ -351,85 +355,184 @@ function Feed(props) {
                 >
                   <Box
                     width={400}
-                    bgcolor={'background.default'}
-                    color={'text.primary'}
-                    p={3}
                     borderRadius={5}
-                    sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 3,
+                      background:
+                        'linear-gradient(180deg, #05081D 0%, rgba(37, 57, 48,0) 100%)',
+                      backgroundColor: 'rgba(4, 23, 46, 1)',
+                      color: 'white',
+                      padding: 4,
+                    }}
                   >
-                    <TextField
-                      sx={{ width: '100%' }}
-                      id="standard-multiline-static"
-                      name="title"
-                      value={title}
-                      placeholder="Title"
-                      variant="outlined"
-                      onChange={val}
-                    />
-                    <TextField
-                      sx={{ width: '100%' }}
-                      id="standard-multiline-static"
-                      multiline
-                      value={caption}
-                      name="caption"
-                      rows={3}
-                      placeholder="What's on your mind?"
-                      variant="outlined"
-                      onChange={val}
-                    />
-
-                    <label
-                      htmlFor="upload-image"
-                      style={{ backgroundColor: 'lightyellow' }}
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        width: '100%',
+                        alignItems: 'center',
+                        gap: 4,
+                        '.MuiInputBase-root': { borderRadius: '10px' },
+                        'label.MuiInputLabel-shrink ': {
+                          color: '#c6c6c6',
+                        },
+                        fieldset: {
+                          border: '2px solid  #455e87',
+                        },
+                        '.MuiInputBase-root:hover fieldset': {
+                          border: '2px solid  #455e87',
+                        },
+                        '.MuiInputBase-root.Mui-focused fieldset': {
+                          border: '2px solid #b5b5b5',
+                        },
+                        '.MuiInputBase-root.Mui-focused label.MuiInputLabel-shrink':
+                          {
+                            color: '#b5b5b5',
+                          },
+                        overflow: 'auto',
+                        '&::-webkit-scrollbar': {
+                          display: 'none',
+                        },
+                        padding: 1,
+                      }}
                     >
-                      <Button
-                        variant="contained"
-                        component="span"
+                      <FormControl
+                        fullWidth
                         sx={{
-                          backgroundColor: 'transparent',
-                          '&:hover': { backgroundColor: 'transparent' },
-                          // display: "inline"
-                          color: 'black',
-                          textTransform: 'none',
+                          backgroundColor: '#1e293bbb',
+                          borderRadius: '10px',
+                        }}
+                      >
+                        <InputLabel
+                          htmlFor="standard-multiline-static"
+                          sx={{
+                            color: '#8aa6aa',
+                          }}
+                        >
+                          Title
+                        </InputLabel>
+                        <OutlinedInput
+                          id="standard-multiline-static"
+                          name="title"
+                          label="Title"
+                          placeholder="Title"
+                          sx={{ color: '#cad8e8' }}
+                          value={title}
+                          onChange={val}
+                          variant="outlined"
+                        />
+                      </FormControl>
+                      <FormControl
+                        fullWidth
+                        sx={{
+                          backgroundColor: '#1e293bbb',
+                          borderRadius: '10px',
+                        }}
+                      >
+                        <InputLabel
+                          htmlFor="standard-multiline-static"
+                          sx={{
+                            color: '#8aa6aa',
+                          }}
+                        >
+                          Caption
+                        </InputLabel>
+                        <OutlinedInput
+                          id="standard-multiline-static"
+                          name="caption"
+                          label="Caption"
+                          multiline
+                          rows={3}
+                          placeholder="What's on your mind?"
+                          sx={{ color: '#cad8e8' }}
+                          value={caption}
+                          onChange={val}
+                          variant="outlined"
+                        />
+                      </FormControl>
+
+                      <label
+                        htmlFor="upload-image"
+                        style={{
+                          backgroundColor: '#d5eaed',
+                          borderRadius: '20px',
                           width: '100%',
                         }}
                       >
-                        Upload Image{' '}
-                        <Image color="secondary" sx={{ marginLeft: '8px' }} />
-                      </Button>
-                      <input
-                        id="upload-image"
-                        hidden
-                        accept="image/*"
-                        type="file"
-                        onChange={handleFileUpload}
-                      />
-                    </label>
-
-                    {imageUrl && (
-                      <>
-                        <Box
-                          width="auto"
-                          height={100}
+                        <Button
+                          variant="contained"
+                          component="span"
                           sx={{
-                            backgroundImage: `url(${imageUrl})`,
-                            backgroundPosition: 'center',
-                            backgroundSize: 'contain',
-                            backgroundRepeat: 'no-repeat',
+                            backgroundColor: 'transparent',
+                            '&:hover': { backgroundColor: 'transparent' },
+                            // display: "inline"
+                            color: 'black',
+                            textTransform: 'none',
+                            width: '100%',
                           }}
-                        ></Box>
-                        <Button onClick={() => remove()}>remove image</Button>
-                      </>
-                    )}
-                    <ButtonGroup
-                      sx={{ backgroundColor: '#1E293B' }}
-                      fullWidth
-                      variant="contained"
-                      aria-label="outlined primary button group"
-                      onClick={(e) => handleClickPost(e, item._id)}
-                    >
-                      <Button>Edit</Button>
-                    </ButtonGroup>
+                        >
+                          Upload Image{' '}
+                          <Image color="secondary" sx={{ marginLeft: '8px' }} />
+                        </Button>
+                        <input
+                          id="upload-image"
+                          hidden
+                          accept="image/*"
+                          type="file"
+                          onChange={handleFileUpload}
+                        />
+                      </label>
+
+                      {imageUrl && (
+                        <>
+                          <Box
+                            // width="auto"
+                            height={125}
+                            sx={{
+                              backgroundImage: `url(${imageUrl})`,
+                              backgroundPosition: 'center',
+                              backgroundSize: 'contain',
+                              backgroundRepeat: 'no-repeat',
+                              minWidth: '300px',
+                            }}
+                          ></Box>
+                          <Button
+                            sx={{
+                              border: '2px solid #455e87',
+                              borderRadius: '20px',
+                              width: '40%',
+                              color: '#8aa6aa',
+                              '&:hover': { color: '#cad8e8' },
+                            }}
+                            onClick={() => remove()}
+                          >
+                            Remove
+                          </Button>
+                        </>
+                      )}
+                      <ButtonGroup
+                        sx={{ backgroundColor: 'transparent' }}
+                        fullWidth
+                        variant="contained"
+                        aria-label="button group"
+                        onClick={(e) => handleClickPost(e, item._id)}
+                      >
+                        <Button
+                          sx={{
+                            borderRadius: '20px',
+                            paddingX: 2,
+                            color: 'white',
+                            '&:hover': { color: '#cad8e8' },
+                          }}
+                          onClick={handleSave}
+                        >
+                          Edit
+                        </Button>
+                      </ButtonGroup>
+                    </Box>
                   </Box>
                 </SytledModal>
                 <CardContent>
@@ -456,11 +559,14 @@ function Feed(props) {
                       display: 'block',
                       maxWidth: '450px',
                       maxHeight: '450px',
-                      width: '100%',
+                      width: { md: '100%', xl: '100%' },
                       height: '100%',
                     }}
                     component="img"
                     image="images/bird.jpg"
+                    height={340}
+                    width={450}
+                    loading="lazy"
                   />
                 </Box>
                 <Box

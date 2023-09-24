@@ -549,7 +549,7 @@ function Profile({ setLoginUser }) {
 										sx={{
 											width: { xs: "100%", md: "270px", lg: "320px" },
 											aspectRatio: 1,
-											backgroundImage: `url("https://images.unsplash.com/photo-1524502397800-2eeaad7c3fe5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80")`,
+											backgroundImage: `url("https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1780&q=80")`,
 											backgroundSize: "cover",
 											borderRadius: { xs: "25px", md: "50px", lg: "70px" },
 											position: "absolute",
